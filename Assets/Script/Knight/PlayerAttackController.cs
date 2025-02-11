@@ -24,7 +24,6 @@ public class PlayerAttackController : MonoBehaviour
     private float timeSinceAttack;
     private float timeSinceBlock;
     private float timeSinceUntil;
-    public int currentAttack;
 
     public GameObject efAttack;
     public GameObject efUntil;
@@ -131,30 +130,7 @@ public class PlayerAttackController : MonoBehaviour
             }
         }
     }
-    private void Attack()
-    {
-        if (Input.GetMouseButtonDown(0) && playerAim.GetBool("IsGrounded") && timeSinceAttack > 0.6f && CursorLocked)
-        {
-            isEquipping = true;
-
-            LockMove();
-
-            currentAttack++;
-            isAttacking = true;
-
-            if (currentAttack > 3)
-                currentAttack = 1;
-
-            if (timeSinceAttack > 1.0f)
-                currentAttack = 1;
-
-            playerAim.SetTrigger("Attack" + currentAttack);
-
-            timeSinceAttack = 0;
-
-        }
-        
-    }
+    
 
     void Until()
     {
@@ -162,7 +138,6 @@ public class PlayerAttackController : MonoBehaviour
         {
             isEquipping = true;
 
-            LockMove();
             isAttacking = true;
 
             playerAim.SetTrigger("Until");
@@ -185,16 +160,12 @@ public class PlayerAttackController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse1) && playerAim.GetBool("IsGrounded") && timeSinceBlock > 3f && CursorLocked)
         {
             isEquipping = true;
-            isBlock = true;
             playerAim.SetBool("Block", true);
-            LockMove();
             Invoke(nameof(UnBlock), 1f);
         }
     }
     void UnBlock()
     {
-        UnlockMove();
-        isBlock = false;
         playerAim.SetBool("Block", false);
         timeSinceBlock = 0;
     }
@@ -205,7 +176,6 @@ public class PlayerAttackController : MonoBehaviour
         {
             tcp.lockMovement = true;
             tcp.lockRotation = true;
-            tcp.moveSpeed = 0;
             rb.angularDrag = 100;
             rb.drag = 100;
             playerAim.SetFloat("InputMagnitude", -1f);
@@ -215,6 +185,7 @@ public class PlayerAttackController : MonoBehaviour
     }
     public void UnlockMove()
     {
+        
         rb.angularDrag = AngDrag;
         rb.drag = Drag;
         tcp.lockMovement = false;
