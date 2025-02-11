@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4623406050750242241
+--- !u!1 &6505645858668111765
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,11 +8,11 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5751367266060910437}
-  - component: {fileID: 9178425870704572811}
-  - component: {fileID: 2252958362160991034}
-  - component: {fileID: 4372144035262872880}
-  - component: {fileID: 3706167600206612800}
+  - component: {fileID: 3505047776424349987}
+  - component: {fileID: 5606737654378381267}
+  - component: {fileID: 5567316743255086934}
+  - component: {fileID: 8441913926110507949}
+  - component: {fileID: 4864784575380535178}
   m_Layer: 0
   m_Name: Spot Light
   m_TagString: Untagged
@@ -20,40 +20,40 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5751367266060910437
+--- !u!4 &3505047776424349987
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4623406050750242241}
+  m_GameObject: {fileID: 6505645858668111765}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 1.329, y: 4.82, z: 1.84}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
---- !u!108 &9178425870704572811
+--- !u!108 &5606737654378381267
 Light:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4623406050750242241}
+  m_GameObject: {fileID: 6505645858668111765}
   m_Enabled: 1
   serializedVersion: 10
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 1, g: 0.5666981, b: 0, a: 1}
-  m_Intensity: 4.83
+  m_Intensity: 100
   m_Range: 10
-  m_SpotAngle: 103.8
-  m_InnerSpotAngle: 21.80208
+  m_SpotAngle: 60.21229
+  m_InnerSpotAngle: 60.21229
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 2
+    m_Type: 0
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -86,7 +86,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 2
+  m_Lightmapping: 1
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 5.65
@@ -97,14 +97,14 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!95 &2252958362160991034
+--- !u!95 &5567316743255086934
 Animator:
   serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4623406050750242241}
+  m_GameObject: {fileID: 6505645858668111765}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 49f77643374e4004ebd5bb43e3d0b65e, type: 2}
@@ -118,26 +118,26 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &4372144035262872880
+--- !u!114 &8441913926110507949
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4623406050750242241}
+  m_GameObject: {fileID: 6505645858668111765}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2184b72f68f2b384483735817b9005be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   DestroyTime: 0.7
---- !u!114 &3706167600206612800
+--- !u!114 &4864784575380535178
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4623406050750242241}
+  m_GameObject: {fileID: 6505645858668111765}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}

@@ -20,6 +20,7 @@ public class PlayerAttackController : MonoBehaviour
     public bool isEquipping;
 
     public bool isAttacking;
+    public bool isUntil;
     public bool isBlock;
     private float timeSinceAttack;
     private float timeSinceBlock;
@@ -67,7 +68,7 @@ public class PlayerAttackController : MonoBehaviour
     public void ResetAttack()
     {
         isAttacking = false;
-        
+        isUntil = false;
     }
     
     // Start is called before the first frame update
@@ -136,20 +137,22 @@ public class PlayerAttackController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Q) && playerAim.GetBool("IsGrounded") && timeSinceUntil > 2f && CursorLocked)
         {
-            isEquipping = true;
-
-            isAttacking = true;
-
+            if(isAttacking) return;
             playerAim.SetTrigger("Until");
-            efUntil.SetActive(true);
-            Vector3 spawnPosition = new Vector3(sword.transform.position.x, sword.transform.position.y + 5, sword.transform.position.z);
-            Quaternion spawnRotation = Quaternion.Euler(90, 0, 0);
-            Instantiate(Light, spawnPosition, spawnRotation);
-            timeSinceUntil = 0;
-            Invoke(nameof(EndUntil), 4f);
         }
     }
     
+    public void UntilAim()
+    {
+        isEquipping = true;
+        isUntil = true;
+        efUntil.SetActive(true);
+        Vector3 spawnPosition = new Vector3(sword.transform.position.x, sword.transform.position.y + 5, sword.transform.position.z);
+        Quaternion spawnRotation = Quaternion.Euler(90, 0, 0);
+        Instantiate(Light, spawnPosition, spawnRotation);
+        timeSinceUntil = 0;
+        Invoke(nameof(EndUntil), 4f);
+    }
     void EndUntil()
     {
         efUntil.SetActive(false);
@@ -172,7 +175,7 @@ public class PlayerAttackController : MonoBehaviour
 
     public void LockMove()
     {
-        if (isAttacking || isBlock || !CursorLocked)
+        if (isAttacking || isBlock || isUntil || !CursorLocked)
         {
             tcp.lockMovement = true;
             tcp.lockRotation = true;
