@@ -4,14 +4,15 @@ using UnityEngine.SceneManagement;
 
 public class ChangeScene : MonoBehaviour
 {
+    #region Attributes
     public CanvasGroup playButton, exitButton, optionsButton, gameTitle, optionsPanel;
     private bool isOptionsOpen = false;
-
+    #endregion
     void Start()
     {
         ResetUI();
     }
-
+    #region UI
     void ResetUI()
     {
         playButton.alpha = 1;
@@ -48,7 +49,8 @@ public class ChangeScene : MonoBehaviour
             StartCoroutine(FadeOutUIAndOpenOptions());
         }
     }
-
+    #endregion
+    #region Features
     IEnumerator FadeOutUIAndLoadScene()
     {
         yield return StartCoroutine(FadeOutAllUI(0.5f));
@@ -119,4 +121,5 @@ public class ChangeScene : MonoBehaviour
 
         uiElement.alpha = 1;
     }
+    #endregion
 }
