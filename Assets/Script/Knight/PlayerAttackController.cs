@@ -115,7 +115,7 @@ public class PlayerAttackController : MonoBehaviour
     }
     public void AttackCombo()
     {
-        if (Input.GetMouseButtonDown(0) && playerAim.GetBool("IsGrounded") && CursorLocked)
+        if (Input.GetMouseButtonDown(0) && playerAim.GetBool("IsGrounded") && CursorLocked && !isUntil && !isBlock)
         {
 
             if (canRecceiveInput)
