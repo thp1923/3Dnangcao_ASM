@@ -1,13 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
-public class AttackDamgePlayer : MonoBehaviour
+public class EnemyDamge : MonoBehaviour
 {
     public Transform pointAttack;
-    public Transform pointAttack2;
-    public Vector3 box;
     public float radius;
     public int stunDamge;
     public LayerMask attackMask;
@@ -19,13 +16,13 @@ public class AttackDamgePlayer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void Damge1()
@@ -41,28 +38,19 @@ public class AttackDamgePlayer : MonoBehaviour
     public void Damge3()
     {
         Damge = damge1;
-        Attack2();
+        Attack();
     }
     public void Attack()
     {
         Collider[] colInfo = Physics.OverlapSphere(pointAttack.position, radius, attackMask);
-        foreach (Collider enemy in colInfo)
+        foreach (Collider player in colInfo)
         {
-            enemy.GetComponent<EnemyTakeDamge>().TakeDamge(Damge, stunDamge);
-        }
-    }
-    public void Attack2()
-    {
-        Collider[] colInfo = Physics.OverlapBox(pointAttack2.position, box, Quaternion.identity, attackMask);
-        foreach (Collider enemy in colInfo)
-        {
-            enemy.GetComponent<EnemyTakeDamge>().TakeDamge(Damge, stunDamge);
+            player.GetComponent<PlayerTakeDamge>().TakeDamge(Damge, stunDamge);
         }
     }
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(pointAttack.position, radius);
-        Gizmos.DrawWireCube(pointAttack2.position, box);
     }
 }

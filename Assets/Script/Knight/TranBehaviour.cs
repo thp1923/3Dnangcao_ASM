@@ -14,7 +14,7 @@ public class TranBehaviour : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (PlayerAttackController.Instance.inputRecceived)
+        if (PlayerAttackController.Instance.inputRecceived && Input.GetMouseButtonDown(0))
         {
             animator.SetTrigger("Attack"+ currentAttack);
             PlayerAttackController.Instance.InputManager();

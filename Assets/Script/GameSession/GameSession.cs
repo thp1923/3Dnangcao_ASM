@@ -38,7 +38,7 @@ public class GameSession : MonoBehaviour
         Hp -= damage;
         if (Hp <= 0)
         {
-            Debug.Log("You lose");
+            PlayerTakeDamge.Instance.Death();
         }
     }
 }
