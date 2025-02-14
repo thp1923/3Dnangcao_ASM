@@ -1,14 +1,14 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.PostProcessing;
 
 namespace UnityEditor.PostProcessing
 {
-    [CustomPropertyDrawer(typeof(MinAttribute))]
+    [CustomPropertyDrawer(typeof(UnityEngine.MinAttribute))] // Chỉ định rõ MinAttribute của UnityEngine
     sealed class MinDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            MinAttribute attribute = (MinAttribute)base.attribute;
+            UnityEngine.MinAttribute attribute = (UnityEngine.MinAttribute)base.attribute; // Chỉ định rõ namespace
 
             if (property.propertyType == SerializedPropertyType.Integer)
             {
