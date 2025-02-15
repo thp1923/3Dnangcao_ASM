@@ -28,11 +28,10 @@ public class EnemyTakeDamge : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        timeCD += Time.deltaTime;
-        if (stunResistance < 100 & timeCD >= stunResistanceHealthCD)
+        timeCD -= Time.deltaTime;
+        if (stunResistance < 100 & timeCD <= 0)
         {
-            stunResistance = stunResistanceMax;
-            timeCD = 0;
+            RestoreStunRetance();
         }
     }
     public void TakeDamge(int damge, int stunNumber)
@@ -56,6 +55,13 @@ public class EnemyTakeDamge : MonoBehaviour
             rb.useGravity = false;
         }
     }
+
+    public void RestoreStunRetance()
+    {
+        timeCD = stunResistanceHealthCD;
+        stunResistance = stunResistanceMax;
+    }
+
     void Death()
     {
         isDeath = true;
