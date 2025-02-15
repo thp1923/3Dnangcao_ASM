@@ -8,6 +8,7 @@ public class Attack : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         PlayerAttackController.Instance.isAttacking = true;
+        PlayerAttackController.Instance.canRecceiveInput = false;
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

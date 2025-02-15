@@ -15,6 +15,7 @@ public class AttackDamgePlayer : MonoBehaviour
     public int damge2;
     public int damge3;
     int Damge;
+    int DamgeBonous;
 
     // Start is called before the first frame update
     void Start()
@@ -27,20 +28,23 @@ public class AttackDamgePlayer : MonoBehaviour
     {
         
     }
-
+    public void Bonus(int damgeBonus)
+    {
+        DamgeBonous = damgeBonus;
+    }
     public void Damge1()
     {
-        Damge = damge1;
+        Damge = damge1 + DamgeBonous;
         Attack();
     }
     public void Damge2()
     {
-        Damge = damge1;
+        Damge = damge2 + DamgeBonous;
         Attack();
     }
     public void Damge3()
     {
-        Damge = damge1;
+        Damge = damge3 + DamgeBonous;
         Attack2();
     }
     public void Attack()

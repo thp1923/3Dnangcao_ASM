@@ -497,6 +497,7 @@ GameObject:
   - component: {fileID: 2275926102303911237}
   - component: {fileID: 7323391668268605151}
   - component: {fileID: 7540938156841268248}
+  - component: {fileID: 3768437699743269442}
   - component: {fileID: 432282313714797099}
   - component: {fileID: 1849912817031232871}
   - component: {fileID: 1788078219825885335}
@@ -594,8 +595,8 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 1
-  groundMinDistance: 0.25
-  groundMaxDistance: 0.5
+  groundMinDistance: 0
+  groundMaxDistance: 0
   slopeLimit: 75
   lockMovement: 0
   lockRotation: 0
@@ -696,6 +697,18 @@ MonoBehaviour:
   Light: {fileID: 6505645858668111765, guid: 98b587c11e8901a428f6e7751b7d3a7a, type: 3}
   canRecceiveInput: 0
   inputRecceived: 0
+--- !u!114 &3768437699743269442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1660292267887620671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72c0e6701df29de43a1894db15c457aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   aimRange: 3
 --- !u!114 &432282313714797099
 MonoBehaviour:
@@ -723,7 +736,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e975a4c3160e8664098fb3f5bbb026dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stunResistance: 100
+  stunResistanceMax: 100
   stunResistanceHealthCD: 3
 --- !u!114 &1788078219825885335
 MonoBehaviour:
@@ -739,15 +752,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pointAttack: {fileID: 1752000701027815887}
   pointAttack2: {fileID: 4095186736043166111}
-  box: {x: 0.36, y: 1.59, z: 0.91}
+  box: {x: 0.55, y: 1.59, z: 0.91}
   radius: 0.66
-  stunDamge: 0
+  stunDamge: 90
   attackMask:
     serializedVersion: 2
     m_Bits: 64
-  damge1: 5
-  damge2: 7
-  damge3: 10
+  damge1: 10
+  damge2: 30
+  damge3: 50
 --- !u!1 &2174191528518647198
 GameObject:
   m_ObjectHideFlags: 0
@@ -11812,7 +11825,7 @@ Transform:
   m_GameObject: {fileID: 5742243733628350899}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.094, z: 1.3}
+  m_LocalPosition: {x: 0, y: 1.094, z: 1.274}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

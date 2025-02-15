@@ -41,4 +41,11 @@ public class GameSession : MonoBehaviour
             PlayerTakeDamge.Instance.Death();
         }
     }
+
+    public void Heal(int healBonous)
+    {
+        Hp += healBonous;
+        if (Hp > HpMax)
+            Hp = HpMax;
+    }
 }

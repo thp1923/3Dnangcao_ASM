@@ -17,9 +17,11 @@ public class PatrollState : StateMachineBehaviour
         agent.enabled = true;
         timer = 0;
         agent.speed = 3.5f;
-        GameObject go = GameObject.FindGameObjectWithTag("WayPoint");
-        foreach(Transform t in go.transform)
-            wayPoints.Add(t);
+        WayPoint wayPointScript = animator.GetComponent<WayPoint>();
+        foreach (Transform wayPoint in wayPointScript.WayPoints)
+        {
+            wayPoints.Add(wayPoint);
+        }
         agent.SetDestination(wayPoints[Random.Range(0, wayPoints.Count)].position);
         player = GameObject.FindGameObjectWithTag("Player").transform;
     }

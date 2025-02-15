@@ -9,16 +9,19 @@ public class EnemyTakeDamge : MonoBehaviour
     Animator aim;
     public GameObject me;
 
+    public bool isDeath;
+
     public int HpMax;
     int Hp;
-
-    public int stunResistance;
+    public int stunResistanceMax;
+    int stunResistance;
     public float stunResistanceHealthCD;
     float timeCD;
     // Start is called before the first frame update
     void Start()
     {
         Hp = HpMax;
+        stunResistance = stunResistanceMax;
         aim = GetComponent<Animator>();
     }
 
@@ -28,7 +31,7 @@ public class EnemyTakeDamge : MonoBehaviour
         timeCD += Time.deltaTime;
         if (stunResistance < 100 & timeCD >= stunResistanceHealthCD)
         {
-            stunResistance = 100;
+            stunResistance = stunResistanceMax;
             timeCD = 0;
         }
     }
@@ -55,6 +58,8 @@ public class EnemyTakeDamge : MonoBehaviour
     }
     void Death()
     {
+        isDeath = true;
+        FindObjectOfType<PlayerAim>().RemoveEnemy();
         Destroy(me);
     }
 }

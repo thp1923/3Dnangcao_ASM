@@ -25,6 +25,7 @@ public class PlayerAttackController : MonoBehaviour
     public bool isAttacking;
     public bool isUntil;
     public bool isBlock;
+    public bool isBuff;
     private float timeSinceAttack;
     private float timeSinceBlock;
     private float timeSinceUntil;
@@ -39,12 +40,6 @@ public class PlayerAttackController : MonoBehaviour
     [Header("Move")]
     float Drag;
     float AngDrag;
-
-    [Header("Aim")]
-    List<GameObject> enemiesList = new List<GameObject>();
-    GameObject closestEnemy;
-    public float aimRange;
-
 
     private void Awake()
     {
@@ -85,12 +80,7 @@ public class PlayerAttackController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         Drag = rb.drag;
         AngDrag = rb.angularDrag;
-        InputManager();
-        GameObject[] enemiesInScene = GameObject.FindGameObjectsWithTag("Enemy");
-        foreach(GameObject enemy in enemiesInScene)
-        {
-            enemiesList.Add(enemy);
-        }
+        canRecceiveInput = true;
     }
 
     // Update is called once per frame
@@ -99,38 +89,13 @@ public class PlayerAttackController : MonoBehaviour
         AttackCombo();
         timeSinceBlock += Time.deltaTime;
         timeSinceUntil += Time.deltaTime;
-        canRecceiveInput = true;
         ActiveWeapon();
         Until();
         UpdateCursorLock();
         Block();
         LockMove();
-        RemoveEnemy();
     }
 
-    public void ClosestEnemy()
-    {
-        float range = aimRange;
-        foreach(GameObject enemyGameObject in enemiesList)
-        {
-            float dist = Vector3.Distance(enemyGameObject.transform.position, transform.position);
-            if (dist < range)
-            {
-                range = dist;
-                closestEnemy = enemyGameObject;
-                Vector3 enemyPosition = new Vector3(closestEnemy.transform.position.x, 0, closestEnemy.transform.position.z);
-                gameObject.transform.LookAt(enemyPosition);
-            }
-        }
-    }
-
-    public void RemoveEnemy()
-    {
-        if(closestEnemy != null)
-        {
-            enemiesList.Remove(closestEnemy);
-        }
-    }
 
     public void InputManager()
     {
@@ -162,7 +127,7 @@ public class PlayerAttackController : MonoBehaviour
                 inputRecceived = true;
                 canRecceiveInput = false;
                 isAttacking = true;
-                ClosestEnemy();
+                GetComponent<PlayerAim>().ClosestEnemy();
             }
             else
             {
@@ -178,7 +143,7 @@ public class PlayerAttackController : MonoBehaviour
         {
             if(isAttacking) return;
             playerAim.SetTrigger("Until");
-            ClosestEnemy();
+            GetComponent<PlayerAim>().ClosestEnemy();
         }
     }
     
@@ -204,7 +169,7 @@ public class PlayerAttackController : MonoBehaviour
         {
             isEquipping = true;
             playerAim.SetBool("Block", true);
-            ClosestEnemy();
+            GetComponent<PlayerAim>().ClosestEnemy();
             Invoke(nameof(UnBlock), 1f);
         }
     }
@@ -216,7 +181,7 @@ public class PlayerAttackController : MonoBehaviour
 
     public void LockMove()
     {
-        if (isAttacking || isBlock || isUntil || !CursorLocked)
+        if (isAttacking || isBlock || isUntil || !CursorLocked || isBuff)
         {
             tcp.lockMovement = true;
             tcp.lockRotation = true;

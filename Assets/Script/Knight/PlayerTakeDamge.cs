@@ -7,15 +7,18 @@ public class PlayerTakeDamge : MonoBehaviour
 {
     public static PlayerTakeDamge Instance;
     Animator aim;
-
-    public int stunResistance;
+    public int stunResistanceMax;
+    int stunResistance;
     public float stunResistanceHealthCD;
     float timeCD;
+
+    public bool noTakeDamge;
     // Start is called before the first frame update
     void Start()
     {
         aim = GetComponent<Animator>();
         Instance = this;
+        stunResistance = stunResistanceMax;
     }
 
     // Update is called once per frame
@@ -24,20 +27,21 @@ public class PlayerTakeDamge : MonoBehaviour
         timeCD += Time.deltaTime;
         if(stunResistance < 100 & timeCD >= stunResistanceHealthCD)
         {
-            stunResistance = 100;
+            stunResistance = stunResistanceMax;
             timeCD = 0;
         }
     }
 
     public void TakeDamge(int damge, int stunNumber)
     {
+        if (noTakeDamge) return;
         GameSession.Instance.TakeDamage(damge);
         stunResistance -= stunNumber;
         timeCD = 0;
         if(stunResistance <= 0)
         {
             aim.SetTrigger("Hit");
-            GetComponent<PlayerAttackController>().ClosestEnemy();
+            GetComponent<PlayerAim>().ClosestEnemy();
         }
     }
     public void Death()
