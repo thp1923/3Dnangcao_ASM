@@ -69,6 +69,6 @@ public class PowerUp : MonoBehaviour
     public void PowerUpOff()
     {
         powerUp = false;
-        GetComponent<AttackDamgePlayer>().Bonus(0);
+        GetComponent<AttackDamgePlayer>().Bonus(-DamgeBonus);
     }
 }

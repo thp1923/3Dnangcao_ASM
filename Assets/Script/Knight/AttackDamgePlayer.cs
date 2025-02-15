@@ -30,7 +30,7 @@ public class AttackDamgePlayer : MonoBehaviour
     }
     public void Bonus(int damgeBonus)
     {
-        DamgeBonous = damgeBonus;
+        DamgeBonous += damgeBonus;
     }
     public void Damge1()
     {
