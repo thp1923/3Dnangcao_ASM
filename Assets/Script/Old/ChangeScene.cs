@@ -1,11 +1,15 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class ChangeScene : MonoBehaviour
 {
     #region Attributes
     public CanvasGroup playButton, exitButton, optionsButton, gameTitle, optionsPanel;
+    public GameObject loadingScreen;
+    public Slider progressBar;
+
     private bool isOptionsOpen = false;
     #endregion
     void Start()
@@ -30,6 +34,11 @@ public class ChangeScene : MonoBehaviour
 
         optionsPanel.alpha = 0;
         optionsPanel.gameObject.SetActive(false);
+
+        if (loadingScreen != null)
+        {
+            loadingScreen.SetActive(false);
+        }
     }
 
     public void NextScene()
@@ -55,10 +64,50 @@ public class ChangeScene : MonoBehaviour
     {
         yield return StartCoroutine(FadeOutAllUI(0.5f));
         yield return new WaitForSeconds(0.5f);
-        Debug.Log("Loading next scene...");
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        
+        if (loadingScreen != null)
+        {
+            loadingScreen.SetActive(true);
+        }
+        yield return StartCoroutine(LoadSceneAsync());
     }
+    #region Scene Loading
+    IEnumerator LoadSceneAsync()
+    {
+        AsyncOperation operation = SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
+        operation.allowSceneActivation = false; // Prevent auto-switching
 
+        float targetProgress = 0;
+
+        while (!operation.isDone)
+        {
+            // Normalize progress (0 to 1)
+            targetProgress = Mathf.Clamp01(operation.progress / 0.9f);
+
+            // Smoothly update the slider over time
+            if (progressBar != null)
+            {
+                progressBar.value = Mathf.MoveTowards(progressBar.value, targetProgress, Time.deltaTime * 2f);
+            }
+
+            // Wait until the scene is fully loaded (progress = 0.9)
+            if (operation.progress >= 0.9f)
+            {
+                // Force the slider to complete the animation to 100%
+                while (progressBar.value < 1f)
+                {
+                    progressBar.value = Mathf.MoveTowards(progressBar.value, 1f, Time.deltaTime * 2f);
+                    yield return null;
+                }
+
+                yield return new WaitForSeconds(0.5f); // Optional delay for smooth transition
+                operation.allowSceneActivation = true; // Now switch scenes
+            }
+
+            yield return null;
+        }
+    }
+    #endregion
     IEnumerator FadeOutUIAndOpenOptions()
     {
         isOptionsOpen = true;
