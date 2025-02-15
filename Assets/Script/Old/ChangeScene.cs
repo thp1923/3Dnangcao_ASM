@@ -58,13 +58,21 @@ public class ChangeScene : MonoBehaviour
             StartCoroutine(FadeOutUIAndOpenOptions());
         }
     }
+
+    public void CloseOptions()
+    {
+        if (isOptionsOpen)
+        {
+            StartCoroutine(FadeOutOptionsAndRestoreUI());
+        }
+    }
     #endregion
     #region Features
     IEnumerator FadeOutUIAndLoadScene()
     {
         yield return StartCoroutine(FadeOutAllUI(0.5f));
         yield return new WaitForSeconds(0.5f);
-        
+
         if (loadingScreen != null)
         {
             loadingScreen.SetActive(true);
@@ -117,6 +125,14 @@ public class ChangeScene : MonoBehaviour
         yield return StartCoroutine(FadeInUI(optionsPanel, 0.5f));
     }
 
+    IEnumerator FadeOutOptionsAndRestoreUI()
+    {
+        yield return StartCoroutine(FadeOutUI(optionsPanel, 0.5f));
+        optionsPanel.gameObject.SetActive(false);
+        yield return StartCoroutine(FadeInAllUI(0.5f));
+        isOptionsOpen = false;
+    }
+
     IEnumerator FadeOutUIAndQuit()
     {
         yield return StartCoroutine(FadeOutAllUI(0.5f));
@@ -125,11 +141,10 @@ public class ChangeScene : MonoBehaviour
         Application.Quit();
     }
 
-    // ✅ This fades out all UI elements at the SAME time
     IEnumerator FadeOutAllUI(float duration)
     {
         float time = 0;
-        float startAlpha = gameTitle.alpha; // All elements start at the same alpha
+        float startAlpha = gameTitle.alpha;
 
         while (time < duration)
         {
@@ -144,7 +159,6 @@ public class ChangeScene : MonoBehaviour
             yield return null;
         }
 
-        // Disable interaction after fade-out
         playButton.interactable = false;
         optionsButton.interactable = false;
         exitButton.interactable = false;
@@ -152,6 +166,44 @@ public class ChangeScene : MonoBehaviour
         playButton.blocksRaycasts = false;
         optionsButton.blocksRaycasts = false;
         exitButton.blocksRaycasts = false;
+    }
+
+    IEnumerator FadeInAllUI(float duration)
+    {
+        float time = 0;
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+            float newAlpha = Mathf.Lerp(0, 1, time / duration);
+
+            playButton.alpha = newAlpha;
+            optionsButton.alpha = newAlpha;
+            exitButton.alpha = newAlpha;
+            gameTitle.alpha = newAlpha;
+
+            yield return null;
+        }
+
+        playButton.interactable = true;
+        optionsButton.interactable = true;
+        exitButton.interactable = true;
+
+        playButton.blocksRaycasts = true;
+        optionsButton.blocksRaycasts = true;
+        exitButton.blocksRaycasts = true;
+    }
+
+    IEnumerator FadeOutUI(CanvasGroup uiElement, float duration)
+    {
+        float time = 0;
+        float startAlpha = uiElement.alpha;
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+            uiElement.alpha = Mathf.Lerp(startAlpha, 0, time / duration);
+            yield return null;
+        }
+        uiElement.alpha = 0;
     }
 
     IEnumerator FadeInUI(CanvasGroup uiElement, float duration)
