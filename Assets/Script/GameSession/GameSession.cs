@@ -38,7 +38,7 @@ public class GameSession : MonoBehaviour
         Hp -= damage;
         if (Hp <= 0)
         {
-            PlayerTakeDamge.Instance.Death();
+            FindObjectOfType<PlayerTakeDamge>().Death();
         }
     }
 

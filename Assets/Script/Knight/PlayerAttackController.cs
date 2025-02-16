@@ -24,10 +24,9 @@ public class PlayerAttackController : MonoBehaviour
 
     public bool isAttacking;
     public bool isUntil;
-    public bool isBlock;
+    
     public bool isBuff;
     private float timeSinceAttack;
-    private float timeSinceBlock;
     private float timeSinceUntil;
 
     public GameObject efAttack;
@@ -87,12 +86,10 @@ public class PlayerAttackController : MonoBehaviour
     void Update()
     {
         AttackCombo();
-        timeSinceBlock += Time.deltaTime;
         timeSinceUntil += Time.deltaTime;
         ActiveWeapon();
         Until();
         UpdateCursorLock();
-        Block();
         LockMove();
     }
 
@@ -118,7 +115,7 @@ public class PlayerAttackController : MonoBehaviour
     }
     public void AttackCombo()
     {
-        if (Input.GetMouseButtonDown(0) && playerAim.GetBool("IsGrounded") && CursorLocked && !isUntil && !isBlock)
+        if (Input.GetMouseButtonDown(0) && playerAim.GetBool("IsGrounded") && CursorLocked && !isUntil && !GetComponent<PlayerTakeDamge>().isBlock)
         {
 
             if (canRecceiveInput)
@@ -163,25 +160,12 @@ public class PlayerAttackController : MonoBehaviour
         efUntil.SetActive(false);
     }
 
-    void Block()
-    {
-        if (Input.GetKeyDown(KeyCode.Mouse1) && playerAim.GetBool("IsGrounded") && timeSinceBlock > 3f && CursorLocked)
-        {
-            isEquipping = true;
-            playerAim.SetBool("Block", true);
-            GetComponent<PlayerAim>().ClosestEnemy();
-            Invoke(nameof(UnBlock), 1f);
-        }
-    }
-    void UnBlock()
-    {
-        playerAim.SetBool("Block", false);
-        timeSinceBlock = 0;
-    }
+    
+    
 
     public void LockMove()
     {
-        if (isAttacking || isBlock || isUntil || !CursorLocked || isBuff)
+        if (isAttacking || GetComponent<PlayerTakeDamge>().isBlock || isUntil || !CursorLocked || isBuff)
         {
             tcp.lockMovement = true;
             tcp.lockRotation = true;

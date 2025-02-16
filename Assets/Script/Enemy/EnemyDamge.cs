@@ -7,6 +7,7 @@ public class EnemyDamge : MonoBehaviour
     public Transform pointAttack;
     public float radius;
     public int stunDamge;
+    public float knockBack;
     public LayerMask attackMask;
     public int damge1;
     public int damge2;
@@ -45,7 +46,12 @@ public class EnemyDamge : MonoBehaviour
         Collider[] colInfo = Physics.OverlapSphere(pointAttack.position, radius, attackMask);
         foreach (Collider player in colInfo)
         {
-            player.GetComponent<PlayerTakeDamge>().TakeDamge(Damge, stunDamge);
+            if (player.GetComponent<PlayerTakeDamge>().isBlock)
+            {
+                GetComponent<EnemyTakeDamge>().TakeDamge(0, 1000);
+                return;
+            }
+            player.GetComponent<PlayerTakeDamge>().TakeDamge(Damge, stunDamge, knockBack);
         }
     }
     private void OnDrawGizmosSelected()

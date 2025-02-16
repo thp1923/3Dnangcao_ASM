@@ -5,6 +5,7 @@ using UnityEngine;
 public class PatrollState : StateMachineBehaviour
 {
     public float time;
+    public float speed;
     public float chaseDistance;
     float timer;
     List<Transform> wayPoints = new List<Transform>();
@@ -16,7 +17,7 @@ public class PatrollState : StateMachineBehaviour
         agent = animator.GetComponent<NavMeshAgent>();
         agent.enabled = true;
         timer = 0;
-        agent.speed = 3.5f;
+        agent.speed = speed;
         WayPoint wayPointScript = animator.GetComponent<WayPoint>();
         foreach (Transform wayPoint in wayPointScript.WayPoints)
         {

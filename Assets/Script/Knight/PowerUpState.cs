@@ -8,7 +8,7 @@ public class PowerUpState : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         PlayerAttackController.Instance.isBuff = true;
-        PlayerTakeDamge.Instance.noTakeDamge = true;
+        animator.GetComponent<PlayerTakeDamge>().noTakeDamge = true;
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -21,7 +21,7 @@ public class PowerUpState : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         PlayerAttackController.Instance.isBuff = false;
-        PlayerTakeDamge.Instance.noTakeDamge = false;
+        animator.GetComponent<PlayerTakeDamge>().noTakeDamge = false;
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

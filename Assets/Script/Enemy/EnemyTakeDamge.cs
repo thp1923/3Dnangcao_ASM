@@ -38,11 +38,7 @@ public class EnemyTakeDamge : MonoBehaviour
     {
         Hp -= damge;
         stunResistance -= stunNumber;
-        timeCD = 0;
-        if (stunResistance <= 0)
-        {
-            aim.SetTrigger("Hit");
-        }
+        timeCD = stunResistanceHealthCD;
         if (Hp <= 0)
         {
             aim.SetBool("IsChasing", false);
@@ -53,6 +49,10 @@ public class EnemyTakeDamge : MonoBehaviour
             GetComponent<CapsuleCollider>().enabled = false;
             Rigidbody rb = GetComponent<Rigidbody>();
             rb.useGravity = false;
+        }
+        if (stunResistance <= 0)
+        {
+            aim.SetTrigger("Hit");
         }
     }
 

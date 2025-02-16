@@ -19,6 +19,10 @@ public class AttackState : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        if (player.GetComponent<PlayerTakeDamge>().isDeath)
+        {
+            return;
+        }
         // Get the player's position and set the y-coordinate to zero.
         Vector3 playerPosition = new Vector3(player.transform.position.x, 0, player.transform.position.z);
 
