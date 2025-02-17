@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class PlayerTakeDamge : MonoBehaviour
 {
-    public PlayerTakeDamge Instance;
     Animator PlayerAim;
     Rigidbody rb;
     public int stunResistanceMax;
@@ -23,7 +22,6 @@ public class PlayerTakeDamge : MonoBehaviour
     {
         PlayerAim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
-        Instance = this;
         stunResistance = stunResistanceMax;
     }
 

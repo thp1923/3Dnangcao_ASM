@@ -16,6 +16,7 @@ public class BossWolfDamge : MonoBehaviour
     public int damge2;
     int Damge;
 
+    public GameObject Shock;
     public GameObject Tornado;
     // Start is called before the first frame update
     void Start()
@@ -37,6 +38,7 @@ public class BossWolfDamge : MonoBehaviour
     {
         Damge = damge2;
         Attack();
+        GameObject instance = Instantiate(Shock, pointAttack2.position, Quaternion.identity);
     }
 
     public void SummonTornado()

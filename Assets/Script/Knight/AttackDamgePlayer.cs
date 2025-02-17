@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -16,6 +16,8 @@ public class AttackDamgePlayer : MonoBehaviour
     public int damge3;
     int Damge;
     int DamgeBonous;
+
+    public GameObject Blouse;
 
     // Start is called before the first frame update
     void Start()
@@ -52,6 +54,7 @@ public class AttackDamgePlayer : MonoBehaviour
         Collider[] colInfo = Physics.OverlapSphere(pointAttack.position, radius, attackMask);
         foreach (Collider enemy in colInfo)
         {
+            // Gây sát thương lên kẻ địch
             enemy.GetComponent<EnemyTakeDamge>().TakeDamge(Damge, stunDamge);
         }
     }

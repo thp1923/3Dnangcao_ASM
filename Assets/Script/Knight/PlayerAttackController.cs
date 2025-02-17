@@ -40,6 +40,8 @@ public class PlayerAttackController : MonoBehaviour
     float Drag;
     float AngDrag;
 
+    public BoxCollider weapon;
+
     private void Awake()
     {
         Instance = this;
@@ -66,7 +68,11 @@ public class PlayerAttackController : MonoBehaviour
         }
     }
     
-
+    public void WeaponColider(int number)
+    {
+        if(number == 0) weapon.enabled = true;
+        else weapon.enabled = false;
+    }
     public void ResetAttack()
     {
         isAttacking = false;
@@ -80,6 +86,7 @@ public class PlayerAttackController : MonoBehaviour
         Drag = rb.drag;
         AngDrag = rb.angularDrag;
         canRecceiveInput = true;
+        weapon.enabled = false;
     }
 
     // Update is called once per frame
