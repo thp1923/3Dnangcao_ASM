@@ -9,7 +9,6 @@ public class EnemyTakeDamge : MonoBehaviour
     Animator aim;
     public GameObject me;
 
-    public bool isDeath;
 
     public int HpMax;
     int Hp;
@@ -29,7 +28,7 @@ public class EnemyTakeDamge : MonoBehaviour
     void Update()
     {
         timeCD -= Time.deltaTime;
-        if (stunResistance < 100 & timeCD <= 0)
+        if (stunResistance < stunResistanceMax & timeCD <= 0)
         {
             RestoreStunRetance();
         }
@@ -64,7 +63,6 @@ public class EnemyTakeDamge : MonoBehaviour
 
     void Death()
     {
-        isDeath = true;
         FindObjectOfType<PlayerAim>().RemoveEnemy();
         Destroy(me);
     }

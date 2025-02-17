@@ -34,7 +34,7 @@ public class ChaseStateBossWolf : StateMachineBehaviour
 
         if (distance <= skillAttackRange && animator.GetComponent<BossWolf>().Mp2 >= 100)
             animator.SetTrigger("Attack3");
-        else if (distance <= heavyAttackRange && distance >= 4 && animator.GetComponent<BossWolf>().Mp1 >= 50)
+        else if (distance <= heavyAttackRange && distance >= 5 && animator.GetComponent<BossWolf>().Mp1 >= 50)
             animator.SetTrigger("Attack2");
         else if (distance <= attackRange)
             animator.SetTrigger("Attack1");

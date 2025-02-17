@@ -14,8 +14,8 @@ public class Attack1StateBossWolf : StateMachineBehaviour
         agent = animator.GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
         agent.enabled = false;
-        animator.GetComponent<BossWolf>().Mp1 += 20;
-        animator.GetComponent<BossWolf>().Mp2 += 20;
+        animator.GetComponent<BossWolf>().Mp1 -= 50;
+        animator.GetComponent<BossWolf>().Mp2 += 50;
         animator.GetComponent<Wolf>().Attack1();
     }
 

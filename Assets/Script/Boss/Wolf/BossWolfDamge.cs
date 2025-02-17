@@ -37,7 +37,7 @@ public class BossWolfDamge : MonoBehaviour
     public void Damge2()
     {
         Damge = damge2;
-        Attack();
+        Attack2();
         GameObject instance = Instantiate(Shock, pointAttack2.position, Quaternion.identity);
     }
 
@@ -70,7 +70,7 @@ public class BossWolfDamge : MonoBehaviour
                 GetComponent<EnemyTakeDamge>().TakeDamge(0, 1000);
                 return;
             }
-            player.GetComponent<EnemyTakeDamge>().TakeDamge(Damge, stunDamge);
+            player.GetComponent<PlayerTakeDamge>().TakeDamge(Damge, stunDamge, knockBack);
         }
     }
     private void OnDrawGizmosSelected()

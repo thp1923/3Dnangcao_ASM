@@ -36,7 +36,7 @@ public class RunStateBossWolf : StateMachineBehaviour
         float distance = Vector3.Distance(player.position, animator.transform.position);
         if (distance <= skillAttackRange && animator.GetComponent<BossWolf>().Mp2 >= 100)
             animator.SetTrigger("Attack3");
-        else if (distance <= heavyAttackRange && animator.GetComponent<BossWolf>().Mp1 >= 50)
+        else if (distance <= heavyAttackRange && distance >= 5 && animator.GetComponent<BossWolf>().Mp1 >= 50)
             animator.SetTrigger("Attack2");
         else if (distance <= attackRange)
             animator.SetTrigger("Attack1");
