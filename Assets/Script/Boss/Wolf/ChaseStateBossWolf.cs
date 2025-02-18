@@ -14,7 +14,8 @@ public class ChaseStateBossWolf : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
-
+        animator.GetComponent<AttackEffectWolf>().WeaponColider(1);
+        animator.GetComponent<AttackEffectWolf>().WeaponColider2(1);
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

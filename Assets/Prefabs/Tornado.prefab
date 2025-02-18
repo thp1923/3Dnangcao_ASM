@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &324807952890122568
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2805545671135174956}
+  m_Layer: 0
+  m_Name: AttackPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2805545671135174956
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 324807952890122568}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.25, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9028215825507533031}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8745606657383875881
 GameObject:
   m_ObjectHideFlags: 0
@@ -11,6 +42,9 @@ GameObject:
   - component: {fileID: 9028215825507533031}
   - component: {fileID: 4479504565876026954}
   - component: {fileID: 8860550129222082596}
+  - component: {fileID: 6669621372758502750}
+  - component: {fileID: 1180150385559966173}
+  - component: {fileID: 6571984193641383294}
   m_Layer: 0
   m_Name: Tornado
   m_TagString: Enemy
@@ -32,6 +66,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1862785741725859525}
+  - {fileID: 2805545671135174956}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4479504565876026954
@@ -68,6 +103,64 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &6669621372758502750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8745606657383875881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30c9a225826493e4d8df836a836bbbf9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackMask:
+    serializedVersion: 2
+    m_Bits: 8
+  box: {x: 0.97, y: 2.97, z: 1}
+  point: {fileID: 2805545671135174956}
+  damge1: 40
+  stunDamge: 30
+  knockBack: 30
+  tagAttack: Player
+  attackCount: 0
+  attackMax: 7
+--- !u!65 &1180150385559966173
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8745606657383875881}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 2.9448764, z: 1}
+  m_Center: {x: 0, y: 1.2489606, z: 0}
+--- !u!114 &6571984193641383294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8745606657383875881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c69fbc19e4e94f14fbadeae5674aae36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tagEffect: Player
+  effect: {fileID: 3132353365736778974, guid: 37d561cba6f0b8642a892cbf09e0a336, type: 3}
 --- !u!1001 &6990900997992437272
 PrefabInstance:
   m_ObjectHideFlags: 0
