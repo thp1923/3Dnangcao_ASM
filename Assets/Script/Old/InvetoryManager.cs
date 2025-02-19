@@ -9,7 +9,6 @@ public class InvetoryManager : MonoBehaviour
 
     public static InvetoryManager Instance { get; private set; }
     public List<ItemIn> items = new List<ItemIn>();
-    //public List<ItemModel> itemsMl = new List<ItemModel>();
     public Transform itemHolder;
     public GameObject itemPrefab;
     public Toggle enableRomoveButton;
@@ -43,25 +42,15 @@ public class InvetoryManager : MonoBehaviour
         Instance = this;
     }
 
-    public void Add(ItemIn item/*, ItemModel itemMl*/)
+    public void Add(ItemIn item)
     {
         items.Add(item);
-        //itemsMl.Add(itemMl);
         DislayInventory();
     }
 
-    //public void DropItem(ItemModel itemMl)
-    //{
-    //    Transform transPlayer = GameObject.FindGameObjectWithTag("Player").transform;
-    //    GameObject instance = Instantiate(itemMl.itemModel, 
-    //        transPlayer.position
-    //        + new Vector3(Random.Range(-0.7f, 0.7f), 0, Random.Range(-0.7f, 0.7f)), Quaternion.identity);
-    //    itemsMl.Remove(itemMl);
-    //}
-    public void Remove(ItemIn item/*, ItemModel itemMl*/)
+    public void Remove(ItemIn item)
     {
         items.Remove(item);
-        //DropItem(itemMl);
     }
     
     public void EnableRemoveButton()

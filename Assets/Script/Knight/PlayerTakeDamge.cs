@@ -1,6 +1,7 @@
 using Invector.vCharacterController;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class PlayerTakeDamge : MonoBehaviour
@@ -17,6 +18,8 @@ public class PlayerTakeDamge : MonoBehaviour
     public bool isBlock;
     public bool isDeath;
     public bool noTakeDamge;
+
+    public GameObject DamPopUp;
 
     [Header("-------------CD----------")]
     public GameObject block;
@@ -66,8 +69,12 @@ public class PlayerTakeDamge : MonoBehaviour
         if (noTakeDamge) return;
         GameSession.Instance.TakeDamage(damge);
         stunResistance -= stunNumber;
-        timeCD = 0;
-        if(stunResistance <= 0)
+        timeCD = stunResistanceHealthCD;
+        GameObject instance = Instantiate(DamPopUp, transform.position
+            + new Vector3(UnityEngine.Random.Range(-1f, 1f), 2f, UnityEngine.Random.Range(-1f, 1f)), 
+            Quaternion.identity);
+        instance.GetComponentInChildren<TextMeshProUGUI>().text = damge.ToString();
+        if (stunResistance <= 0)
         {
             PlayerAim.SetTrigger("Hit");
             PlayerAim.SetFloat("InputMagnitude", -1);

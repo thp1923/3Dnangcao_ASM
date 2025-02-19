@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
@@ -19,6 +20,10 @@ public class EnemyTakeDamge : MonoBehaviour
     int stunResistance;
     public float stunResistanceHealthCD;
     float timeCD;
+
+    public GameObject DamPopUp;
+
+    public float Y;
 
     [Header("Time")]
     public float timeDelayHp;
@@ -66,6 +71,10 @@ public class EnemyTakeDamge : MonoBehaviour
         stunResistance -= stunNumber;
         HpBar.value = Hp;
         timeCD = stunResistanceHealthCD;
+        GameObject instance = Instantiate(DamPopUp, transform.position
+            + new Vector3(UnityEngine.Random.Range(-1f, 1f), Y, UnityEngine.Random.Range(-1f, 1f)),
+            Quaternion.identity);
+        instance.GetComponentInChildren<TextMeshProUGUI>().text = damge.ToString();
         if (Hp <= 0)
         {
             aim.SetBool("IsChasing", false);

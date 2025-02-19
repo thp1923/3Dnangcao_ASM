@@ -6,7 +6,6 @@ public class ItemUIController : MonoBehaviour
 {
 
     public ItemIn item;
-    public ItemModel itemModel;
     public void SetItem(ItemIn item)
     {
         this.item = item;
@@ -23,7 +22,7 @@ public class ItemUIController : MonoBehaviour
         switch(item.itemType)
         {
             case ItemIn.ItemType.Consumbles:
-                Debug.Log("su dung vat pham ten:" + item.Item_Name);
+                GameSession.Instance.Heal(item.value);
                 break;
             case ItemIn.ItemType.Weapon:
                 Debug.Log("su dung vu khi ten:" + item.Item_Name);
