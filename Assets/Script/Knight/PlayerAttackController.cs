@@ -3,11 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerAttackController : MonoBehaviour
+public class PlayerAttackController : LockMouse
 {
     [Header("Main")]
     public static PlayerAttackController Instance;
-    public static bool CursorLocked = true;
     public vThirdPersonController tcp;
 
     [Header("Private")]
@@ -207,30 +206,5 @@ public class PlayerAttackController : MonoBehaviour
         tcp.lockMovement = false;
         tcp.lockRotation = false;
     }
-    void UpdateCursorLock()
-    {
-        if (CursorLocked)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-
-            //UnlockMove();
-            if (Input.GetKeyDown(KeyCode.LeftAlt))
-            {
-                CursorLocked = false;
-            }
-        }
-        else
-        {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-            //LockMove();
-            
-
-            if (Input.GetKeyDown(KeyCode.LeftAlt))
-            {
-                CursorLocked = true;
-            }
-        }
-    }
+    
 }

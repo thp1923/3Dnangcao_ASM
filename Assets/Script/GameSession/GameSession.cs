@@ -19,6 +19,9 @@ public class GameSession : MonoBehaviour
     [Header("Time")]
     public float timeDelayHp;
     float _timeDelayHp;
+
+    [Header("-----------Inven----------")]
+    public GameObject InventoryCanva;
     
     void Awake()
     {
@@ -45,6 +48,7 @@ public class GameSession : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Inventory();
         _timeDelayHp -= Time.deltaTime;
         if(Hp < HpDelay && _timeDelayHp <= 0)
         {
@@ -70,5 +74,36 @@ public class GameSession : MonoBehaviour
         HpBar.value = Hp;
         if (Hp > HpMax)
             Hp = HpMax;
+    }
+
+    public void Inventory()
+    {
+        if (InventoryCanva.activeInHierarchy)
+        {
+            Time.timeScale = 0;
+        }
+        else{
+            Time.timeScale = 1;
+        }
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            if (InventoryCanva.activeInHierarchy)
+            {
+                InventoryCanva.SetActive(false);
+                LockMouse.CursorLocked = true;
+            }
+            else
+            {
+                InventoryCanva.SetActive(true);
+                LockMouse.CursorLocked = false;
+            }
+        }
+    }
+    public void LockMouseInGamesession(int number)
+    {
+        if(number == 0)
+            LockMouse.CursorLocked = false;
+        else
+            LockMouse.CursorLocked = true;
     }
 }
