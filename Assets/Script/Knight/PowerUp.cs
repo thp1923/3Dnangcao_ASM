@@ -18,6 +18,11 @@ public class PowerUp : MonoBehaviour
     public int DamgeBonus;
 
     Animator anim;
+
+    [Header("----------CD--------")]
+    public GameObject power;
+
+    public TMPro.TextMeshProUGUI powerCD;
     // Start is called before the first frame update
     void Start()
     {
@@ -30,7 +35,9 @@ public class PowerUp : MonoBehaviour
     void Update()
     {
         _timeCD -= Time.deltaTime;
+        powerCD.text = _timeCD.ToString("F1");
         OnPowerUp();
+        IconPower();
         if (powerUp)
         {
             buff.SetActive(true);
@@ -47,6 +54,12 @@ public class PowerUp : MonoBehaviour
             buff.SetActive(false);
             heal.SetActive(false);
         }
+    }
+
+    void IconPower()
+    {
+        if(powerUp) power.SetActive(true);
+        else power.SetActive(false);
     }
 
     private void OnPowerUp()

@@ -19,7 +19,7 @@ public class ChaseState : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (player.GetComponent<PlayerTakeDamge>().isDeath)
+        if (FindObjectOfType<PlayerTakeDamge>().isDeath)
         {
             animator.SetBool("IsRunning", false);
             return;

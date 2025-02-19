@@ -26,6 +26,7 @@ public class PlayerAttackController : MonoBehaviour
     public bool isUntil;
     
     public bool isBuff;
+    public float timeCDUntil;
     private float timeSinceAttack;
     private float timeSinceUntil;
 
@@ -41,6 +42,12 @@ public class PlayerAttackController : MonoBehaviour
     float AngDrag;
 
     public BoxCollider weapon;
+
+    [Header("CD")]
+    public GameObject nomarl;
+    public GameObject skill;
+
+    public TMPro.TextMeshProUGUI skillCD;
 
     private void Awake()
     {
@@ -92,14 +99,23 @@ public class PlayerAttackController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        skillCD.text = timeSinceUntil.ToString("F1");
+        IconAttack();
         AttackCombo();
-        timeSinceUntil += Time.deltaTime;
+        timeSinceUntil -= Time.deltaTime;
         ActiveWeapon();
         Until();
         UpdateCursorLock();
         LockMove();
     }
 
+    void IconAttack()
+    {
+        if(timeSinceUntil > 0) skill.SetActive(true);
+        else skill.SetActive(false);
+        if (!canRecceiveInput) nomarl.SetActive(true);
+        else nomarl.SetActive(false);
+    }
 
     public void InputManager()
     {
@@ -143,7 +159,7 @@ public class PlayerAttackController : MonoBehaviour
 
     void Until()
     {
-        if (Input.GetKeyDown(KeyCode.Q) && playerAim.GetBool("IsGrounded") && timeSinceUntil > 2f && CursorLocked)
+        if (Input.GetKeyDown(KeyCode.Q) && playerAim.GetBool("IsGrounded") && timeSinceUntil <= 0 && CursorLocked)
         {
             if(isAttacking) return;
             playerAim.SetTrigger("Until");
@@ -159,7 +175,7 @@ public class PlayerAttackController : MonoBehaviour
         Vector3 spawnPosition = new Vector3(sword.transform.position.x, sword.transform.position.y + 5, sword.transform.position.z);
         Quaternion spawnRotation = Quaternion.Euler(90, 0, 0);
         Instantiate(Light, spawnPosition, spawnRotation);
-        timeSinceUntil = 0;
+        timeSinceUntil = timeCDUntil;
         Invoke(nameof(EndUntil), 4f);
     }
     void EndUntil()

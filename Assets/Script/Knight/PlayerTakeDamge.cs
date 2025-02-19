@@ -17,6 +17,11 @@ public class PlayerTakeDamge : MonoBehaviour
     public bool isBlock;
     public bool isDeath;
     public bool noTakeDamge;
+
+    [Header("-------------CD----------")]
+    public GameObject block;
+
+    public TMPro.TextMeshProUGUI blockCD;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,13 +34,22 @@ public class PlayerTakeDamge : MonoBehaviour
     void Update()
     {
         Block();
-        timeCD += Time.deltaTime;
-        if(stunResistance < 100 & timeCD >= stunResistanceHealthCD)
+        blockCD.text = timeSinceBlock.ToString("F1");
+        timeCD -= Time.deltaTime;
+        IconBlock();
+        if(stunResistance < 100 & timeCD <= 0)
         {
             stunResistance = stunResistanceMax;
-            timeCD = 0;
+            timeCD = stunResistanceHealthCD;
         }
     }
+
+    void IconBlock()
+    {
+        if(timeSinceBlock > 0) block.SetActive(true);
+        else block.SetActive(false);
+    }
+
     void Block()
     {
         timeSinceBlock -= Time.deltaTime;

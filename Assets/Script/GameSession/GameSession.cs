@@ -1,14 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameSession : MonoBehaviour
 {
     public static GameSession Instance;
 
+    [Header("Slider")]
+    public Slider HpBar;
+    public Slider delayHpBar;
+
     public int HpMax;
 
     int Hp;
+    int HpDelay;
+
+    [Header("Time")]
+    public float timeDelayHp;
+    float _timeDelayHp;
     
     void Awake()
     {
@@ -25,17 +35,29 @@ public class GameSession : MonoBehaviour
     void Start()
     {
         Hp = HpMax;
+        HpDelay = Hp;
+        HpBar.maxValue = HpMax;
+        HpBar.value = HpMax;
+        delayHpBar.maxValue = HpMax;
+        delayHpBar.value = HpMax;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        _timeDelayHp -= Time.deltaTime;
+        if(Hp < HpDelay && _timeDelayHp <= 0)
+        {
+            delayHpBar.value -= 3;
+            HpDelay -= 3;
+            _timeDelayHp = timeDelayHp;
+        }
     }
 
     public void TakeDamage(int damage)
     {
         Hp -= damage;
+        HpBar.value = Hp;
         if (Hp <= 0)
         {
             FindObjectOfType<PlayerTakeDamge>().Death();
@@ -45,6 +67,7 @@ public class GameSession : MonoBehaviour
     public void Heal(int healBonous)
     {
         Hp += healBonous;
+        HpBar.value = Hp;
         if (Hp > HpMax)
             Hp = HpMax;
     }

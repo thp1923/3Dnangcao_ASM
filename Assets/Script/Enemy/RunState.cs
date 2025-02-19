@@ -25,7 +25,7 @@ public class RunState : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         if (!agent.enabled) return;
-        if (player.GetComponent<PlayerTakeDamge>().isDeath)
+        if (FindObjectOfType<PlayerTakeDamge>().isDeath)
         {
             animator.SetBool("IsRunning", false); 
             return;
