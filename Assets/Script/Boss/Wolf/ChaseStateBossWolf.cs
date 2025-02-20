@@ -16,6 +16,7 @@ public class ChaseStateBossWolf : StateMachineBehaviour
         player = GameObject.FindGameObjectWithTag("Player").transform;
         animator.GetComponent<AttackEffectWolf>().WeaponColider(1);
         animator.GetComponent<AttackEffectWolf>().WeaponColider2(1);
+        animator.GetComponent<PlayAudioEnemy>().PlayAudio(4,0);
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

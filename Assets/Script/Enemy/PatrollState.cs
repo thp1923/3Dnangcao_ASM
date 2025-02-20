@@ -18,6 +18,7 @@ public class PatrollState : StateMachineBehaviour
         agent.enabled = true;
         timer = 0;
         agent.speed = speed;
+        animator.GetComponent<PlayAudioEnemy>().PlayAlwaysUpPitch(6, 0, 0.4f);
         WayPoint wayPointScript = animator.GetComponent<WayPoint>();
         foreach (Transform wayPoint in wayPointScript.WayPoints)
         {
@@ -47,6 +48,8 @@ public class PatrollState : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        animator.GetComponent<PlayAudioEnemy>().ResetPitch(0);
+        animator.GetComponent<PlayAudioEnemy>().PlayAudioStop(6, 0);
         if (!agent.enabled)
             return;
         agent.SetDestination(agent.transform.position);

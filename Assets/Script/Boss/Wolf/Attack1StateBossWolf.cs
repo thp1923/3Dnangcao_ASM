@@ -11,12 +11,14 @@ public class Attack1StateBossWolf : StateMachineBehaviour
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        animator.GetComponent<PlayAudioEnemy>().PlayAudio(0, 0);
         agent = animator.GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
         agent.enabled = false;
         animator.GetComponent<BossWolf>().Mp1 -= 50;
         animator.GetComponent<BossWolf>().Mp2 += 50;
         animator.GetComponent<Wolf>().Attack1();
+
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

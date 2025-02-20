@@ -44,7 +44,6 @@ public class TornadoDamge : MonoBehaviour
         foreach (Collider player in colInfo)
         {
             attackCount++;
-            Debug.Log("attack" + attackCount);
             if (player.GetComponent<PlayerTakeDamge>().isBlock || player.GetComponent<PlayerTakeDamge>().isDeath)
             {
                 Destroy(gameObject);

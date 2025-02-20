@@ -19,6 +19,7 @@ public class RunStateBossWolf : StateMachineBehaviour
         agent = animator.GetComponent<NavMeshAgent>();
         agent.enabled = true;
         agent.speed = speed;
+        animator.GetComponent<PlayAudioEnemy>().PlayAlwaysUpPitch(6, 0, 0.9f);
         if (player.GetComponent<PlayerTakeDamge>().isDeath)
             animator.SetBool("IsRunning", false);
     }
@@ -48,6 +49,8 @@ public class RunStateBossWolf : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        animator.GetComponent<PlayAudioEnemy>().ResetPitch(0);
+        animator.GetComponent<PlayAudioEnemy>().PlayAudioStop(6, 0);
         if (!agent.enabled) return;
         agent.SetDestination(animator.transform.position);
         animator.SetBool("IsRunning", false);
