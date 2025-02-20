@@ -59,6 +59,7 @@ public class PlayerTakeDamge : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse1) && PlayerAim.GetBool("IsGrounded") && timeSinceBlock <= 0 && PlayerAttackController.CursorLocked)
         {
             GetComponent<PlayerAttackController>().isEquipping = true;
+            GetComponent<PlayerAim>().aimRange += 5;
             PlayerAim.SetTrigger("Block");
             GetComponent<PlayerAim>().ClosestEnemy();
             timeSinceBlock = timeSinceBlockCD;

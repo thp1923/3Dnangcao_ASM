@@ -12,6 +12,8 @@ public class EnemyTakeDamge : MonoBehaviour
 
     public Slider HpBar;
     public Slider delayHpBar;
+    public TMPro.TextMeshProUGUI HpPhanTram;
+    float PhanTramHp;
 
     public int HpMax;
     int Hp;
@@ -35,12 +37,14 @@ public class EnemyTakeDamge : MonoBehaviour
     {
         Hp = HpMax;
         HpDelay = Hp;
+        PhanTramHp = (Hp /(float)HpMax) * 100;
         HpBar.maxValue = HpMax;
         HpBar.value = HpMax;
         delayHpBar.maxValue = HpMax;
         delayHpBar.value = HpMax;
         stunResistance = stunResistanceMax;
         aim = GetComponent<Animator>();
+        HpPhanTram.text = PhanTramHp.ToString("F0") + "%";
     }
 
     // Update is called once per frame
@@ -71,6 +75,8 @@ public class EnemyTakeDamge : MonoBehaviour
         stunResistance -= stunNumber;
         HpBar.value = Hp;
         timeCD = stunResistanceHealthCD;
+        PhanTramHp = (Hp /(float) HpMax) * 100;
+        HpPhanTram.text = PhanTramHp.ToString("F0") + "%";
         GameObject instance = Instantiate(DamPopUp, transform.position
             + new Vector3(UnityEngine.Random.Range(-1f, 1f), Y, UnityEngine.Random.Range(-1f, 1f)),
             Quaternion.identity);
@@ -84,6 +90,7 @@ public class EnemyTakeDamge : MonoBehaviour
             GetComponent<NavMeshAgent>().enabled = false;
             GetComponent<CapsuleCollider>().enabled = false;
             Rigidbody rb = GetComponent<Rigidbody>();
+            HpPhanTram.text = "0" + "%";
             rb.useGravity = false;
         }
         if (stunResistance <= 0)

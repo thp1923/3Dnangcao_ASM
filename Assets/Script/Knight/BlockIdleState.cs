@@ -20,6 +20,7 @@ public class BlockIdleState : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.GetComponent<PlayerTakeDamge>().isBlock = false;
+        animator.GetComponent<PlayerAim>().aimRange -= 5;
         animator.ResetTrigger("Block");
     }
 

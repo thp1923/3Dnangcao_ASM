@@ -1,3 +1,4 @@
+using Invector.vCharacterController;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -78,10 +79,14 @@ public class PowerUp : MonoBehaviour
         powerUp = true;
         GetComponent<AttackDamgePlayer>().Bonus(DamgeBonus);
         Invoke(nameof(PowerUpOff), timeBuff);
+        //anim.speed += 0.5f;
+        //GetComponent<vThirdPersonController>().moveSpeed += 10;
     }
     public void PowerUpOff()
     {
         powerUp = false;
         GetComponent<AttackDamgePlayer>().Bonus(-DamgeBonus);
+        //GetComponent<vThirdPersonController>().moveSpeed -= 10;
+        //anim.speed -= 0.5f;
     }
 }
