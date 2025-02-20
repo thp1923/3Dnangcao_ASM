@@ -57,7 +57,7 @@ public class OptionsPanel : MonoBehaviour
     void PopulateGraphicsDropdown()
     {
         graphicsDropdown.ClearOptions();
-        List<string> options = new List<string> { "Low", "Medium", "High", "Ultra" };
+        List<string> options = new List<string> { "Very Low","Low", "Medium", "High", "Ultra" };
         graphicsDropdown.AddOptions(options);
         graphicsDropdown.value = QualitySettings.GetQualityLevel();
         graphicsDropdown.RefreshShownValue();
