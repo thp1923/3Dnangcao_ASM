@@ -20,13 +20,13 @@ public class PlayAudioEnemy : MonoBehaviour
         
     }
 
-    public void PlayAudio(int index)
+    public void StopAudio(int index)
     {
         audioE.PlayClip(index);
     }
-    public void PlayAudioAlways(int index)
+    public void PlayAudio(int index)
     {
-        audioE.PlayClipAlways(index);
+        audioE.PlayClip(index);
     }
     public void PlayAlwaysUpPitch(int index, float pitch)
     {

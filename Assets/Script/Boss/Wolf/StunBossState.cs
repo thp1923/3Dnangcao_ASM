@@ -10,7 +10,7 @@ public class StunBossState : StateMachineBehaviour
         animator.GetComponent<EnemyTakeDamge>().RestoreStunRetance();
         animator.GetComponent<Wolf>().ResetCp();
         animator.GetComponent<AttackEffectWolf>().WeaponColider(1);
-        animator.GetComponent<PlayAudioEnemy>().PlayAudio(5);
+        animator.GetComponent<PlayAudioEnemy>().StopAudio(5);
         animator.GetComponent<AttackEffectWolf>().WeaponColider2(1);
     }
 
