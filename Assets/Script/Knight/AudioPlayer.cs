@@ -5,7 +5,7 @@ using UnityEngine;
 public class AudioPlayer : MonoBehaviour
 {
     public Audio audioP;
-    public GameObject audioPR;
+    public AudioPlayerRun audioPR;
     Animator animator;
     // Start is called before the first frame update
     void Start()
@@ -16,20 +16,12 @@ public class AudioPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        AudioWalk();
+
     }
     public void AudioWalk()
     {
-        if(animator.GetFloat("InputMagnitude") > 0.1f)
-        {
-            audioPR.SetActive(true);
-            //audioPR.GetComponent<AudioPlayerRun>().source.pitch = 0.5f + animator.GetFloat("InputMagnitude");
-        }
-        else
-        {
-            audioPR.SetActive(false);
-
-        }
+        if(animator.GetFloat("InputMagnitude") < 0.3f) return;
+        audioPR.playSourceWalk();
     }
     public void PlayAudio(int index)
     {

@@ -34,9 +34,7 @@ public class Audio : MonoBehaviour
     public void PlayClip(int index)
     {
         source.loop = false;
-        source.clip = clip[index];
-        if (source.isPlaying) return;
-        source.Play();
+        source.PlayOneShot(clip[index]);
     }
 
     public void PlayClipAlways(int index)
