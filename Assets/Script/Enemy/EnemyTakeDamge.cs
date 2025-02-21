@@ -9,6 +9,7 @@ public class EnemyTakeDamge : MonoBehaviour
 {
     Animator aim;
     public GameObject me;
+    Audio audioE;
 
     public Slider HpBar;
     public Slider delayHpBar;
@@ -35,6 +36,7 @@ public class EnemyTakeDamge : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        audioE = GameObject.FindGameObjectWithTag("Audio").GetComponent<Audio>();
         Hp = HpMax;
         HpDelay = Hp;
         PhanTramHp = (Hp /(float)HpMax) * 100;
@@ -76,6 +78,7 @@ public class EnemyTakeDamge : MonoBehaviour
         HpBar.value = Hp;
         timeCD = stunResistanceHealthCD;
         PhanTramHp = (Hp /(float) HpMax) * 100;
+        audioE.PlayClip(0);
         HpPhanTram.text = PhanTramHp.ToString("F0") + "%";
         GameObject instance = Instantiate(DamPopUp, transform.position
             + new Vector3(UnityEngine.Random.Range(-1f, 1f), Y, UnityEngine.Random.Range(-1f, 1f)),

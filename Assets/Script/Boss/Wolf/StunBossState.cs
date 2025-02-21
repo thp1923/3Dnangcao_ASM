@@ -10,7 +10,7 @@ public class StunBossState : StateMachineBehaviour
         animator.GetComponent<EnemyTakeDamge>().RestoreStunRetance();
         animator.GetComponent<Wolf>().ResetCp();
         animator.GetComponent<AttackEffectWolf>().WeaponColider(1);
-        animator.GetComponent<PlayAudioEnemy>().PlayAudio(5, 0);
+        animator.GetComponent<PlayAudioEnemy>().PlayAudio(5);
         animator.GetComponent<AttackEffectWolf>().WeaponColider2(1);
     }
 
@@ -24,7 +24,7 @@ public class StunBossState : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.GetComponent<EnemyTakeDamge>().RestoreStunRetance();
-        animator.GetComponent<PlayAudioEnemy>().PlayAudioStop(5, 0);
+        animator.GetComponent<PlayAudioEnemy>().PlayAudioStop(5);
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

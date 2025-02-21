@@ -11,6 +11,10 @@ public class PatrollState : StateMachineBehaviour
     List<Transform> wayPoints = new List<Transform>();
     NavMeshAgent agent;
     Transform player;
+
+    public int index;
+    public int sourceIndex;
+    public float pitch;
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
@@ -18,7 +22,7 @@ public class PatrollState : StateMachineBehaviour
         agent.enabled = true;
         timer = 0;
         agent.speed = speed;
-        animator.GetComponent<PlayAudioEnemy>().PlayAlwaysUpPitch(6, 0, 0.4f);
+        animator.GetComponent<PlayAudioEnemy>().PlayAlwaysUpPitch(index, pitch);
         WayPoint wayPointScript = animator.GetComponent<WayPoint>();
         foreach (Transform wayPoint in wayPointScript.WayPoints)
         {
@@ -33,6 +37,7 @@ public class PatrollState : StateMachineBehaviour
     {
         if(!agent.enabled)
             return;
+
         if(agent.remainingDistance <= agent.stoppingDistance)
             agent.SetDestination(wayPoints[Random.Range(0, wayPoints.Count)].position);
         timer += Time.deltaTime;
@@ -43,13 +48,17 @@ public class PatrollState : StateMachineBehaviour
         {
             animator.SetBool("IsChasing", true);
         }
+        if(distance >= (chaseDistance + 5))
+        {
+            animator.GetComponent<PlayAudioEnemy>().PlayAudioStop(index);
+        }
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.GetComponent<PlayAudioEnemy>().ResetPitch(0);
-        animator.GetComponent<PlayAudioEnemy>().PlayAudioStop(6, 0);
+        animator.GetComponent<PlayAudioEnemy>().ResetPitch();
+        animator.GetComponent<PlayAudioEnemy>().PlayAudioStop(index);
         if (!agent.enabled)
             return;
         agent.SetDestination(agent.transform.position);

@@ -5,7 +5,7 @@ using UnityEngine;
 public class Audio : MonoBehaviour
 {
     [Header("-----------Audio Source------------")]
-    public AudioSource[] source;
+    public AudioSource source;
 
     [Header("-----------Audio Clip------------")]
     public AudioClip[] clip;
@@ -16,14 +16,13 @@ public class Audio : MonoBehaviour
     [Header("-----------Volume------------")]
     public float volume;
 
+    int currentClip;
+
     // Start is called before the first frame update
     void Start()
     {
         pitchFirst = 1;
-        foreach (AudioSource srce in source)
-        {
-            srce.volume = volume;
-        }
+        source.volume = volume;
     }
 
     // Update is called once per frame
@@ -32,41 +31,37 @@ public class Audio : MonoBehaviour
         
     }
 
-    public void PlayClip(int index, int indexSource)
+    public void PlayClip(int index)
     {
-        source[indexSource].loop = false;
-        source[indexSource].clip = clip[index];
-        source[indexSource].Play();
-        if (!source[indexSource].isPlaying && source[indexSource].clip != null)
-        {
-            source[indexSource].Play();
-            Debug.Log(clip[index], source[indexSource]);
-        }
+        source.loop = false;
+        source.clip = clip[index];
+        if (source.isPlaying) return;
+        source.Play();
     }
 
-    public void PlayClipAlways(int index, int indexSource)
+    public void PlayClipAlways(int index)
     {
-        source[indexSource].loop = true;
-        source[indexSource].clip = clip[index];
-        source[indexSource].Play();
+        source.loop = true;
+        source.clip = clip[index];
+        source.Play();
     }
 
-    public void StopPlay(int index, int indexSource)
+    public void StopPlay(int index)
     {
-        source[indexSource].clip = clip[index];
-        source[indexSource].Stop();
+        source.clip = clip[index];
+        source.Stop();
     }
-    public void PlayClipAlwaysUpPich(int index, int indexSource, float pitch)
+    public void PlayClipAlwaysUpPich(int index, float pitch)
     {
-        source[indexSource].clip = clip[index];
-        source[indexSource].loop = true;
-        source[indexSource].pitch = pitch;
-        source[indexSource].Play();
+        source.clip = clip[index];
+        source.loop = true;
+        source.pitch = pitch;
+        source.Play();
     }
 
-    public void ResetPitch(int indexSource)
+    public void ResetPitch()
     {
-        source[indexSource].pitch = pitchFirst;
-        source[indexSource].loop = false;
+        source.pitch = pitchFirst;
+        source.loop = false;
     }
 }

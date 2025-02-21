@@ -11,7 +11,7 @@ public class Attack1StateBossWolf : StateMachineBehaviour
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.GetComponent<PlayAudioEnemy>().PlayAudio(0, 0);
+        animator.GetComponent<PlayAudioEnemy>().PlayAudio(0);
         agent = animator.GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
         agent.enabled = false;
@@ -34,7 +34,7 @@ public class Attack1StateBossWolf : StateMachineBehaviour
         // Make the animator's transform look at the player's position.
         animator.transform.LookAt(playerPosition);
         float distance = Vector3.Distance(player.position, animator.transform.position);
-        if (distance <= (attackRange + 5f))
+        if (distance <= attackRange)
             animator.SetBool("IsRunning", false);
         else
             animator.SetBool("IsRunning", true);

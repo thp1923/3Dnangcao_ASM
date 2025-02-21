@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,6 +18,7 @@ public class RunState : StateMachineBehaviour
         agent = animator.GetComponent<NavMeshAgent>();
         agent.enabled = true;
         agent.speed = speed;
+        animator.GetComponent<PlayAudioEnemy>().PlayAlwaysUpPitch(1, 2f);
         if (!player.GetComponent<PlayerTakeDamge>().isDeath)
             animator.SetBool("IsRunning", false);
     }
@@ -42,6 +44,8 @@ public class RunState : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        animator.GetComponent<PlayAudioEnemy>().ResetPitch();
+        animator.GetComponent<PlayAudioEnemy>().PlayAudioStop(1);
         if (!agent.enabled) return;
         agent.SetDestination(animator.transform.position);
     }
