@@ -32314,13 +32314,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 491893787}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.1227008, y: -0, z: -0, w: 0.99244374}
-  m_LocalPosition: {x: 21.58, y: 66.6, z: -6.37}
+  m_LocalRotation: {x: 0.121023744, y: -0.16352087, z: 0.020216899, w: 0.9788797}
+  m_LocalPosition: {x: 1.97, y: 66.6, z: 12.89}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 14.096, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 14.096, y: -18.967, z: 0}
 --- !u!114 &491893791
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32345,7 +32345,7 @@ MonoBehaviour:
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
   m_RenderPostProcessing: 1
-  m_Antialiasing: 0
+  m_Antialiasing: 2
   m_AntialiasingQuality: 2
   m_StopNaN: 0
   m_Dithering: 0
@@ -62554,8 +62554,8 @@ MonoBehaviour:
   m_y: 0
   m_z: 0
   m_isFoldedOut: 0
-  m_width: 1
-  m_height: 7
+  m_width: 100
+  m_height: 5
   m_blendStrength: 0.5
   m_absoluteHeightValue: 0
   m_rotation: 0
@@ -62819,9 +62819,9 @@ MonoBehaviour:
     m_blendMode: 0
     m_imageMaskLocation: 0
     m_strength: 1
-    m_seaLevel: 12.5
-    m_maxWorldHeight: 109.46573
-    m_minWorldHeight: 55.105537
+    m_seaLevel: 0
+    m_maxWorldHeight: 0
+    m_minWorldHeight: 0
     m_xOffSet: 0
     m_zOffSet: 0
     m_xOffSetScalar: 0
@@ -62830,7 +62830,7 @@ MonoBehaviour:
     m_zScale: 1
     m_rotationDegrees: 0
     m_tiling: 0
-    m_imageMaskSpace: 1
+    m_imageMaskSpace: 0
     m_imageMaskTextureGUID: 
     m_imageMaskFilterMode: 0
     m_imageMaskColorSelectionColor: {r: 1, g: 1, b: 1, a: 1}
@@ -62974,7 +62974,7 @@ MonoBehaviour:
       m_warpIterations: 5.134206
       m_warpStrength: 0.17388129
       m_warpOffset: {x: -314.91895, y: -712.79224, z: -923.5962, w: 0}
-    m_noiseSettings: {fileID: 1630213410}
+    m_noiseSettings: {fileID: 1217699747}
     m_noiseToolSettings:
       worldHeightRemap: {x: 0, y: 0}
       coordSpace: 0
@@ -63026,9 +63026,9 @@ MonoBehaviour:
     m_blendMode: 0
     m_imageMaskLocation: 0
     m_strength: 1
-    m_seaLevel: 12.5
-    m_maxWorldHeight: 109.46573
-    m_minWorldHeight: 55.105537
+    m_seaLevel: 0
+    m_maxWorldHeight: 0
+    m_minWorldHeight: 0
     m_xOffSet: 0
     m_zOffSet: 0
     m_xOffSetScalar: 0
@@ -69655,6 +69655,30 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1216151647}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1217699747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cba17d399ab86974c8ef9551f6e8f8d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  transformSettings:
+    translation: {x: 476.4694, y: -396.597, z: 2.049469}
+    scale: {x: 3.6762047, y: 1, z: 3.6762047}
+    rotation: {x: 0, y: 0, z: 0}
+    flipScaleX: 0
+    flipScaleY: 0
+    flipScaleZ: 0
+  domainSettings:
+    noiseTypeName: Perlin
+    fractalTypeName: Fbm
+    noiseTypeParams: 
+    fractalTypeParams: '{"warpOffsets":{"x":-314.9189453125,"y":-712.792236328125,"z":-923.59619140625,"w":0.0},"octavesMinMax":{"x":0.0,"y":16.0},"amplitudeMinMax":{"x":0.0,"y":1.0},"frequencyMinMax":{"x":0.0,"y":2.0},"lacunarityMinMax":{"x":0.0,"y":4.0},"persistenceMinMax":{"x":0.0,"y":1.0},"warpIterationsMinMax":{"x":0.0,"y":8.0},"warpStrengthMinMax":{"x":-2.0,"y":2.0},"octaves":8.0,"amplitude":0.4587366580963135,"frequency":1.0,"persistence":0.5,"lacunarity":0.7839463949203491,"warpIterations":5.1342058181762699,"warpStrength":0.17388129234313966,"warpEnabled":true,"warpExpanded":true}'
 --- !u!1001 &1217966365
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -82779,8 +82803,8 @@ MonoBehaviour:
   m_spawnRuleStampsToggleAllState: 1
   m_drawPreview: 0
   m_previewRuleIds: 
-  m_maxWorldHeight: 109.46573
-  m_minWorldHeight: 55.105537
+  m_maxWorldHeight: 0
+  m_minWorldHeight: 0
   m_showSeaLevelinStampPreview: 1
   m_terrainGeneratorPanelUnfolded: 1
   m_worldDesignerPreviewSettingsUnfolded: 0
@@ -85390,30 +85414,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1629298143}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1630213410
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cba17d399ab86974c8ef9551f6e8f8d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  transformSettings:
-    translation: {x: 476.4694, y: -396.597, z: 2.049469}
-    scale: {x: 3.6762047, y: 1, z: 3.6762047}
-    rotation: {x: 0, y: 0, z: 0}
-    flipScaleX: 0
-    flipScaleY: 0
-    flipScaleZ: 0
-  domainSettings:
-    noiseTypeName: Perlin
-    fractalTypeName: Fbm
-    noiseTypeParams: 
-    fractalTypeParams: '{"warpOffsets":{"x":-314.9189453125,"y":-712.792236328125,"z":-923.59619140625,"w":0.0},"octavesMinMax":{"x":0.0,"y":16.0},"amplitudeMinMax":{"x":0.0,"y":1.0},"frequencyMinMax":{"x":0.0,"y":2.0},"lacunarityMinMax":{"x":0.0,"y":4.0},"persistenceMinMax":{"x":0.0,"y":1.0},"warpIterationsMinMax":{"x":0.0,"y":8.0},"warpStrengthMinMax":{"x":-2.0,"y":2.0},"octaves":8.0,"amplitude":0.4587366580963135,"frequency":1.0,"persistence":0.5,"lacunarity":0.7839463949203491,"warpIterations":5.1342058181762699,"warpStrength":0.17388129234313966,"warpEnabled":true,"warpExpanded":true}'
 --- !u!1001 &1634894795
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -110553,7 +110553,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 7, z: 1}
+  m_LocalScale: {x: 100, y: 7, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1558117694}
