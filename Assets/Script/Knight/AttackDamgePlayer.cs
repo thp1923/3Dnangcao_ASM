@@ -17,7 +17,6 @@ public class AttackDamgePlayer : MonoBehaviour
     int Damge;
     int DamgeBonous;
 
-    public GameObject Blouse;
 
     // Start is called before the first frame update
     void Start()

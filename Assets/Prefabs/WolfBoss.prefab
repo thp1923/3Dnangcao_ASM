@@ -543,8 +543,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8244011346663548784}
-  - component: {fileID: 3485075209824584149}
-  - component: {fileID: 5438927203930651904}
   m_Layer: 0
   m_Name: AttackPoint1
   m_TagString: Untagged
@@ -567,43 +565,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2313361205408105489}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!136 &3485075209824584149
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3525988152857418488}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Radius: 1.84
-  m_Height: 1
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5438927203930651904
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3525988152857418488}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c69fbc19e4e94f14fbadeae5674aae36, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tagEffect: Player
-  effect: {fileID: 3132353365736778974, guid: 37d561cba6f0b8642a892cbf09e0a336, type: 3}
 --- !u!1 &4234406398104008182
 GameObject:
   m_ObjectHideFlags: 0
@@ -665,6 +626,37 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1421252599403107768}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5082174967681939268
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9068700788628121762}
+  m_Layer: 6
+  m_Name: HitPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 4162164826716764455, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9068700788628121762
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5082174967681939268}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.76, y: -0.13, z: -0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9000553779802157420}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5861374082964147612
 GameObject:
@@ -1009,8 +1001,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2121585430642972236}
-  - component: {fileID: 8517370289892570076}
-  - component: {fileID: 5331966388035703212}
   m_Layer: 0
   m_Name: AttackPoint2
   m_TagString: Untagged
@@ -1033,43 +1023,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2313361205408105489}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!136 &8517370289892570076
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7214584312485271252}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Radius: 3.47
-  m_Height: 1
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5331966388035703212
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7214584312485271252}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c69fbc19e4e94f14fbadeae5674aae36, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tagEffect: Player
-  effect: {fileID: 3132353365736778974, guid: 37d561cba6f0b8642a892cbf09e0a336, type: 3}
 --- !u!1 &7702538202606609253
 GameObject:
   m_ObjectHideFlags: 0
@@ -2526,6 +2479,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 3378797428880835332}
+    - targetCorrespondingSourceObject: {fileID: 1982113826400925900, guid: 4bbd87a5c12e92748ab033feeaee5e85,
+        type: 3}
+      insertIndex: 0
+      addedObject: {fileID: 9068700788628121762}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5492391064966338315, guid: 4bbd87a5c12e92748ab033feeaee5e85,
         type: 3}
@@ -2559,10 +2516,6 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1045365291883519072}
-    - targetCorrespondingSourceObject: {fileID: 5492391064966338315, guid: 4bbd87a5c12e92748ab033feeaee5e85,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 4095837294677671347}
     - targetCorrespondingSourceObject: {fileID: 5492391064966338315, guid: 4bbd87a5c12e92748ab033feeaee5e85,
         type: 3}
       insertIndex: -1
@@ -2733,6 +2686,9 @@ MonoBehaviour:
   Y: 5
   timeDelayHp: 0.0002
   HpLost: 10
+  HitPoint: {fileID: 9068700788628121762}
+  HitEffect: {fileID: 5149150626739120556, guid: 0b129ec631d112941b437891164502d9,
+    type: 3}
 --- !u!114 &1045365291883519072
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2751,20 +2707,6 @@ MonoBehaviour:
   radius2: 0
   center2: {x: 0, y: 0, z: 0}
   height2: 0
---- !u!114 &4095837294677671347
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3121387543878524587}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c44bdb96dd36b31478f868442ef14113, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weapon: {fileID: 3485075209824584149}
-  weapon2: {fileID: 8517370289892570076}
 --- !u!114 &8584908406449069560
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2791,3 +2733,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioPR: {fileID: 8235106823161977458}
+--- !u!4 &9000553779802157420 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1982113826400925900, guid: 4bbd87a5c12e92748ab033feeaee5e85,
+    type: 3}
+  m_PrefabInstance: {fileID: 7451629978697615776}
+  m_PrefabAsset: {fileID: 0}

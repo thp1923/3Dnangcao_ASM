@@ -33,6 +33,10 @@ public class EnemyTakeDamge : MonoBehaviour
     float _timeDelayHp;
 
     public int HpLost;
+
+    public Transform HitPoint;
+
+    public GameObject HitEffect;
     // Start is called before the first frame update
     void Start()
     {
@@ -84,6 +88,7 @@ public class EnemyTakeDamge : MonoBehaviour
             + new Vector3(UnityEngine.Random.Range(-1f, 1f), Y, UnityEngine.Random.Range(-1f, 1f)),
             Quaternion.identity);
         instance.GetComponentInChildren<TextMeshProUGUI>().text = damge.ToString();
+        Instantiate(HitEffect, HitPoint.position, Quaternion.identity);
         if (Hp <= 0)
         {
             aim.SetBool("IsChasing", false);

@@ -25,6 +25,11 @@ public class PlayerTakeDamge : MonoBehaviour
     public GameObject block;
 
     public TMPro.TextMeshProUGUI blockCD;
+
+    public Audio audioP;
+
+    public Transform HitPoint;
+    public GameObject HitEffect;
     // Start is called before the first frame update
     void Start()
     {
@@ -58,6 +63,7 @@ public class PlayerTakeDamge : MonoBehaviour
         timeSinceBlock -= Time.deltaTime;
         if (Input.GetKeyDown(KeyCode.Mouse1) && PlayerAim.GetBool("IsGrounded") && timeSinceBlock <= 0 && PlayerAttackController.CursorLocked)
         {
+            audioP.PlayClip(9);
             GetComponent<PlayerAttackController>().isEquipping = true;
             GetComponent<PlayerAim>().aimRange += 5;
             PlayerAim.SetTrigger("Block");
@@ -71,10 +77,12 @@ public class PlayerTakeDamge : MonoBehaviour
         GameSession.Instance.TakeDamage(damge);
         stunResistance -= stunNumber;
         timeCD = stunResistanceHealthCD;
+        audioP.PlayClip(7);
         GameObject instance = Instantiate(DamPopUp, transform.position
             + new Vector3(UnityEngine.Random.Range(-1f, 1f), 2f, UnityEngine.Random.Range(-1f, 1f)), 
             Quaternion.identity);
         instance.GetComponentInChildren<TextMeshProUGUI>().text = damge.ToString();
+        Instantiate(HitEffect, HitPoint.position, Quaternion.identity);
         if (stunResistance <= 0)
         {
             PlayerAim.SetTrigger("Hit");

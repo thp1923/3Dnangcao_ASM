@@ -9,9 +9,7 @@ public class StunBossState : StateMachineBehaviour
     {
         animator.GetComponent<EnemyTakeDamge>().RestoreStunRetance();
         animator.GetComponent<Wolf>().ResetCp();
-        animator.GetComponent<AttackEffectWolf>().WeaponColider(1);
         animator.GetComponent<PlayAudioEnemy>().StopAudio(5);
-        animator.GetComponent<AttackEffectWolf>().WeaponColider2(1);
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

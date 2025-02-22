@@ -40,7 +40,6 @@ public class PlayerAttackController : LockMouse
     float Drag;
     float AngDrag;
 
-    public BoxCollider weapon;
 
     [Header("CD")]
     public GameObject nomarl;
@@ -74,11 +73,6 @@ public class PlayerAttackController : LockMouse
         }
     }
     
-    public void WeaponColider(int number)
-    {
-        if(number == 0) weapon.enabled = true;
-        else weapon.enabled = false;
-    }
     public void ResetAttack()
     {
         isAttacking = false;
@@ -92,7 +86,6 @@ public class PlayerAttackController : LockMouse
         Drag = rb.drag;
         AngDrag = rb.angularDrag;
         canRecceiveInput = true;
-        weapon.enabled = false;
     }
 
     // Update is called once per frame
@@ -161,6 +154,7 @@ public class PlayerAttackController : LockMouse
         if (Input.GetKeyDown(KeyCode.Q) && playerAim.GetBool("IsGrounded") && timeSinceUntil <= 0 && CursorLocked)
         {
             if(isAttacking) return;
+            GetComponent<AudioPlayer>().PlayAudio(5);
             playerAim.SetTrigger("Until");
             GetComponent<PlayerAim>().ClosestEnemy();
         }
