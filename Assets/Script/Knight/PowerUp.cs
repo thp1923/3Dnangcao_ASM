@@ -46,7 +46,7 @@ public class PowerUp : MonoBehaviour
             timeHeal += Time.deltaTime;
             if (timeHeal >= 1)
             {
-                GameSession.Instance.Heal(HealBonus);
+                FindObjectOfType<GameSession>().Heal(HealBonus);
                 timeHeal = 0;
             }
         }

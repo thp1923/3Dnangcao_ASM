@@ -13,7 +13,8 @@ public class ItemUIController : MonoBehaviour
 
     public void Remove()
     {
-        InvetoryManager.Instance.Remove(item/*, itemModel*/);
+        //InvetoryManager.Instance.Remove(item/*, itemModel*/);
+        FindObjectOfType<InvetoryManager>().Remove(item/*, itemModel*/);
         Destroy(this.gameObject);
     }
 
@@ -22,7 +23,7 @@ public class ItemUIController : MonoBehaviour
         switch(item.itemType)
         {
             case ItemIn.ItemType.Consumbles:
-                GameSession.Instance.Heal(item.value);
+                FindObjectOfType<GameSession>().Heal(item.value);
                 break;
             case ItemIn.ItemType.Weapon:
                 Debug.Log("su dung vu khi ten:" + item.Item_Name);

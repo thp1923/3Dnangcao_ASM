@@ -74,7 +74,7 @@ public class PlayerTakeDamge : MonoBehaviour
     public void TakeDamge(int damge, int stunNumber, float knockBack)
     {
         if (noTakeDamge) return;
-        GameSession.Instance.TakeDamage(damge);
+        FindObjectOfType<GameSession>().TakeDamage(damge);
         stunResistance -= stunNumber;
         timeCD = stunResistanceHealthCD;
         audioP.PlayClip(7);
@@ -94,6 +94,7 @@ public class PlayerTakeDamge : MonoBehaviour
     }
     public void Death()
     {
+        audioP.PlayClip(10);
         PlayerAim.SetBool("IsDeath", true);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;

@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameSession : MonoBehaviour
 {
-    public static GameSession Instance;
+    
 
     [Header("Slider")]
     public Slider HpBar;
@@ -19,9 +20,14 @@ public class GameSession : MonoBehaviour
     [Header("Time")]
     public float timeDelayHp;
     float _timeDelayHp;
+    int HpLost;
 
     [Header("-----------Inven----------")]
     public GameObject InventoryCanva;
+
+    [Header("-----------Death----------")]
+    public GameObject canvaDie;
+    public GameObject canvaStart;
     
     void Awake()
     {
@@ -32,7 +38,6 @@ public class GameSession : MonoBehaviour
             Destroy(gameObject);
         else
             DontDestroyOnLoad(gameObject); //khong cho huy khi load
-        Instance = this;
     }
     // Start is called before the first frame update
     void Start()
@@ -52,8 +57,8 @@ public class GameSession : MonoBehaviour
         _timeDelayHp -= Time.deltaTime;
         if(Hp < HpDelay && _timeDelayHp <= 0)
         {
-            delayHpBar.value -= 3;
-            HpDelay -= 3;
+            delayHpBar.value -= (int)(HpLost/(float)4);
+            HpDelay -= (int)(HpLost / (float)4);
             _timeDelayHp = timeDelayHp;
         }
     }
@@ -62,9 +67,11 @@ public class GameSession : MonoBehaviour
     {
         Hp -= damage;
         HpBar.value = Hp;
+        HpLost = damage;
         if (Hp <= 0)
         {
             FindObjectOfType<PlayerTakeDamge>().Death();
+            canvaDie.SetActive(true);
         }
     }
 
@@ -105,5 +112,52 @@ public class GameSession : MonoBehaviour
             LockMouse.CursorLocked = false;
         else
             LockMouse.CursorLocked = true;
+    }
+
+    public void Canva(int index)
+    {
+        switch (index)
+        {
+            case 0:
+                canvaStart.SetActive(true); 
+                canvaDie.SetActive(false);
+                PlayAgain();
+                break;
+            case 1:
+                canvaStart.SetActive(false);
+                canvaDie.SetActive(true);
+                break;
+            case 2:
+                canvaStart.SetActive(false);
+                canvaDie.SetActive(false);
+                break;
+            case 3:
+                canvaStart.SetActive(false);
+                break;
+            case 4:
+                canvaDie.SetActive(false);
+                break;
+            default:
+                break;
+        }
+    }
+    public void ResetGameSession()
+    {
+        SceneManager.LoadScene(0);//load lai Scene 0
+        Time.timeScale = 1;
+    }
+    public void PlayAgain()
+    {
+        //lay index cua scene hien tai
+        int currentsceneindex = SceneManager.GetActiveScene().buildIndex;
+        //load lai scene hien tai
+
+        SceneManager.LoadScene(currentsceneindex);
+        Time.timeScale = 1;
+        //Destroy(gameObject); //destroy GameSession luon
+        Hp = HpMax;
+        HpDelay = Hp;
+        HpBar.value = Hp; 
+        delayHpBar.value = Hp;
     }
 }

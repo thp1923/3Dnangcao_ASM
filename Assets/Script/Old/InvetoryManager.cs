@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class InvetoryManager : MonoBehaviour
 {
 
-    public static InvetoryManager Instance { get; private set; }
+    //public static InvetoryManager Instance { get; private set; }
     public List<ItemIn> items = new List<ItemIn>();
     public Transform itemHolder;
     public GameObject itemPrefab;
@@ -35,11 +35,11 @@ public class InvetoryManager : MonoBehaviour
 
     private void Awake()
     {
-        if(Instance != null && Instance != this)
-        {
-            Destroy(Instance);
-        }
-        Instance = this;
+        //if(Instance != null && Instance != this)
+        //{
+        //    Destroy(Instance);
+        //}
+        //Instance = this;
     }
 
     public void Add(ItemIn item)

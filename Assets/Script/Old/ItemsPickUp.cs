@@ -9,7 +9,8 @@ public class ItemsPickUp : MonoBehaviour
     void PickUp()
     {
         Destroy(gameObject);
-        InvetoryManager.Instance.Add(item/*, itemModel*/);
+        //InvetoryManager.Instance.Add(item/*, itemModel*/);
+        FindObjectOfType<InvetoryManager>().Add(item/*, itemModel*/);
     }
     //private void OnMouseDown()
     //{
