@@ -59,8 +59,8 @@ public class PowerUp : MonoBehaviour
 
     void IconPower()
     {
-        if(powerUp) power.SetActive(true);
-        else power.SetActive(false);
+        if(!powerUp && _timeCD <= 0) power.SetActive(false);
+        else power.SetActive(true);
     }
 
     private void OnPowerUp()
