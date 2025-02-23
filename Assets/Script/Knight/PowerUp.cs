@@ -15,7 +15,7 @@ public class PowerUp : MonoBehaviour
     bool powerUp;
     float timeHeal;
 
-    public int HealBonus;
+    public float HealBonus;
     public int DamgeBonus;
 
     Animator anim;

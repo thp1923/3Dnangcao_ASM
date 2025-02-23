@@ -16,6 +16,7 @@ public class Attack1StateBossWolf : StateMachineBehaviour
         agent.enabled = false;
         animator.GetComponent<BossWolf>().Mp1 -= 50;
         animator.GetComponent<BossWolf>().Mp2 += 50;
+        if(Vector3.Distance(player.position, animator.transform.position) <= 7.24f) return;
         animator.GetComponent<Wolf>().Attack1();
 
     }

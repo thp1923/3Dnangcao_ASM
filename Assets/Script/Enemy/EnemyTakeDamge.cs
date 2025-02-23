@@ -32,11 +32,14 @@ public class EnemyTakeDamge : MonoBehaviour
     public float timeDelayHp;
     float _timeDelayHp;
 
-    public int HpLost;
+    int HpLost;
 
     public Transform HitPoint;
 
     public GameObject HitEffect;
+
+    [Header("---------Items Drop-----------")]
+    public List<GameObject> itemsDrop;
     // Start is called before the first frame update
     void Start()
     {
@@ -70,7 +73,7 @@ public class EnemyTakeDamge : MonoBehaviour
         if (Hp < HpDelay && _timeDelayHp <= 0)
         {
             delayHpBar.value -= HpLost;
-            HpDelay -= HpLost;
+            HpDelay -= (int)(HpLost / (float)4);
             _timeDelayHp = timeDelayHp;
         }
     }
@@ -79,6 +82,7 @@ public class EnemyTakeDamge : MonoBehaviour
     {
         Hp -= damge;
         stunResistance -= stunNumber;
+        HpLost = damge;
         HpBar.value = Hp;
         timeCD = stunResistanceHealthCD;
         PhanTramHp = (Hp /(float) HpMax) * 100;
@@ -116,6 +120,10 @@ public class EnemyTakeDamge : MonoBehaviour
     void Death()
     {
         FindObjectOfType<PlayerAim>().RemoveEnemy();
+        foreach(GameObject items in itemsDrop)
+        {
+            Instantiate(items, gameObject.transform.position + new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)), Quaternion.identity);
+        }
         Destroy(me);
     }
 }
