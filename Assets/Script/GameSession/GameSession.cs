@@ -77,7 +77,7 @@ public class GameSession : MonoBehaviour
 
     public void Heal(float healBonous)
     {
-        Hp += (int)healBonous*HpLost;
+        Hp += (int)(healBonous*(float)HpMax);
         HpBar.value = Hp;
         if (Hp > HpMax)
             Hp = HpMax;

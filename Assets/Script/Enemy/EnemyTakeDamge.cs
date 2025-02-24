@@ -122,7 +122,7 @@ public class EnemyTakeDamge : MonoBehaviour
         FindObjectOfType<PlayerAim>().RemoveEnemy();
         foreach(GameObject items in itemsDrop)
         {
-            Instantiate(items, gameObject.transform.position + new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)), Quaternion.identity);
+            Instantiate(items, gameObject.transform.position + new Vector3(Random.Range(-1f, 1f), 1, Random.Range(-1f, 1f)), Quaternion.identity);
         }
         Destroy(me);
     }
