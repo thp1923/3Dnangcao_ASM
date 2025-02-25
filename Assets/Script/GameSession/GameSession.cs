@@ -6,9 +6,10 @@ using UnityEngine.UI;
 
 public class GameSession : MonoBehaviour
 {
-    
+
 
     [Header("Slider")]
+    public GameObject HeadUp;
     public Slider HpBar;
     public Slider delayHpBar;
 
@@ -159,5 +160,13 @@ public class GameSession : MonoBehaviour
         HpDelay = Hp;
         HpBar.value = Hp; 
         delayHpBar.value = Hp;
+    }
+
+    public void FalseActive()
+    {
+        canvaStart.SetActive(false);
+        canvaDie.SetActive(false);
+        InventoryCanva.SetActive(false);
+        HeadUp.SetActive(false);
     }
 }
