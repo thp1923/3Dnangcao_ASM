@@ -20,7 +20,7 @@ public class SetCollider : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            GetComponent<ChangeScene>().nextScene();
+            //GetComponent<ChangeScene>().nextScene();
         }
     }
 }
