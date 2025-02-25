@@ -9,13 +9,14 @@ public class IdleBehaviour : StateMachineBehaviour
     {
         PlayerAttackController.Instance.inputRecceived = false;
         PlayerAttackController.Instance.ResetAttack();
+        PlayerAttackController.Instance.canRecceiveInput = true;
         animator.SetFloat("InputMagnitude", 0f);
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (PlayerAttackController.Instance != null && PlayerAttackController.Instance.inputRecceived /*&& Input.GetMouseButtonDown(0)*/)
+        if (PlayerAttackController.Instance.inputRecceived)
         {
             animator.SetTrigger("Attack1");
             PlayerAttackController.Instance.InputManager();

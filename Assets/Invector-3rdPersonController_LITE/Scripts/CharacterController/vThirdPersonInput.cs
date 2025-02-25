@@ -143,6 +143,11 @@ namespace Invector.vCharacterController
         /// </summary>
         protected virtual void JumpInput()
         {
+            if (PlayerAttackController.Instance.isAttacking 
+                || GetComponent<PlayerTakeDamge>().isBlock
+                || PlayerAttackController.Instance.isUntil 
+                || !PlayerAttackController.CursorLocked)
+                return;
             if (Input.GetKeyDown(jumpInput) && JumpConditions())
                 cc.Jump();
         }

@@ -9,13 +9,14 @@ public class ItemsPickUp : MonoBehaviour
     void PickUp()
     {
         Destroy(gameObject);
-        InvetoryManager.Instance.Add(item/*, itemModel*/);
+        //InvetoryManager.Instance.Add(item/*, itemModel*/);
+        FindObjectOfType<InvetoryManager>().Add(item/*, itemModel*/);
     }
-    private void OnMouseDown()
-    {
-        PickUp();
+    //private void OnMouseDown()
+    //{
+    //    PickUp();
 
-    }
+    //}
     // Start is called before the first frame update
     void Start()
     {
@@ -26,5 +27,13 @@ public class ItemsPickUp : MonoBehaviour
     void Update()
     {
         
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            PickUp();
+        }
     }
 }

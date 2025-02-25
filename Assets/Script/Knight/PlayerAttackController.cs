@@ -3,16 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerAttackController : MonoBehaviour
+public class PlayerAttackController : LockMouse
 {
+    [Header("Main")]
+    public static PlayerAttackController Instance;
+    public vThirdPersonController tcp;
+
+    [Header("Private")]
     [SerializeField]
     Animator playerAim;
     Rigidbody rb;
 
-    
-    public vThirdPersonController tcp;
-
-    public static bool CursorLocked = true;
+    [Header("Attack")]
     [SerializeField]
     private GameObject sword;
     [SerializeField]
@@ -20,23 +22,30 @@ public class PlayerAttackController : MonoBehaviour
     public bool isEquipping;
 
     public bool isAttacking;
-    public bool isBlock;
+    public bool isUntil;
+    
+    public bool isBuff;
+    public float timeCDUntil;
     private float timeSinceAttack;
-    private float timeSinceBlock;
     private float timeSinceUntil;
-    public int currentAttack;
 
     public GameObject efAttack;
     public GameObject efUntil;
     public GameObject Light;
 
+    public bool canRecceiveInput;
+    public bool inputRecceived;
+
+    [Header("Move")]
     float Drag;
     float AngDrag;
 
-    public static PlayerAttackController Instance;
 
-    public bool canRecceiveInput;
-    public bool inputRecceived;
+    [Header("CD")]
+    public GameObject nomarl;
+    public GameObject skill;
+
+    public TMPro.TextMeshProUGUI skillCD;
 
     private void Awake()
     {
@@ -64,11 +73,10 @@ public class PlayerAttackController : MonoBehaviour
         }
     }
     
-
     public void ResetAttack()
     {
         isAttacking = false;
-        
+        isUntil = false;
     }
     
     // Start is called before the first frame update
@@ -77,21 +85,28 @@ public class PlayerAttackController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         Drag = rb.drag;
         AngDrag = rb.angularDrag;
-        InputManager();
+        canRecceiveInput = true;
     }
 
     // Update is called once per frame
     void Update()
     {
+        skillCD.text = timeSinceUntil.ToString("F1");
+        IconAttack();
         AttackCombo();
-        timeSinceBlock += Time.deltaTime;
-        timeSinceUntil += Time.deltaTime;
-        canRecceiveInput = true;
+        timeSinceUntil -= Time.deltaTime;
         ActiveWeapon();
         Until();
         UpdateCursorLock();
-        Block();
         LockMove();
+    }
+
+    void IconAttack()
+    {
+        if(timeSinceUntil > 0) skill.SetActive(true);
+        else skill.SetActive(false);
+        if (!canRecceiveInput) nomarl.SetActive(true);
+        else nomarl.SetActive(false);
     }
 
     public void InputManager()
@@ -115,7 +130,7 @@ public class PlayerAttackController : MonoBehaviour
     }
     public void AttackCombo()
     {
-        if (Input.GetMouseButtonDown(0) && playerAim.GetBool("IsGrounded") && CursorLocked)
+        if (Input.GetMouseButtonDown(0) && playerAim.GetBool("IsGrounded") && CursorLocked && !isUntil && !GetComponent<PlayerTakeDamge>().isBlock)
         {
 
             if (canRecceiveInput)
@@ -124,6 +139,7 @@ public class PlayerAttackController : MonoBehaviour
                 inputRecceived = true;
                 canRecceiveInput = false;
                 isAttacking = true;
+                GetComponent<PlayerAim>().ClosestEnemy();
             }
             else
             {
@@ -131,81 +147,44 @@ public class PlayerAttackController : MonoBehaviour
             }
         }
     }
-    private void Attack()
-    {
-        if (Input.GetMouseButtonDown(0) && playerAim.GetBool("IsGrounded") && timeSinceAttack > 0.6f && CursorLocked)
-        {
-            isEquipping = true;
-
-            LockMove();
-
-            currentAttack++;
-            isAttacking = true;
-
-            if (currentAttack > 3)
-                currentAttack = 1;
-
-            if (timeSinceAttack > 1.0f)
-                currentAttack = 1;
-
-            playerAim.SetTrigger("Attack" + currentAttack);
-
-            timeSinceAttack = 0;
-
-        }
-        
-    }
+    
 
     void Until()
     {
-        if (Input.GetKeyDown(KeyCode.Q) && playerAim.GetBool("IsGrounded") && timeSinceUntil > 2f && CursorLocked)
+        if (Input.GetKeyDown(KeyCode.Q) && playerAim.GetBool("IsGrounded") && timeSinceUntil <= 0 && CursorLocked)
         {
-            isEquipping = true;
-
-            LockMove();
-            isAttacking = true;
-
+            if(isAttacking) return;
+            GetComponent<AudioPlayer>().PlayAudio(5);
             playerAim.SetTrigger("Until");
-            efUntil.SetActive(true);
-            Vector3 spawnPosition = new Vector3(sword.transform.position.x, sword.transform.position.y + 5, sword.transform.position.z);
-            Quaternion spawnRotation = Quaternion.Euler(90, 0, 0);
-            Instantiate(Light, spawnPosition, spawnRotation);
-            timeSinceUntil = 0;
-            Invoke(nameof(EndUntil), 4f);
+            GetComponent<PlayerAim>().ClosestEnemy();
         }
     }
     
+    public void UntilAim()
+    {
+        isEquipping = true;
+        isUntil = true;
+        efUntil.SetActive(true);
+        Vector3 spawnPosition = new Vector3(sword.transform.position.x, sword.transform.position.y + 5, sword.transform.position.z);
+        Quaternion spawnRotation = Quaternion.Euler(90, 0, 0);
+        Instantiate(Light, spawnPosition, spawnRotation);
+        timeSinceUntil = timeCDUntil;
+        Invoke(nameof(EndUntil), 4f);
+    }
     void EndUntil()
     {
         efUntil.SetActive(false);
     }
 
-    void Block()
-    {
-        if (Input.GetKeyDown(KeyCode.Mouse1) && playerAim.GetBool("IsGrounded") && timeSinceBlock > 3f && CursorLocked)
-        {
-            isEquipping = true;
-            isBlock = true;
-            playerAim.SetBool("Block", true);
-            LockMove();
-            Invoke(nameof(UnBlock), 1f);
-        }
-    }
-    void UnBlock()
-    {
-        UnlockMove();
-        isBlock = false;
-        playerAim.SetBool("Block", false);
-        timeSinceBlock = 0;
-    }
+    
+    
 
     public void LockMove()
     {
-        if (isAttacking || isBlock || !CursorLocked)
+        if (isAttacking || GetComponent<PlayerTakeDamge>().isBlock || isUntil || !CursorLocked || isBuff)
         {
             tcp.lockMovement = true;
             tcp.lockRotation = true;
-            tcp.moveSpeed = 0;
             rb.angularDrag = 100;
             rb.drag = 100;
             playerAim.SetFloat("InputMagnitude", -1f);
@@ -215,35 +194,11 @@ public class PlayerAttackController : MonoBehaviour
     }
     public void UnlockMove()
     {
+        
         rb.angularDrag = AngDrag;
         rb.drag = Drag;
         tcp.lockMovement = false;
         tcp.lockRotation = false;
     }
-    void UpdateCursorLock()
-    {
-        if (CursorLocked)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-
-            //UnlockMove();
-            if (Input.GetKeyDown(KeyCode.LeftAlt))
-            {
-                CursorLocked = false;
-            }
-        }
-        else
-        {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-            //LockMove();
-            
-
-            if (Input.GetKeyDown(KeyCode.LeftAlt))
-            {
-                CursorLocked = true;
-            }
-        }
-    }
+    
 }
