@@ -48,7 +48,6 @@ public class SaveGame : MonoBehaviour
         // ??t v? trí cho player
         Vector3 vector = new Vector3(x, y, z);
         player.transform.position = vector;
-        Debug.Log("?ã load: " + vector);
     }
 
 
@@ -70,7 +69,6 @@ public class SaveGame : MonoBehaviour
 
         PlayerPrefs.Save();
         haveSave = true;
-        Debug.Log("?ã l?u: " + vector);
     }
 
 }

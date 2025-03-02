@@ -137,7 +137,6 @@ public class ChangeScene : MonoBehaviour
     {
         yield return StartCoroutine(FadeOutAllUI(0.5f));
         yield return new WaitForSeconds(0.5f);
-        Debug.Log("Quitting game...");
         Application.Quit();
     }
 

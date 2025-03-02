@@ -26,7 +26,6 @@ public class ItemUIController : MonoBehaviour
                 FindObjectOfType<GameSession>().Heal(item.value);
                 break;
             case ItemIn.ItemType.Weapon:
-                Debug.Log("su dung vu khi ten:" + item.Item_Name);
                 break;
             default:
                 break;

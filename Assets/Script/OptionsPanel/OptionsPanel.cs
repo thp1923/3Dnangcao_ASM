@@ -22,7 +22,6 @@ public class OptionsPanel : MonoBehaviour
 
         Resolution[] allResolutions = Screen.resolutions;
         availableResolutions.Clear();
-        Debug.Log("Available resolutions: " + allResolutions.Length);
 
         int currentResolutionIndex = 0;
         Resolution currentRes = Screen.currentResolution;
@@ -30,7 +29,6 @@ public class OptionsPanel : MonoBehaviour
         foreach (Resolution res in allResolutions)
         {
             string option = res.width + " x " + res.height + " @ " + res.refreshRateRatio.numerator / res.refreshRateRatio.denominator + "Hz";
-            Debug.Log(option);
 
             // Prevent duplicate resolutions (same width, height, refresh rate)
             if (!availableResolutions.Exists(r => r.width == res.width && r.height == res.height && r.refreshRateRatio.numerator == res.refreshRateRatio.numerator && r.refreshRateRatio.denominator == res.refreshRateRatio.denominator))

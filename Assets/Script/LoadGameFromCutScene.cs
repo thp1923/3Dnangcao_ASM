@@ -20,10 +20,6 @@ public class LoadGameFromCutScene : MonoBehaviour
         {
             StartCoroutine(LoadSceneAsync(nextSceneIndex));
         }
-        else
-        {
-            Debug.LogWarning("No more scenes to load! You are at the last scene.");
-        }
     }
 
     IEnumerator LoadSceneAsync(int sceneIndex)
