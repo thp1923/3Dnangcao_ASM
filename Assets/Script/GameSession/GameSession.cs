@@ -169,4 +169,11 @@ public class GameSession : MonoBehaviour
         InventoryCanva.SetActive(false);
         HeadUp.SetActive(false);
     }
+    public void HeadUpActive(bool active)
+    {
+        if (active)
+            HeadUp.SetActive(true);
+        else
+            HeadUp.SetActive(false);
+    }
 }
