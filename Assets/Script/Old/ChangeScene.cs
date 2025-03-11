@@ -3,6 +3,13 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+public class ChangeSceneGame : MonoBehaviour
+{
+    public void LoadGameScene()
+    {
+        SceneLoader.Instance.LoadScene(1); // Change 1 to your game scene index
+    }
+}
 public class ChangeScene : MonoBehaviour
 {
     #region Attributes
