@@ -171,9 +171,8 @@ public class GameSession : MonoBehaviour
     }
     public void HeadUpActive(bool active)
     {
-        if (active)
-            HeadUp.SetActive(true);
-        else
-            HeadUp.SetActive(false);
+        HeadUp.SetActive(active);
+        Debug.Log("Active:"+active);
+        return;
     }
 }
