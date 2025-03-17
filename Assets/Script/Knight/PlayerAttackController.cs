@@ -17,9 +17,6 @@ public class PlayerAttackController : LockMouse
     [Header("Attack")]
     [SerializeField]
     private GameObject sword;
-    [SerializeField]
-    private GameObject swordOnShoulder;
-    public bool isEquipping;
 
     public bool isAttacking;
     public bool isUntil;
@@ -36,10 +33,6 @@ public class PlayerAttackController : LockMouse
     public bool canRecceiveInput;
     public bool inputRecceived;
 
-    [Header("Move")]
-    float Drag;
-    float AngDrag;
-
 
     [Header("CD")]
     public GameObject nomarl;
@@ -50,27 +43,6 @@ public class PlayerAttackController : LockMouse
     private void Awake()
     {
         Instance = this;
-    }
-
-    public void UnEquip()
-    {
-        isEquipping = false;
-    }
-
-    void ActiveWeapon()
-    {
-        if (isEquipping)
-        {
-            sword.SetActive(true);
-            swordOnShoulder.SetActive(false);
-            playerAim.SetBool("Equipping", true);
-        }
-        else
-        {
-            sword.SetActive(false);
-            swordOnShoulder.SetActive(true);
-            playerAim.SetBool("Equipping", false);
-        }
     }
     
     public void ResetAttack()
@@ -83,8 +55,6 @@ public class PlayerAttackController : LockMouse
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        Drag = rb.drag;
-        AngDrag = rb.angularDrag;
         canRecceiveInput = true;
     }
 
@@ -95,7 +65,6 @@ public class PlayerAttackController : LockMouse
         IconAttack();
         AttackCombo();
         timeSinceUntil -= Time.deltaTime;
-        ActiveWeapon();
         Until();
         UpdateCursorLock();
         LockMove();
@@ -135,7 +104,6 @@ public class PlayerAttackController : LockMouse
 
             if (canRecceiveInput)
             {
-                isEquipping = true;
                 inputRecceived = true;
                 canRecceiveInput = false;
                 isAttacking = true;
@@ -162,7 +130,6 @@ public class PlayerAttackController : LockMouse
     
     public void UntilAim()
     {
-        isEquipping = true;
         isUntil = true;
         efUntil.SetActive(true);
         Vector3 spawnPosition = new Vector3(sword.transform.position.x, sword.transform.position.y + 5, sword.transform.position.z);
@@ -181,12 +148,12 @@ public class PlayerAttackController : LockMouse
 
     public void LockMove()
     {
-        if (isAttacking || GetComponent<PlayerTakeDamge>().isBlock || isUntil || !CursorLocked || isBuff)
+        if (isAttacking || isUntil || !CursorLocked || isBuff)
         {
             tcp.lockMovement = true;
             tcp.lockRotation = true;
-            rb.angularDrag = 100;
-            rb.drag = 100;
+            rb.velocity = Vector3.zero;
+            //rb.angularVelocity = Vector3.zero;
             playerAim.SetFloat("InputMagnitude", -1f);
         }
         else
@@ -194,9 +161,9 @@ public class PlayerAttackController : LockMouse
     }
     public void UnlockMove()
     {
-        
-        rb.angularDrag = AngDrag;
-        rb.drag = Drag;
+
+        rb.velocity = Vector3.zero;
+        //rb.angularVelocity = Vector3.zero;
         tcp.lockMovement = false;
         tcp.lockRotation = false;
     }

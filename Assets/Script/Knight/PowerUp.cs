@@ -68,7 +68,6 @@ public class PowerUp : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.E) && !powerUp && _timeCD <= 0)
         {
             GetComponent<AudioPlayer>().PlayAudio(3);
-            PlayerAttackController.Instance.isEquipping = true;
             anim.SetTrigger("PowerUp");
             PowerUpOn();
             _timeCD = timeCD;

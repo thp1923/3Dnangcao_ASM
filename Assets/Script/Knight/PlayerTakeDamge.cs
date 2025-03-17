@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class PlayerTakeDamge : MonoBehaviour
+public class PlayerTakeDamge : AliveManager
 {
     Animator PlayerAim;
     Rigidbody rb;
@@ -64,7 +64,6 @@ public class PlayerTakeDamge : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse1) && PlayerAim.GetBool("IsGrounded") && timeSinceBlock <= 0 && PlayerAttackController.CursorLocked)
         {
             audioP.PlayClip(9);
-            GetComponent<PlayerAttackController>().isEquipping = true;
             GetComponent<PlayerAim>().aimRange += 5;
             PlayerAim.SetTrigger("Block");
             GetComponent<PlayerAim>().ClosestEnemy();
@@ -88,7 +87,6 @@ public class PlayerTakeDamge : MonoBehaviour
             PlayerAim.SetTrigger("Hit");
             PlayerAim.SetFloat("InputMagnitude", -1);
             GetComponent<PlayerAim>().ClosestEnemy();
-            GetComponent<PlayerAttackController>().isEquipping = true;
             rb.AddForce(-transform.forward * knockBack);
         }
     }

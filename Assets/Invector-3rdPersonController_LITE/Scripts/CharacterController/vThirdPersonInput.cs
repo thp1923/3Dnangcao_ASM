@@ -20,6 +20,7 @@ namespace Invector.vCharacterController
         [HideInInspector] public vThirdPersonController cc;
         [HideInInspector] public vThirdPersonCamera tpCamera;
         [HideInInspector] public Camera cameraMain;
+        bool canJump = false;
 
         #endregion
 
@@ -143,10 +144,10 @@ namespace Invector.vCharacterController
         /// </summary>
         protected virtual void JumpInput()
         {
+            if(!canJump) return;
             if (PlayerAttackController.Instance.isAttacking 
                 || GetComponent<PlayerTakeDamge>().isBlock
-                || PlayerAttackController.Instance.isUntil 
-                || !PlayerAttackController.CursorLocked)
+                || PlayerAttackController.Instance.isUntil)
                 return;
             if (Input.GetKeyDown(jumpInput) && JumpConditions())
                 cc.Jump();
