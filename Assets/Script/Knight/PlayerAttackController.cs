@@ -152,8 +152,6 @@ public class PlayerAttackController : LockMouse
         {
             tcp.lockMovement = true;
             tcp.lockRotation = true;
-            rb.velocity = Vector3.zero;
-            //rb.angularVelocity = Vector3.zero;
             playerAim.SetFloat("InputMagnitude", -1f);
         }
         else
@@ -161,9 +159,6 @@ public class PlayerAttackController : LockMouse
     }
     public void UnlockMove()
     {
-
-        rb.velocity = Vector3.zero;
-        //rb.angularVelocity = Vector3.zero;
         tcp.lockMovement = false;
         tcp.lockRotation = false;
     }

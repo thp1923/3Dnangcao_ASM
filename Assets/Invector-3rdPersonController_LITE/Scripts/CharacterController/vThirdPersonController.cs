@@ -20,7 +20,21 @@ namespace Invector.vCharacterController
 
         public virtual void ControlLocomotionType()
         {
-            if (lockMovement) return;
+            if (lockMovement)
+            {
+                freeSpeed.walkSpeed = 0;
+                freeSpeed.runningSpeed = 0;
+                freeSpeed.sprintSpeed = 0;
+                //Rigidbody rb = GetComponent<Rigidbody>();
+                //rb.Sleep();
+                return;
+            }
+            else
+            {
+                freeSpeed.walkSpeed = 2;
+                freeSpeed.runningSpeed = 4;
+                freeSpeed.sprintSpeed = 6;
+            }
 
             if (locomotionType.Equals(LocomotionType.FreeWithStrafe) && !isStrafing || locomotionType.Equals(LocomotionType.OnlyFree))
             {
