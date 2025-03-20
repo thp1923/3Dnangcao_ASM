@@ -49,7 +49,7 @@ public class TornadoDamge : MonoBehaviour
                 Destroy(gameObject);
                 return;
             }
-            player.GetComponent<PlayerTakeDamge>().TakeDamge(Damge, stunDamge, knockBack);
+            player.GetComponent<PlayerTakeDamge>().TakeDamge(Damge, stunDamge);
         }
     }
 

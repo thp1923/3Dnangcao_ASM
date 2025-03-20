@@ -51,7 +51,7 @@ public class EnemyDamge : MonoBehaviour
                 GetComponent<EnemyTakeDamge>().TakeDamge(0, 1000);
                 return;
             }
-            player.GetComponent<PlayerTakeDamge>().TakeDamge(Damge, stunDamge, knockBack);
+            player.GetComponent<PlayerTakeDamge>().TakeDamge(Damge, stunDamge);
         }
     }
     private void OnDrawGizmosSelected()

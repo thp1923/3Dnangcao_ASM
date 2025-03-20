@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace StatsManager
 {
-    public class StatsAlive
+    public class StatsAlive : MonoBehaviour
     {
         #region Public
         public int MaxHP; // Máu tối đa ko phải máu dùng trong thực tế
@@ -16,7 +16,14 @@ namespace StatsManager
 
         protected int currentHP;
 
-        public void TakeDamge(int damge, int stunDamge)
+        protected virtual void Start()
+        {
+            currentHP = MaxHP;
+            if (HpSlider != null)
+                HpSlider.maxValue = MaxHP;
+        }
+
+        public virtual void TakeDamge(int damge, int stunDamge)
         {
             int Damge = Mathf.FloorToInt((damge / Defense) * 3.14f);
             Damge = Mathf.Max(Damge, 1); // luôn gây damge ít nhất là 1
@@ -29,7 +36,7 @@ namespace StatsManager
         }
     }
 
-    public class StatsAttack
+    public class StatsAttack : MonoBehaviour
     {
         #region Public
         [Header("-----Atk Stats-----")]
@@ -41,7 +48,7 @@ namespace StatsManager
 
         protected int atk;
 
-        public void Attack(int attackNumber)
+        public virtual void Attack(int attackNumber)
         {
             int damge = Mathf.FloorToInt(BaseATK * (ATK[attackNumber]/100));
             if(Random.Range(0, 1f) <= critRate)
@@ -55,7 +62,7 @@ namespace StatsManager
         }
     }
 
-    public class StatsStamina
+    public class StatsStamina : MonoBehaviour
     {
         public int StaminaMax;
         public int StaminaRecover;
@@ -64,7 +71,7 @@ namespace StatsManager
         protected float _recoverStaminaTime;
         protected int stamina;
 
-        public void LostStamina(int staminaLost)
+        public virtual void LostStamina(int staminaLost)
         {
             stamina -= staminaLost;
         }

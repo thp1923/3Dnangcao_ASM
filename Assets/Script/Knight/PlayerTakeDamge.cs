@@ -9,10 +9,6 @@ public class PlayerTakeDamge : StatsAlive
 {
     Animator PlayerAim;
     Rigidbody rb;
-    public int stunResistanceMax;
-    int stunResistance;
-    public float stunResistanceHealthCD;
-    float timeCD;
     public float timeSinceBlockCD;
     private float timeSinceBlock;
 
@@ -32,11 +28,11 @@ public class PlayerTakeDamge : StatsAlive
     public Transform HitPoint;
     public GameObject HitEffect;
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         PlayerAim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
-        stunResistance = stunResistanceMax;
     }
 
     // Update is called once per frame
@@ -44,13 +40,7 @@ public class PlayerTakeDamge : StatsAlive
     {
         Block();
         blockCD.text = timeSinceBlock.ToString("F1");
-        timeCD -= Time.deltaTime;
         IconBlock();
-        if(stunResistance < 100 & timeCD <= 0)
-        {
-            stunResistance = stunResistanceMax;
-            timeCD = stunResistanceHealthCD;
-        }
     }
 
     void IconBlock()
@@ -58,7 +48,7 @@ public class PlayerTakeDamge : StatsAlive
         if(timeSinceBlock > 0) block.SetActive(true);
         else block.SetActive(false);
     }
-
+    
     void Block()
     {
         timeSinceBlock -= Time.deltaTime;
@@ -71,24 +61,19 @@ public class PlayerTakeDamge : StatsAlive
             timeSinceBlock = timeSinceBlockCD;
         }
     }
-    public void TakeDamge(int damge, int stunNumber, float knockBack)
+    public override void TakeDamge(int damge, int stunDamge)
     {
         if (noTakeDamge) return;
-        FindObjectOfType<GameSession>().TakeDamage(damge);
-        stunResistance -= stunNumber;
-        timeCD = stunResistanceHealthCD;
+        base.TakeDamge(damge, stunDamge);
         audioP.PlayClip(7);
-        GameObject instance = Instantiate(DamPopUp, transform.position
-            + new Vector3(UnityEngine.Random.Range(-1f, 1f), 2f, UnityEngine.Random.Range(-1f, 1f)), 
-            Quaternion.identity);
-        instance.GetComponentInChildren<TextMeshProUGUI>().text = damge.ToString();
         Instantiate(HitEffect, HitPoint.position, Quaternion.identity);
-        if (stunResistance <= 0)
+        if(currentHP <= 0)
         {
-            PlayerAim.SetTrigger("Hit");
-            PlayerAim.SetFloat("InputMagnitude", -1);
-            GetComponent<PlayerAim>().ClosestEnemy();
-            rb.AddForce(-transform.forward * knockBack);
+            Death();
+        }
+        if(stunDamge > StunResistance)
+        {
+            Debug.Log("Stun");
         }
     }
     public void Death()
@@ -103,6 +88,5 @@ public class PlayerTakeDamge : StatsAlive
         GetComponent<PlayerAttackController>().enabled = false;
         GetComponent<CapsuleCollider>().enabled = false;
         rb.useGravity = false;
-        rb.mass = 10;
     }
 }
