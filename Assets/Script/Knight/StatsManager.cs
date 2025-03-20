@@ -1,0 +1,83 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace StatsManager
+{
+    public class StatsAlive
+    {
+        #region Public
+        public int MaxHP; // Máu tối đa ko phải máu dùng trong thực tế
+        public int Defense; // Chỉ số phòng thủ
+        public int StunResistance; // Chỉ sô kháng stun
+        public Slider HpSlider;
+        #endregion
+
+        protected int currentHP;
+
+        public void TakeDamge(int damge, int stunDamge)
+        {
+            int Damge = Mathf.FloorToInt((damge / Defense) * 3.14f);
+            Damge = Mathf.Max(Damge, 1); // luôn gây damge ít nhất là 1
+            currentHP -= Damge;
+            HpSlider.value = currentHP;
+            //if(stunDamge > StunResistance)
+            //{
+            //    // sẽ chạy stun tùy theo mức độ
+            //}
+        }
+    }
+
+    public class StatsAttack
+    {
+        #region Public
+        [Header("-----Atk Stats-----")]
+        public List<float> ATK; //Phần trăm damge của đòn đánh
+        public int BaseATK;
+        public float critRate;
+        public float critDamge;
+        #endregion
+
+        protected int atk;
+
+        public void Attack(int attackNumber)
+        {
+            int damge = Mathf.FloorToInt(BaseATK * (ATK[attackNumber]/100));
+            if(Random.Range(0, 1f) <= critRate)
+            {
+                atk = Mathf.FloorToInt(damge * (1f + critDamge));
+            }
+            else
+            {
+                atk = damge;
+            }
+        }
+    }
+
+    public class StatsStamina
+    {
+        public int StaminaMax;
+        public int StaminaRecover;
+        public float RecoverStaminaTime;
+
+        protected float _recoverStaminaTime;
+        protected int stamina;
+
+        public void LostStamina(int staminaLost)
+        {
+            stamina -= staminaLost;
+        }
+
+        public void RecoveStamina()
+        {
+            _recoverStaminaTime -= Time.deltaTime;
+            if (stamina < StaminaMax && _recoverStaminaTime < RecoverStaminaTime)
+            {
+                stamina += StaminaRecover;
+            }
+            else
+                stamina = StaminaMax; return;
+        }
+    }
+}

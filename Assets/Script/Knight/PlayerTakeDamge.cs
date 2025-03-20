@@ -1,10 +1,11 @@
 using Invector.vCharacterController;
+using StatsManager;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class PlayerTakeDamge : AliveManager
+public class PlayerTakeDamge : StatsAlive
 {
     Animator PlayerAim;
     Rigidbody rb;
