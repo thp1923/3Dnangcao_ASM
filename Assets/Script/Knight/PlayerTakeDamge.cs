@@ -41,6 +41,7 @@ public class PlayerTakeDamge : StatsAlive
         Block();
         blockCD.text = timeSinceBlock.ToString("F1");
         IconBlock();
+        Dodge();
     }
 
     void IconBlock()
@@ -61,6 +62,16 @@ public class PlayerTakeDamge : StatsAlive
             timeSinceBlock = timeSinceBlockCD;
         }
     }
+
+    public void Dodge()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            GetComponent<vThirdPersonController>().lockMovement = true;
+            PlayerAim.SetTrigger("Dodge");
+        }
+    }
+
     public override void TakeDamge(int damge, int stunDamge)
     {
         if (noTakeDamge) return;

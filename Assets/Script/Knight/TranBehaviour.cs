@@ -9,6 +9,7 @@ public class TranBehaviour : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         PlayerAttackController.Instance.canRecceiveInput = true;
+        animator.GetComponent<SwordTrailEffect>().PlayPartical(1);
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
