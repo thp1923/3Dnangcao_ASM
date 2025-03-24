@@ -41,7 +41,6 @@ public class PlayerTakeDamge : StatsAlive
         Block();
         blockCD.text = timeSinceBlock.ToString("F1");
         IconBlock();
-        Dodge();
     }
 
     void IconBlock()
@@ -60,15 +59,6 @@ public class PlayerTakeDamge : StatsAlive
             PlayerAim.SetTrigger("Block");
             GetComponent<PlayerAim>().ClosestEnemy();
             timeSinceBlock = timeSinceBlockCD;
-        }
-    }
-
-    public void Dodge()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            GetComponent<vThirdPersonController>().lockMovement = true;
-            PlayerAim.SetTrigger("Dodge");
         }
     }
 
