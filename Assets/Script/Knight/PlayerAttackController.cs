@@ -148,7 +148,7 @@ public class PlayerAttackController : LockMouse
 
     public void LockMove()
     {
-        if (isAttacking || isUntil || !CursorLocked || isBuff)
+        if (isAttacking || isUntil || !CursorLocked || GetComponent<PlayerDodge>().isDodge)
         {
             tcp.lockMovement = true;
             tcp.lockRotation = true;

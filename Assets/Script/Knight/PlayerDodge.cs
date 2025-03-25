@@ -4,41 +4,22 @@ using UnityEngine;
 
 public class PlayerDodge : MonoBehaviour
 {
+    Animator anim;
+    vThirdPersonController tcp;
 
-    vThirdPersonController cp;
-    public float dodgeSpeed = 10f;
-    public float dodgeCooldown = 1f;
+    public bool isDodge;
 
-    private bool isDodging = false;
-    private bool canDodge = true;
-    private Vector3 dodgeDirection;
-
-    Animator aim;
-
-    void Start()
+    private void Start()
     {
-        cp = GetComponent<vThirdPersonController>();
-        aim = GetComponent<Animator>();
+        tcp = GetComponent<vThirdPersonController>();
+        anim = GetComponent<Animator>();
     }
 
-    void Update()
+    private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && !isDodge)
         {
-            StartCoroutine(Dash());
+            anim.SetTrigger("Dodge");
         }
     }
-
-    IEnumerator Dash()
-    {
-        float startTime = Time.time;
-        
-        while(Time.time < startTime + dodgeCooldown)
-        {
-            cp.MoveCharacter(cp.moveDirection * dodgeSpeed * Time.deltaTime);
-
-            yield return null;
-        }
-    }
-    
 }
