@@ -9,12 +9,11 @@ public class PlayerTakeDamge : StatsAlive
 {
     Animator PlayerAim;
     Rigidbody rb;
-    public float timeSinceBlockCD;
-    private float timeSinceBlock;
 
     public bool isBlock;
     public bool isDeath;
     public bool noTakeDamge;
+    public bool isStun;
 
     public GameObject DamPopUp;
 
@@ -39,32 +38,33 @@ public class PlayerTakeDamge : StatsAlive
     void Update()
     {
         Block();
-        blockCD.text = timeSinceBlock.ToString("F1");
-        IconBlock();
+        
     }
-
-    void IconBlock()
-    {
-        if(timeSinceBlock > 0) block.SetActive(true);
-        else block.SetActive(false);
-    }
+    
     
     void Block()
     {
-        timeSinceBlock -= Time.deltaTime;
-        if (Input.GetKeyDown(KeyCode.Mouse1) && PlayerAim.GetBool("IsGrounded") && timeSinceBlock <= 0 && PlayerAttackController.CursorLocked)
+        if (Input.GetKey(KeyCode.Mouse1) && PlayerAim.GetBool("IsGrounded") && PlayerAttackController.CursorLocked)
         {
-            audioP.PlayClip(9);
-            GetComponent<PlayerAim>().aimRange += 5;
-            PlayerAim.SetTrigger("Block");
-            GetComponent<PlayerAim>().ClosestEnemy();
-            timeSinceBlock = timeSinceBlockCD;
+            //audioP.PlayClip(9);
+            PlayerAim.SetBool("IsBlock", true);
+            isBlock = true;
+        }
+        else
+        {
+            isBlock = false;
+            PlayerAim.SetBool("IsBlock", false);
         }
     }
 
     public override void TakeDamge(int damge, int stunDamge)
     {
         if (noTakeDamge) return;
+        if (isBlock)
+        {
+            PlayerAim.SetTrigger("Hit");
+            return;
+        }
         base.TakeDamge(damge, stunDamge);
         audioP.PlayClip(7);
         Instantiate(HitEffect, HitPoint.position, Quaternion.identity);
@@ -74,7 +74,13 @@ public class PlayerTakeDamge : StatsAlive
         }
         if(stunDamge > StunResistance)
         {
-            Debug.Log("Stun");
+            int stun = stunDamge - StunResistance;
+            if(stun > 50)
+            {
+                PlayerAim.SetTrigger("Hit2");
+            }
+            else
+                PlayerAim.SetTrigger("Hit");
         }
     }
     public void Death()

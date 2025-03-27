@@ -16,6 +16,9 @@ public class PlayerDodge : MonoBehaviour
 
     [Header("Shader Relashed")]
     public Material mat;
+    public string shaderVarRef;
+    public float shaderVarRate = 0.1f;
+    public float shaderVarRefreshRate = 0.05f;
 
     [Header("Mesh Relashed")]
     public float meshRefreshRate = 0.1f;
@@ -43,8 +46,16 @@ public class PlayerDodge : MonoBehaviour
         }
     }
 
+
+    public void UnDodge()
+    {
+        isDodge = false;
+    }
+
+
     IEnumerator ActivateTrail(float timeActive)
     {
+        if (!isDodge) yield return null;
         while(timeActive > 0)
         {
             timeActive -= meshRefreshRate;
@@ -67,6 +78,8 @@ public class PlayerDodge : MonoBehaviour
 
                 mr.material = mat;
 
+                StartCoroutine(AnimateMaterialFloat(mr.material, 0, shaderVarRate, shaderVarRefreshRate));
+
                 Destroy(gObj, meshDestroyDelay);
             }
 
@@ -74,5 +87,17 @@ public class PlayerDodge : MonoBehaviour
         }
 
         isActiveTrail = false;
+    }
+
+    IEnumerator AnimateMaterialFloat(Material mat, float goal, float rate, float refreshRate)
+    {
+        float valueToAnimate = mat.GetFloat(shaderVarRef);
+
+        while(valueToAnimate > goal)
+        {
+            valueToAnimate -= rate;
+            mat.SetFloat(shaderVarRef, valueToAnimate);
+            yield return new WaitForSeconds(refreshRate);
+        }
     }
 }

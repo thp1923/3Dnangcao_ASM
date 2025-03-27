@@ -20,7 +20,10 @@ namespace StatsManager
         {
             currentHP = MaxHP;
             if (HpSlider != null)
+            {
                 HpSlider.maxValue = MaxHP;
+                HpSlider.value = currentHP;
+            }
         }
 
         public virtual void TakeDamge(int damge, int stunDamge)
