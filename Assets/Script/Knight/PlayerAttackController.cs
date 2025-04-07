@@ -33,6 +33,7 @@ public class PlayerAttackController : LockMouse
     public bool canRecceiveInput;
     public bool inputRecceived;
 
+    public bool canClick;
 
     [Header("CD")]
     public GameObject nomarl;
@@ -56,6 +57,7 @@ public class PlayerAttackController : LockMouse
     {
         rb = GetComponent<Rigidbody>();
         canRecceiveInput = true;
+        canClick = true;
     }
 
     // Update is called once per frame
@@ -99,7 +101,7 @@ public class PlayerAttackController : LockMouse
     }
     public void AttackCombo()
     {
-        if (Input.GetMouseButtonDown(0) && playerAim.GetBool("IsGrounded") && CursorLocked && !isUntil && !GetComponent<PlayerTakeDamge>().isBlock)
+        if (Input.GetMouseButtonDown(0) && playerAim.GetBool("IsGrounded") && CursorLocked && !GetComponent<PlayerTakeDamge>().isBlock && canClick)
         {
 
             if (canRecceiveInput)

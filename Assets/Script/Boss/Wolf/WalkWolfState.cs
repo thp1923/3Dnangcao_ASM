@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class RunStateBossWolf : StateMachineBehaviour
+public class WalkWolfState : StateMachineBehaviour
 {
     public float playerDistance;
     public float playerDistance2;
@@ -18,7 +18,7 @@ public class RunStateBossWolf : StateMachineBehaviour
         agent.enabled = true;
         agent.speed = speed;
         if (player.GetComponent<PlayerTakeDamge>().isDeath)
-            animator.SetBool("IsRunning", false);
+            animator.SetBool("IsWalking", false);
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -27,13 +27,13 @@ public class RunStateBossWolf : StateMachineBehaviour
         if (!agent.enabled) return;
         if (FindObjectOfType<PlayerTakeDamge>().isDeath)
         {
-            animator.SetBool("IsRunning", false);
+            animator.SetBool("IsWalking", false);
             return;
         }
         agent.SetDestination(player.position);
         float distance = Vector3.Distance(player.position, animator.transform.position);
-        if(distance < playerDistance2)
-            animator.SetBool("IsWalking", true);
+        if (distance < playerDistance2)
+            animator.SetBool("IsWalking", false);
         if (distance > playerDistance)
             animator.SetBool("IsRunning", false);
 
@@ -42,10 +42,10 @@ public class RunStateBossWolf : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.GetComponent<PlayAudioEnemy>().PlayAudioStop(6);
+        
         if (!agent.enabled) return;
         agent.SetDestination(animator.transform.position);
-        animator.SetBool("IsRunning", false);
+        animator.SetBool("IsWalking", false);
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

@@ -52,6 +52,11 @@ public class PlayerDodge : MonoBehaviour
         isDodge = false;
     }
 
+    public void Dodge()
+    {
+        isDodge = true;
+    }
+
 
     IEnumerator ActivateTrail(float timeActive)
     {
