@@ -35,6 +35,12 @@ public class PlayerDodge : MonoBehaviour
 
     private void Update()
     {
+        if (isDodge)
+        {
+            tcp.lockRotation = true;
+        }
+        else
+            tcp.lockRotation = false;
         if (isDodge && !isActiveTrail)
         {
             isActiveTrail = true;

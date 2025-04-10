@@ -150,7 +150,7 @@ public class PlayerAttackController : LockMouse
 
     public void LockMove()
     {
-        if (isAttacking || isUntil || !CursorLocked || GetComponent<PlayerDodge>().isDodge || GetComponent<PlayerTakeDamge>().isStun)
+        if (isAttacking || isUntil || !CursorLocked || GetComponent<PlayerTakeDamge>().isStun)
         {
             tcp.lockMovement = true;
             tcp.lockRotation = true;

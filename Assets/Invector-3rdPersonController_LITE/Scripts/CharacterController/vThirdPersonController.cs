@@ -43,15 +43,8 @@ namespace Invector.vCharacterController
                 MoveCharacter(moveDirection);
         }
 
-        private PlayerAttackController playConAt;
-
-        private void Awake()
-        {
-            playConAt = GetComponent<PlayerAttackController>();
-        }
         public virtual void ControlRotationType()
         {
-            if(playConAt.isAttacking) return;
             if (lockRotation) return;
 
             bool validInput = input != Vector3.zero || (isStrafing ? strafeSpeed.rotateWithCamera : freeSpeed.rotateWithCamera);

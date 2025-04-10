@@ -7,8 +7,7 @@ public class DodgeState : StateMachineBehaviour
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.GetComponent<PlayerAim>().aimRange = 10;
-        animator.GetComponent<PlayerAim>().ClosestEnemy();
+        animator.GetComponent<PlayerDodge>().Dodge();
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -20,7 +19,6 @@ public class DodgeState : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.GetComponent<PlayerAim>().aimRange = 3;
         animator.GetComponent<PlayerDodge>().UnDodge();
     }
 
