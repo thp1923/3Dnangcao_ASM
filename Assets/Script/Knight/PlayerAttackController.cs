@@ -35,12 +35,6 @@ public class PlayerAttackController : LockMouse
 
     public bool canClick;
 
-    [Header("CD")]
-    public GameObject nomarl;
-    public GameObject skill;
-
-    public TMPro.TextMeshProUGUI skillCD;
-
     private void Awake()
     {
         Instance = this;
@@ -63,8 +57,6 @@ public class PlayerAttackController : LockMouse
     // Update is called once per frame
     void Update()
     {
-        skillCD.text = timeSinceUntil.ToString("F1");
-        IconAttack();
         AttackCombo();
         timeSinceUntil -= Time.deltaTime;
         Until();
@@ -72,13 +64,6 @@ public class PlayerAttackController : LockMouse
         LockMove();
     }
 
-    void IconAttack()
-    {
-        if(timeSinceUntil > 0) skill.SetActive(true);
-        else skill.SetActive(false);
-        if (!canRecceiveInput) nomarl.SetActive(true);
-        else nomarl.SetActive(false);
-    }
 
     public void InputManager()
     {

@@ -20,10 +20,6 @@ public class PowerUp : MonoBehaviour
 
     Animator anim;
 
-    [Header("----------CD--------")]
-    public GameObject power;
-
-    public TMPro.TextMeshProUGUI powerCD;
     // Start is called before the first frame update
     void Start()
     {
@@ -36,9 +32,7 @@ public class PowerUp : MonoBehaviour
     void Update()
     {
         _timeCD -= Time.deltaTime;
-        powerCD.text = _timeCD.ToString("F1");
         OnPowerUp();
-        IconPower();
         if (powerUp)
         {
             buff.SetActive(true);
@@ -57,11 +51,6 @@ public class PowerUp : MonoBehaviour
         }
     }
 
-    void IconPower()
-    {
-        if(!powerUp && _timeCD <= 0) power.SetActive(false);
-        else power.SetActive(true);
-    }
 
     private void OnPowerUp()
     {

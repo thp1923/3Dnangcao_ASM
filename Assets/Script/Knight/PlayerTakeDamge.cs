@@ -18,14 +18,8 @@ public class PlayerTakeDamge : StatsAlive
     public GameObject DamPopUp;
 
     [Header("-------------CD----------")]
-    public GameObject block;
-
-    public TMPro.TextMeshProUGUI blockCD;
 
     public Audio audioP;
-
-    public Transform HitPoint;
-    public GameObject HitEffect;
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -67,7 +61,6 @@ public class PlayerTakeDamge : StatsAlive
         }
         base.TakeDamge(damge, stunDamge);
         audioP.PlayClip(7);
-        Instantiate(HitEffect, HitPoint.position, Quaternion.identity);
         if(currentHP <= 0)
         {
             Death();
