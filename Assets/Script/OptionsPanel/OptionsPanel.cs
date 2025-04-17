@@ -28,17 +28,26 @@ public class OptionsPanel : MonoBehaviour
 
         foreach (Resolution res in allResolutions)
         {
-            string option = res.width + " x " + res.height + " @ " + res.refreshRateRatio.numerator / res.refreshRateRatio.denominator + "Hz";
+            // Calculate refresh rate from the ratio (avoid division by zero)
+            int refreshRate = res.refreshRateRatio.denominator != 0 ?
+                Mathf.RoundToInt((float)res.refreshRateRatio.numerator / res.refreshRateRatio.denominator) : 0;
+
+            string option = res.width + " x " + res.height + " @ " + refreshRate + "Hz";
 
             // Prevent duplicate resolutions (same width, height, refresh rate)
-            if (!availableResolutions.Exists(r => r.width == res.width && r.height == res.height && r.refreshRateRatio.numerator == res.refreshRateRatio.numerator && r.refreshRateRatio.denominator == res.refreshRateRatio.denominator))
+            if (!availableResolutions.Exists(r =>
+                r.width == res.width && r.height == res.height &&
+                (r.refreshRateRatio.denominator != 0 ?
+                    Mathf.RoundToInt((float)r.refreshRateRatio.numerator / r.refreshRateRatio.denominator) : 0) == refreshRate))
             {
                 availableResolutions.Add(res);
                 options.Add(option);
             }
 
-            // Set default index to the current resolution
-            if (res.width == currentRes.width && res.height == currentRes.height && res.refreshRateRatio.numerator == currentRes.refreshRateRatio.numerator && res.refreshRateRatio.denominator == currentRes.refreshRateRatio.denominator)
+            // Set the default index to the current resolution if it matches.
+            int currentRefreshRate = currentRes.refreshRateRatio.denominator != 0 ?
+                Mathf.RoundToInt((float)currentRes.refreshRateRatio.numerator / currentRes.refreshRateRatio.denominator) : 0;
+            if (res.width == currentRes.width && res.height == currentRes.height && refreshRate == currentRefreshRate)
             {
                 currentResolutionIndex = availableResolutions.Count - 1;
             }
@@ -49,13 +58,14 @@ public class OptionsPanel : MonoBehaviour
         resolutionDropdown.RefreshShownValue();
         resolutionDropdown.onValueChanged.AddListener(SetResolution);
     }
+
     #endregion
 
     #region Graphics
     void PopulateGraphicsDropdown()
     {
         graphicsDropdown.ClearOptions();
-        List<string> options = new List<string> { "Very Low","Low", "Medium", "High", "Ultra" };
+        List<string> options = new List<string> { "Very Low","Low", "Medium", "High"};
         graphicsDropdown.AddOptions(options);
         graphicsDropdown.value = QualitySettings.GetQualityLevel();
         graphicsDropdown.RefreshShownValue();
