@@ -27136,7 +27136,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9877e20f1278f524f8eb23ee2e29a191, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDodge: 0
+  dodgeSpeed: 6
   positionToSpawn: {fileID: 1219137226}
   mat: {fileID: 2100000, guid: 864dcb16e765d294ca41413031caea1e, type: 2}
   shaderVarRef: _Alpha
@@ -27283,6 +27283,7 @@ GameObject:
   - component: {fileID: 1310050714}
   - component: {fileID: 1310050713}
   - component: {fileID: 1310050712}
+  - component: {fileID: 1310050728}
   m_Layer: 0
   m_Name: vBasicController_Paladin J Nordstrom@T-Pose
   m_TagString: Player
@@ -27302,7 +27303,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9877e20f1278f524f8eb23ee2e29a191, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDodge: 0
+  dodgeSpeed: 6
   positionToSpawn: {fileID: 1310050727}
   mat: {fileID: 2100000, guid: 864dcb16e765d294ca41413031caea1e, type: 2}
   shaderVarRef: _Alpha
@@ -27635,6 +27636,18 @@ Transform:
   - {fileID: 471141363}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1310050728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1310050711}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e3d5b5a410a1eb4a85c8a4977d0bc28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1311506857
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,10 +4,15 @@ using UnityEngine;
 
 public class PlayerDodge : MonoBehaviour
 {
-    Animator anim;
-    vThirdPersonController tcp;
+    private Animator anim;
+    private bool isDodging = false;
+    private Vector3 dodgeDirection;
+    private Rigidbody rb;
 
-    public bool isDodge;
+    private vThirdPersonController controller; // Invector controller
+
+    [Header("Dodge Settings")]
+    public float dodgeSpeed = 6f;
 
     public Transform positionToSpawn;
 
@@ -29,44 +34,79 @@ public class PlayerDodge : MonoBehaviour
     private bool isActiveTrail;
     private void Start()
     {
-        tcp = GetComponent<vThirdPersonController>();
         anim = GetComponent<Animator>();
+        controller = GetComponent<vThirdPersonController>();
+        rb = GetComponent<Rigidbody>();
     }
 
     private void Update()
     {
-        if (isDodge)
-        {
-            tcp.lockRotation = true;
-        }
-        else
-            tcp.lockRotation = false;
-        if (isDodge && !isActiveTrail)
+        
+        if (isDodging && !isActiveTrail)
         {
             isActiveTrail = true;
             StartCoroutine(ActivateTrail(activeTime));
         }
-        if (Input.GetKeyDown(KeyCode.Space) && !isDodge)
+
+        if (!isDodging && Input.GetKeyDown(KeyCode.Space))
         {
-            anim.SetTrigger("Dodge");
+            StartDodge();
         }
     }
 
-
-    public void UnDodge()
+    void FixedUpdate()
     {
-        isDodge = false;
+        if (isDodging)
+        {
+            MoveDuringDodge();
+        }
     }
 
-    public void Dodge()
+    void StartDodge()
     {
-        isDodge = true;
+        isDodging = true;
+
+        // Hướng cố định khi bắt đầu lăn
+        dodgeDirection = transform.forward.normalized;
+
+        // Khoá di chuyển và xoay của Invector
+        controller.lockMovement = true;
+        controller.lockRotation = true;
+
+        // Gọi animation
+        anim.SetTrigger("Dodge");
+
+        // Reset lại velocity của Rigidbody
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
     }
+
+    void MoveDuringDodge()
+    {
+        Vector3 move = dodgeDirection * dodgeSpeed * Time.fixedDeltaTime;
+        rb.MovePosition(rb.position + move);
+    }
+
+
+    // Gọi ở cuối animation bằng Event
+    public void EndDodge()
+    {
+        isDodging = false;
+
+        // Bật lại di chuyển và xoay
+        controller.lockMovement = false;
+        controller.lockRotation = false;
+
+        // Reset lại Rigidbody và velocity
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+    }
+
 
 
     IEnumerator ActivateTrail(float timeActive)
     {
-        if (!isDodge) yield return null;
+        if (!isDodging) yield return null;
         while(timeActive > 0)
         {
             timeActive -= meshRefreshRate;

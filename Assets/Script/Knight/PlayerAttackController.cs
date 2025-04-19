@@ -61,7 +61,7 @@ public class PlayerAttackController : LockMouse
         timeSinceUntil -= Time.deltaTime;
         Until();
         UpdateCursorLock();
-        LockMove();
+        //LockMove();
     }
 
 
@@ -133,21 +133,21 @@ public class PlayerAttackController : LockMouse
     
     
 
-    public void LockMove()
-    {
-        if (isAttacking || isUntil || !CursorLocked || GetComponent<PlayerTakeDamge>().isStun)
-        {
-            tcp.lockMovement = true;
-            tcp.lockRotation = true;
-            playerAim.SetFloat("InputMagnitude", -1f);
-        }
-        else
-            UnlockMove();
-    }
-    public void UnlockMove()
-    {
-        tcp.lockMovement = false;
-        tcp.lockRotation = false;
-    }
+    //public void LockMove()
+    //{
+    //    if (isAttacking || isUntil || !CursorLocked || GetComponent<PlayerTakeDamge>().isStun)
+    //    {
+    //        tcp.lockMovement = true;
+    //        tcp.lockRotation = true;
+    //        playerAim.SetFloat("InputMagnitude", -1f);
+    //    }
+    //    else
+    //        UnlockMove();
+    //}
+    //public void UnlockMove()
+    //{
+    //    tcp.lockMovement = false;
+    //    tcp.lockRotation = false;
+    //}
     
 }

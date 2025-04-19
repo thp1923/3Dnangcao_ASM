@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Invector.vCharacterController
 {
@@ -22,8 +23,6 @@ namespace Invector.vCharacterController
         {
             if (lockMovement)
             {
-                Rigidbody rb = GetComponent<Rigidbody>();
-                rb.Sleep();
                 return;
             }
 
@@ -128,6 +127,11 @@ namespace Invector.vCharacterController
                 animator.CrossFadeInFixedTime("Jump", 0.1f);
             else
                 animator.CrossFadeInFixedTime("JumpMove", .2f);
+        }
+
+        internal void SetInput(Vector2 zero)
+        {
+            throw new NotImplementedException();
         }
     }
 }
