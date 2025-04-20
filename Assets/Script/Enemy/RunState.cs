@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -36,7 +33,16 @@ public class RunState : StateMachineBehaviour
         if (distance > playerDistance)
             animator.SetBool("IsRunning", false);
         if (distance <= attackRange)
-            animator.SetTrigger("Attack");
+        {
+            float check = UnityEngine.Random.Range(-1f, 1f);
+            if (check > 0)
+            {
+                animator.SetTrigger("Attack");
+            }
+            else
+                animator.SetBool("IsRunning", false);
+        }
+            
         
     }
 
