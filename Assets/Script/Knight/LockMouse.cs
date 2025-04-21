@@ -34,10 +34,13 @@ public class LockMouse : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             //LockMove();
-
+            GetComponent<MoveManager>().CheckLockMove(true);
+            GetComponent<MoveManager>().CheckDrag(true);
 
             if (Input.GetKeyDown(KeyCode.LeftAlt))
             {
+                GetComponent<MoveManager>().CheckLockMove(false);
+                GetComponent<MoveManager>().CheckDrag(false);
                 CursorLocked = true;
             }
         }

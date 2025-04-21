@@ -37,4 +37,12 @@ public class MoveManager : MonoBehaviour
         else 
             rb.WakeUp();
     }
+
+    public void CheckDrag(bool Drag)
+    {
+        if (Drag)
+            rb.drag = 100f;
+        else
+            rb.drag = 0f;
+    }
 }
