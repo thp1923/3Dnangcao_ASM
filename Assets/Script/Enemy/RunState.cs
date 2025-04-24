@@ -31,11 +31,18 @@ public class RunState : StateMachineBehaviour
         agent.SetDestination(player.position);
         float distance = Vector3.Distance(player.position, animator.transform.position);
         if (distance > playerDistance)
+        {
             animator.SetBool("IsRunning", false);
+            return;
+        }
+        else
+        {
+            animator.SetBool("IsRunning", true);
+        }
         if (distance <= attackRange)
         {
             float check = UnityEngine.Random.Range(-1f, 1f);
-            if (check > 0)
+            if (check > -0.5f)
             {
                 animator.SetTrigger("Attack");
             }
