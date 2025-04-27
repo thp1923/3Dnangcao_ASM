@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Searcher.SearcherWindow.Alignment;
 
 public class TranBehaviour : StateMachineBehaviour
 {
@@ -19,10 +20,14 @@ public class TranBehaviour : StateMachineBehaviour
         animator.GetComponent<MoveManager>().CheckSleep(true);
         if (PlayerAttackController.Instance.inputRecceived)
         {
-            animator.SetTrigger("Attack"+ currentAttack);
+            animator.SetTrigger("Attack" + currentAttack);
             PlayerAttackController.Instance.InputManager();
             //PlayerAttackController.Instance.inputRecceived = false;
             PlayerAttackController.Instance.isAttacking = true;
+        }
+        else if (!Input.GetMouseButtonDown(0) && (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0))
+        {
+            animator.SetBool("hasInput", true);
         }
     }
 
@@ -30,7 +35,7 @@ public class TranBehaviour : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         PlayerAttackController.Instance.inputRecceived = false;
-        
+        animator.SetBool("hasInput", false);
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

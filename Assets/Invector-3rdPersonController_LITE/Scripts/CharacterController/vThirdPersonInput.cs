@@ -124,6 +124,11 @@ namespace Invector.vCharacterController
 
         protected virtual void SprintInput()
         {
+            if (GetComponent<PlayerAttackController>().isAttacking)
+            {
+                cc.Sprint(false);
+                return;
+            }
             if (Input.GetKeyDown(sprintInput))
                 cc.Sprint(true);
             else if (Input.GetKeyUp(sprintInput))

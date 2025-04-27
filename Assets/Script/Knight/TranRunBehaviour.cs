@@ -1,43 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Searcher.SearcherWindow.Alignment;
 
-public class IdleBehaviour : StateMachineBehaviour
+public class TranRunBehaviour : StateMachineBehaviour
 {
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        PlayerAttackController.Instance.inputRecceived = false;
-        PlayerAttackController.Instance.ResetAttack();
         PlayerAttackController.Instance.canRecceiveInput = true;
-        animator.SetFloat("InputMagnitude", 0f);
-        animator.GetComponent<MoveManager>().CheckLockMove(false);
+        animator.GetComponent<SwordTrailEffect>().PlayPartical(1);
+        animator.GetComponent<MoveManager>().CheckLockMove(true);
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (PlayerAttackController.Instance.inputRecceived && animator.GetFloat("InputMagnitude") <= 1.01f)
+        animator.GetComponent<MoveManager>().CheckSleep(true);
+        if (!Input.GetMouseButtonDown(0) && (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0))
         {
-            animator.SetTrigger("Attack1");
-            PlayerAttackController.Instance.InputManager();
-            PlayerAttackController.Instance.inputRecceived = false;
-            PlayerAttackController.Instance.isAttacking = true;
-        }
-        else if(PlayerAttackController.Instance.inputRecceived && animator.GetFloat("InputMagnitude") > 1.01f)
-        {
-            animator.SetTrigger("AttackRun");
-            PlayerAttackController.Instance.InputManager();
-            PlayerAttackController.Instance.inputRecceived = false;
-            PlayerAttackController.Instance.isAttacking = true;
+            animator.SetBool("hasInput", true);
         }
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
-    //override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //    
-    //}
+    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        PlayerAttackController.Instance.inputRecceived = false;
+        animator.SetBool("hasInput", false);
+    }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()
     //override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
