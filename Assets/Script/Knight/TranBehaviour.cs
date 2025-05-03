@@ -25,7 +25,7 @@ public class TranBehaviour : StateMachineBehaviour
             //PlayerAttackController.Instance.inputRecceived = false;
             PlayerAttackController.Instance.isAttacking = true;
         }
-        else if (!Input.GetMouseButtonDown(0) && (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0))
+        else if (!Input.GetMouseButtonDown(0) && (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0 || Input.GetKey(KeyCode.LeftShift)))
         {
             animator.SetBool("hasInput", true);
         }

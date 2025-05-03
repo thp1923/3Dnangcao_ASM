@@ -17,19 +17,26 @@ public class IdleBehaviour : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (PlayerAttackController.Instance.inputRecceived && animator.GetFloat("InputMagnitude") <= 1.01f)
+        if (PlayerAttackController.Instance.inputRecceived && !Input.GetKey(KeyCode.LeftShift))
         {
             animator.SetTrigger("Attack1");
             PlayerAttackController.Instance.InputManager();
             PlayerAttackController.Instance.inputRecceived = false;
             PlayerAttackController.Instance.isAttacking = true;
         }
-        else if(PlayerAttackController.Instance.inputRecceived && animator.GetFloat("InputMagnitude") > 1.01f)
+        else if(PlayerAttackController.Instance.inputRecceived)
         {
-            animator.SetTrigger("AttackRun");
-            PlayerAttackController.Instance.InputManager();
-            PlayerAttackController.Instance.inputRecceived = false;
-            PlayerAttackController.Instance.isAttacking = true;
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                animator.SetTrigger("AttackRun");
+                PlayerAttackController.Instance.InputManager();
+                PlayerAttackController.Instance.inputRecceived = false;
+                PlayerAttackController.Instance.isAttacking = true;
+            }
+            else
+            {
+                return;
+            }
         }
     }
 
