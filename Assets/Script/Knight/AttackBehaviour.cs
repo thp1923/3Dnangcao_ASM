@@ -24,6 +24,7 @@ public class AttackBehaviour : StateMachineBehaviour
         animator.ResetTrigger("Attack"+numberAttack);
         animator.GetComponent<PlayerAttackController>().canClick = true;
         animator.GetComponent<PlayerAttackController>().inputRecceived = false;
+        animator.GetComponent<SwordTrailEffect>().PlayPartical(0);
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

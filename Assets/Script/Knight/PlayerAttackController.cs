@@ -35,11 +35,29 @@ public class PlayerAttackController : LockMouse
 
     public bool canClick;
 
+    bool swordContract;
+
+    [SerializeField] Vector2 contract_speed_time = new Vector2(0.1f, 0.1f);
+
     private void Awake()
     {
         Instance = this;
     }
     
+    public void SwordContract()
+    {
+        if (!swordContract) StartCoroutine("SpeedRegain"); else return;
+    }
+
+    private IEnumerator SpeedRegain()
+    {
+        swordContract = true;
+        playerAim.speed = contract_speed_time.x;
+        yield return new WaitForSeconds(contract_speed_time.y);
+        playerAim.speed = 1;
+        swordContract = false;
+    }
+
     public void ResetAttack()
     {
         isAttacking = false;
