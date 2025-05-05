@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class MeleeWeapon : MonoBehaviour
@@ -62,8 +63,8 @@ public class MeleeWeapon : MonoBehaviour
                 case "Concrete":
                     Hit(0, hit);
                     break;
-                case "Blood":
-                    Hit(1, hit);
+                case "Enemy":
+                    Hit(0, hit);
                     break;
                 default:
                     break;
@@ -77,7 +78,7 @@ public class MeleeWeapon : MonoBehaviour
         {
             PlayerAttackController.Instance.SwordContract();
             audioSource.PlayOneShot(audioClips[particleType]);
-            Instantiate(particleEffects[particleType], hit.point, Quaternion.LookRotation(hit.normal));
+            Instantiate(particleEffects[Random.Range(0, 5)], hit.point, Quaternion.LookRotation(hit.normal));
             hitCount--;
             recoverTime = max_recoverTime;
         }
