@@ -13,13 +13,15 @@ public class PlayerTakeDamge : StatsAlive
     public bool isBlock;
     public bool isDeath;
     public bool noTakeDamge;
-    public bool isStun;
 
     public GameObject DamPopUp;
 
     [Header("-------------CD----------")]
 
     public Audio audioP;
+
+    [Header("Test")]
+    public int stunDamgeTest;
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -32,7 +34,8 @@ public class PlayerTakeDamge : StatsAlive
     void Update()
     {
         Block();
-        
+        if(Input.GetKeyDown(KeyCode.J)) // Test take damge
+            TakeDamge( 10000 ,stunDamgeTest);
     }
     
     
@@ -68,10 +71,12 @@ public class PlayerTakeDamge : StatsAlive
         if(stunDamge > StunResistance)
         {
             int stun = stunDamge - StunResistance;
-            if(stun > 50)
+            if(stun > 100)
             {
-                PlayerAim.SetTrigger("Hit2");
+                PlayerAim.SetTrigger("Hit3");
             }
+            else if(stun < 100 && stun >=50) 
+                PlayerAim.SetTrigger("Hit2");
             else
                 PlayerAim.SetTrigger("Hit");
         }
