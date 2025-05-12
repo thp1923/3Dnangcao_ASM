@@ -12,6 +12,13 @@ namespace StatsManager
         public int Defense; // Chỉ số phòng thủ
         public int StunResistance; // Chỉ sô kháng stun
         public Slider HpSlider;
+
+        public enum TypeTakeDamge
+        {
+            Only,
+            Branch
+        }
+        public TypeTakeDamge type;
         #endregion
 
         protected int currentHP;
@@ -26,11 +33,11 @@ namespace StatsManager
             }
         }
 
-        public virtual void TakeDamge(int damge, int stunDamge)
+        public virtual void TakeDamge(int damge, int stunDamge, int trueDamge)
         {
-            int Damge = Mathf.FloorToInt((damge / Defense) * 3.14f);
+            int Damge = Mathf.FloorToInt((damge / Defense) * 1.14f);
             Damge = Mathf.Max(Damge, 1); // luôn gây damge ít nhất là 1
-            currentHP -= Damge;
+            currentHP -= Damge + trueDamge;
             HpSlider.value = currentHP;
             //if(stunDamge > StunResistance)
             //{

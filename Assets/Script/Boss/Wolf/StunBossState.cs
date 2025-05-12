@@ -7,7 +7,6 @@ public class StunBossState : StateMachineBehaviour
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.GetComponent<EnemyTakeDamge>().RestoreStunRetance();
         animator.GetComponent<Wolf>().ResetCp();
         animator.GetComponent<PlayAudioEnemy>().StopAudio(5);
     }
@@ -21,7 +20,6 @@ public class StunBossState : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.GetComponent<EnemyTakeDamge>().RestoreStunRetance();
         animator.GetComponent<PlayAudioEnemy>().PlayAudioStop(5);
     }
 

@@ -54,7 +54,6 @@ public class AttackDamgePlayer : MonoBehaviour
         foreach (Collider enemy in colInfo)
         {
             // Gây sát thương lên kẻ địch
-            enemy.GetComponent<EnemyTakeDamge>().TakeDamge(Damge, stunDamge);
         }
     }
     public void Attack2()
@@ -62,7 +61,6 @@ public class AttackDamgePlayer : MonoBehaviour
         Collider[] colInfo = Physics.OverlapBox(pointAttack2.position, box, Quaternion.identity, attackMask);
         foreach (Collider enemy in colInfo)
         {
-            enemy.GetComponent<EnemyTakeDamge>().TakeDamge(Damge, stunDamge);
         }
     }
     private void OnDrawGizmosSelected()

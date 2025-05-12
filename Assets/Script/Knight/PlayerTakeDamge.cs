@@ -35,7 +35,7 @@ public class PlayerTakeDamge : StatsAlive
     {
         Block();
         if(Input.GetKeyDown(KeyCode.J)) // Test take damge
-            TakeDamge( 10000 ,stunDamgeTest);
+            TakeDamge( 10000 ,stunDamgeTest, 0);
     }
     
     
@@ -54,7 +54,7 @@ public class PlayerTakeDamge : StatsAlive
         }
     }
 
-    public override void TakeDamge(int damge, int stunDamge)
+    public override void TakeDamge(int damge, int stunDamge, int trueDamge)
     {
         if (noTakeDamge) return;
         if (isBlock)
@@ -62,7 +62,7 @@ public class PlayerTakeDamge : StatsAlive
             PlayerAim.SetTrigger("Hit");
             return;
         }
-        base.TakeDamge(damge, stunDamge);
+        base.TakeDamge(damge, stunDamge, trueDamge);
         audioP.PlayClip(7);
         if(currentHP <= 0)
         {

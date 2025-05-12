@@ -32,7 +32,6 @@ public class DamgeSkill : MonoBehaviour
         Collider[] colInfo = Physics.OverlapSphere(pointAttack.position, radius, attackMask);
         foreach (Collider enemy in colInfo)
         {
-            enemy.GetComponent<EnemyTakeDamge>().TakeDamge(Damge, stunDamge);
         }
     }
     private void OnDrawGizmosSelected()
