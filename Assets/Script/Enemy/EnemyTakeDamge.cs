@@ -8,12 +8,6 @@ public class EnemyTakeDamge : StatsAlive
     public GameObject me;
     Audio audioE;
 
-    [Header("Time")]
-
-    public Transform HitPoint;
-
-    public GameObject HitEffect;
-
     [Header("---------Items Drop-----------")]
     public List<GameObject> itemsDrop;
     // Start is called before the first frame update
@@ -38,7 +32,7 @@ public class EnemyTakeDamge : StatsAlive
             switch(type)
             {
                 case TypeTakeDamge.Only:
-                    Death();
+                    aim.SetBool("IsDeath", true);
                     break;
                 case TypeTakeDamge.Branch:
                     Debug.Log("T? t?");
