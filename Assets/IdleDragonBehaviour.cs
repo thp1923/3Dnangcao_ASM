@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 
 public class IdleDragonBehaviour : StateMachineBehaviour
@@ -25,6 +22,8 @@ public class IdleDragonBehaviour : StateMachineBehaviour
 
     public float attackRange;
 
+    public float comboDistance;
+
     NavMeshAgent agent;
 
 
@@ -46,6 +45,14 @@ public class IdleDragonBehaviour : StateMachineBehaviour
         float distance = Vector3.Distance(player.position, animator.transform.position);
         if(distance <= attackRange && !isChange)
         {
+            if(distance < comboDistance)
+            {
+                typeChange[0] -= 50;
+            }
+            else
+            {
+                typeChange[0] = 70;
+            }
             float ramdomType = Random.Range(0, 100f);
             if(ramdomType < typeChange[0])
             {
@@ -79,7 +86,6 @@ public class IdleDragonBehaviour : StateMachineBehaviour
                     {
                         animator.SetTrigger("Attack" + 5);
                     }
-                    isChange = true;
                     break;
                 case TypeAttack.Combo:
                     float randomCombo = Random.Range(0, 100f);
@@ -99,10 +105,10 @@ public class IdleDragonBehaviour : StateMachineBehaviour
                     {
                         animator.SetTrigger("Combo" + 4);
                     }
-                    isChange = true;
                     break;
                 default: break;
             }
+            isChange = true;
         }
         if(distance <= chaseDistance && !isChange)
         {
