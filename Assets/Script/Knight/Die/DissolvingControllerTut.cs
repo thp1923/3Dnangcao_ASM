@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -37,6 +37,9 @@ public class DissolvingControllerTut : MonoBehaviour
     {
         if(VFX_Graph != null)
         {
+            // Mở rộng vùng bounds lớn để VFX không bị tắt
+            VFX_Graph.SetVector3("bounds_center", Vector3.zero);
+            VFX_Graph.SetVector3("bounds_size", new Vector3(99999999999999999, 99999999999999999, 99999999999999999));
             VFX_Graph.Play();
         }
         if(skinedMaterials.Length > 0)

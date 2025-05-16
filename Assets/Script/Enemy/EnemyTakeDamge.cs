@@ -5,9 +5,8 @@ using UnityEngine;
 public class EnemyTakeDamge : StatsAlive
 {
     Animator aim;
-    public GameObject me;
     Audio audioE;
-
+    public GameObject me;
     [Header("---------Items Drop-----------")]
     public List<GameObject> itemsDrop;
     // Start is called before the first frame update
@@ -26,20 +25,20 @@ public class EnemyTakeDamge : StatsAlive
 
     public override void TakeDamge(int damge, int stunDamge, int trueDamge)
     {
-        base.TakeDamge(damge, stunDamge, trueDamge);
+        switch (type)
+        {
+            case TypeTakeDamge.Only:
+                base.TakeDamge(damge, stunDamge, trueDamge);    
+                break;
+            case TypeTakeDamge.Branch:
+                GetComponent<BrandHpEnemy>().TakeDam(damge, stunDamge, trueDamge);
+                break;
+            default:
+                break;
+        }
         if(currentHP <= 0)
         {
-            switch(type)
-            {
-                case TypeTakeDamge.Only:
-                    aim.SetBool("IsDeath", true);
-                    break;
-                case TypeTakeDamge.Branch:
-                    Debug.Log("T? t?");
-                    break;
-                default:
-                    break;
-            }
+            aim.SetBool("IsDeath", true);
         }
     }
 
@@ -52,6 +51,7 @@ public class EnemyTakeDamge : StatsAlive
         {
             Instantiate(items, gameObject.transform.position + new Vector3(Random.Range(-1f, 1f), 1, Random.Range(-1f, 1f)), Quaternion.identity);
         }
-        Destroy(me);
+        if(me != null)
+            Destroy(me);
     }
 }

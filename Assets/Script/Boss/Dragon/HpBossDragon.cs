@@ -1,18 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using StatsManager;
 
-public class HpBossDragon : MonoBehaviour
+public class HpBossDragon : StatsAlive
 {
+    Animator aim;
+    public GameObject me;
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
-        
+        base.Start();
+        aim = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void TakeDamge(int damge, int stunDamge, int trueDamge)
     {
-        
+        base.TakeDamge(damge, stunDamge, trueDamge);
+        if(currentHP <= 0)
+        {
+            aim.SetBool("IsDeath", true);
+        }
+    }
+
+    public void Death()
+    {
+        if(me != null)
+            Destroy(me);
     }
 }
