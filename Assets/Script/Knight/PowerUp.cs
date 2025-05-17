@@ -66,7 +66,6 @@ public class PowerUp : MonoBehaviour
     public void PowerUpOn()
     {
         powerUp = true;
-        GetComponent<AttackDamgePlayer>().Bonus(DamgeBonus);
         GetComponent<AudioPlayer>().PlayAudioAlways(4);
         Invoke(nameof(PowerUpOff), timeBuff);
         //anim.speed += 0.5f;
@@ -76,7 +75,6 @@ public class PowerUp : MonoBehaviour
     {
         powerUp = false;
         GetComponent<AudioPlayer>().PlayAudioStop(4);
-        GetComponent<AttackDamgePlayer>().Bonus(-DamgeBonus);
         //GetComponent<vThirdPersonController>().moveSpeed -= 10;
         //anim.speed -= 0.5f;
     }
