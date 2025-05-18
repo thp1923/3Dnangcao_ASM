@@ -18,7 +18,7 @@ public class TranBehaviour : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.GetComponent<MoveManager>().CheckSleep(true);
-        if (PlayerAttackController.Instance.inputRecceived)
+        if (PlayerAttackController.Instance.inputRecceived && !animator.GetComponent<PlayerDodge>().isDodging)
         {
             animator.SetTrigger("Attack" + currentAttack);
             PlayerAttackController.Instance.InputManager();

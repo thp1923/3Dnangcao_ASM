@@ -9,10 +9,17 @@ public class DragonAttackEffect : MonoBehaviour
 
     public GameObject[] fireDragonEffect;
 
+    public GameObject[] dragonLightning;
+
+    public float lightningRate = 1f;
+
     public ParticleSystem[] dragonBreath;
+
+    public ParticleSystem dragonClaw;
 
     private void Start()
     {
+        dragonClaw.Stop();
         foreach(var f in fireDragonEffect)
         {
             f.SetActive(false);
@@ -20,6 +27,10 @@ public class DragonAttackEffect : MonoBehaviour
         foreach(var d in dragonBreath)
         {
             d.Stop();
+        }
+        foreach (var l in dragonLightning)
+        {
+            l.SetActive(false);
         }
     }
 
@@ -41,6 +52,32 @@ public class DragonAttackEffect : MonoBehaviour
         foreach (var f in fireDragonEffect)
         {
             f.SetActive(true);
+        }
+    }
+
+    public void DragonLightning()
+    {
+        StartCoroutine(Lightning());
+    }
+
+    IEnumerator Lightning()
+    {
+        foreach (var l in dragonLightning)
+        {
+            l.SetActive(true);
+            yield return new WaitForSeconds(lightningRate);
+        }
+    }
+
+    public void DragonClaw(int num)
+    {
+        if (num != 0)
+        {
+            dragonClaw.Stop();
+        }
+        else
+        {
+            dragonClaw.Play();
         }
     }
 

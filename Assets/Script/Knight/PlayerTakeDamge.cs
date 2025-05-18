@@ -22,6 +22,10 @@ public class PlayerTakeDamge : StatsAlive
 
     [Header("Test")]
     public int stunDamgeTest;
+
+    [Header("-------------Shake----------")]
+    public float[] duration; // Time shake
+    public float[] magnitude; // Shake level
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -71,14 +75,22 @@ public class PlayerTakeDamge : StatsAlive
         if(stunDamge > StunResistance)
         {
             int stun = stunDamge - StunResistance;
+            GetComponent<PlayerAim>().ClosestEnemy();
             if(stun > 100)
             {
                 PlayerAim.SetTrigger("Hit3");
+                CameraShake.Instance.StartShake(duration[2], magnitude[2]);
             }
-            else if(stun < 100 && stun >=50) 
+            else if(stun < 100 && stun >=50)
+            {
                 PlayerAim.SetTrigger("Hit2");
+                CameraShake.Instance.StartShake(duration[1], magnitude[1]);
+            }
             else
+            {
                 PlayerAim.SetTrigger("Hit");
+                CameraShake.Instance.StartShake(duration[0], magnitude[0]);
+            }
         }
     }
     public void Death()

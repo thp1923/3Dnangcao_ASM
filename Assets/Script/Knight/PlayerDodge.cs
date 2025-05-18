@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerDodge : MonoBehaviour
 {
     private Animator anim;
-    private bool isDodging = false;
+    internal bool isDodging = false;
     private Vector3 dodgeDirection;
     private Rigidbody rb;
 
@@ -50,7 +50,7 @@ public class PlayerDodge : MonoBehaviour
 
         if (!isDodging && Input.GetKeyDown(KeyCode.Space))
         {
-            StartDodge();
+            anim.SetTrigger("Dodge");
         }
     }
 
@@ -62,7 +62,7 @@ public class PlayerDodge : MonoBehaviour
         }
     }
 
-    void StartDodge()
+    public void StartDodge()
     {
         isDodging = true;
 
@@ -72,9 +72,7 @@ public class PlayerDodge : MonoBehaviour
         // Khoá di chuyển và xoay của Invector
         controller.lockMovement = true;
         controller.lockRotation = true;
-
-        // Gọi animation
-        anim.SetTrigger("Dodge");
+        
 
         // Reset lại velocity của Rigidbody
         rb.velocity = Vector3.zero;
@@ -106,7 +104,7 @@ public class PlayerDodge : MonoBehaviour
 
     IEnumerator ActivateTrail(float timeActive)
     {
-        if (!isDodging) yield return null;
+        if (!isDodging && GetComponent<PlayerAttackController>().isAttacking) yield return null;
         while(timeActive > 0)
         {
             timeActive -= meshRefreshRate;

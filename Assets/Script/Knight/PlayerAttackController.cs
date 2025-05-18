@@ -18,7 +18,7 @@ public class PlayerAttackController : LockMouse
     [SerializeField]
     private GameObject sword;
 
-    public bool isAttacking;
+    internal bool isAttacking;
     public bool isUntil;
     
     public bool isBuff;
