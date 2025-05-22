@@ -28,7 +28,7 @@ public class CameraShake : MonoBehaviour
             yield return null;
         }
 
-        transform.localPosition = originalPos;
+        //transform.localPosition = originalPos;
     }
 
     public void StartShake(float duration, float magnitude)

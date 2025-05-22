@@ -47,7 +47,7 @@ public class EnemyTakeDamge : StatsAlive
     void Death()
     {
         FindObjectOfType<PlayerAim>().RemoveEnemy();
-        foreach(GameObject items in itemsDrop)
+        foreach (GameObject items in itemsDrop)
         {
             Instantiate(items, gameObject.transform.position + new Vector3(Random.Range(-1f, 1f), 1, Random.Range(-1f, 1f)), Quaternion.identity);
         }
