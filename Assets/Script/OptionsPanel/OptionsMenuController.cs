@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,19 +20,19 @@ public class OptionsMenuController : MonoBehaviour
         languagesTab.onClick.AddListener(() => SwitchGroup(languagesGroup, languagesTab));
         SwitchGroup(displayGroup, displayTab); // Mặc định hiển thị nhóm đầu tiên
     }
-    
-    void SwitchGroup (CanvasGroup newGroup, Button tabButton)
+
+    void SwitchGroup(CanvasGroup newGroup, Button tabButton)
     {
         if (currentGroup == newGroup) return;
         StopAllCoroutines(); // Dừng tất cả các coroutine đang chạy
         if (currentGroup != null)
             StartCoroutine(FadeGroup(currentGroup, 1, 0));
-            StartCoroutine(FadeGroup(newGroup,0,1));
+        StartCoroutine(FadeGroup(newGroup, 0, 1));
         currentGroup = newGroup;
         highlightImage.transform.position = tabButton.transform.position;
     }
 
-    IEnumerator FadeGroup (CanvasGroup group, float from, float to)
+    IEnumerator FadeGroup(CanvasGroup group, float from, float to)
     {
         float t = 0;
         group.interactable = false; // Tắt tương tác với nhóm
@@ -52,6 +51,6 @@ public class OptionsMenuController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }
