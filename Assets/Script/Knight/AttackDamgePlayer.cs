@@ -13,15 +13,15 @@ public class AttackDamgePlayer : StatsAttack
     public override void Attack(int attackNumber)
     {
         base.Attack(attackNumber);
-        Attack1();
+        Attack1(attackNumber);
     }
 
-    public void Attack1()
+    public void Attack1(int attackNum)
     {
         Collider[] colInfo = Physics.OverlapBox(pointAttack2.position, box, Quaternion.identity, attackMask);
         foreach (Collider enemy in colInfo)
         {
-            enemy.GetComponent<EnemyTakeDamge>().TakeDamge(atk, stunDamge, 0);
+            enemy.GetComponent<EnemyTakeDamge>().TakeDamge(atk, stunDamge[attackNum], 0);
         }
     }
     private void OnDrawGizmosSelected()

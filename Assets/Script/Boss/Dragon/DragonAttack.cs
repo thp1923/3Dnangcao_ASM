@@ -25,7 +25,7 @@ public class DragonAttack : StatsAttack
         }
         else
         {
-            return;
+            Breath(0);
         }
     }
 
@@ -34,7 +34,7 @@ public class DragonAttack : StatsAttack
         Collider[] colInfo = Physics.OverlapSphere(attackPoints[num].position, radius[num], attackMask);
         foreach (Collider player in colInfo)
         {
-            player.GetComponent<PlayerTakeDamge>().TakeDamge(atk, stunDamge, 0);
+            player.GetComponent<PlayerTakeDamge>().TakeDamge(atk, stunDamge[num], 0);
         }
     }
 
@@ -47,21 +47,21 @@ public class DragonAttack : StatsAttack
         else
         {
             isBreath = true;
-            StartCoroutine(BreathAttack());
+            StartCoroutine(BreathAttack(stunDamge.Length - 1));
         }
     }
 
-    IEnumerator BreathAttack()
+    IEnumerator BreathAttack(int attackNum)
     {
         Collider[] colInfo = Physics.OverlapBox(breathPoint.position, breathRange * 0.5f, breathPoint.rotation, attackMask);
         foreach (Collider player in colInfo)
         {
-            player.GetComponent<PlayerTakeDamge>().TakeDamge(atk, stunDamge, 0);
+            player.GetComponent<PlayerTakeDamge>().TakeDamge(atk, stunDamge[attackNum], 0);
         }
         yield return new WaitForSeconds(breathRate);
         if (isBreath)
         {
-            StartCoroutine(BreathAttack());
+            StartCoroutine(BreathAttack(stunDamge.Length - 1));
         }
     }
 

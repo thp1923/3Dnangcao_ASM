@@ -54,7 +54,7 @@ namespace StatsManager
         public int BaseATK;
         public float critRate;
         public float critDamge;
-        public int stunDamge;
+        public int[] stunDamge;
         #endregion
 
         protected int atk;

@@ -26,7 +26,7 @@ public class IdleDragonBehaviour : StateMachineBehaviour
 
     NavMeshAgent agent;
 
-
+    public float angleThreshold = 45f;
 
     Transform player;
 
@@ -45,7 +45,18 @@ public class IdleDragonBehaviour : StateMachineBehaviour
         float distance = Vector3.Distance(player.position, animator.transform.position);
         if(distance <= attackRange && !isChange)
         {
-            if(distance < comboDistance)
+            Vector3 directionToPlayer = (player.position - animator.transform.position).normalized;
+
+            // Tính góc giữa hướng nhìn và hướng tới player
+            float angle = Vector3.Angle(animator.transform.forward, directionToPlayer);
+
+            if (angle > angleThreshold)
+            {
+                animator.SetTrigger("Attack" + 2);
+                isChange = true;
+                return;
+            }
+            if (distance < comboDistance)
             {
                 typeChange[0] -= 50;
             }
@@ -66,21 +77,28 @@ public class IdleDragonBehaviour : StateMachineBehaviour
             {
                 case TypeAttack.Base:
                     float randomAttack = Random.Range(0, 100f);
-                    if (randomAttack < attackChange[0])
-                    {
-                        animator.SetTrigger("Attack" + 1);
-                    }
-                    else if (randomAttack < attackChange[1])
+                    if (distance < comboDistance)
                     {
                         animator.SetTrigger("Attack" + 2);
                     }
-                    else if (randomAttack < attackChange[2])
+                    else
                     {
-                        animator.SetTrigger("Attack" + 3);
-                    }
-                    else if (randomAttack < attackChange[3])
-                    {
-                        animator.SetTrigger("Attack" + 4);
+                        if (randomAttack < attackChange[0])
+                        {
+                            animator.SetTrigger("Attack" + 1);
+                        }
+                        else if (randomAttack < attackChange[1])
+                        {
+                            animator.SetTrigger("Attack" + 2);
+                        }
+                        else if (randomAttack < attackChange[2])
+                        {
+                            animator.SetTrigger("Attack" + 3);
+                        }
+                        else if (randomAttack < attackChange[3])
+                        {
+                            animator.SetTrigger("Attack" + 4);
+                        }
                     }
                     break;
                 case TypeAttack.Combo:

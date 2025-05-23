@@ -69,6 +69,7 @@ public class PlayerTakeDamge : StatsAlive
         if (isBlock)
         {
             PlayerAim.SetTrigger("Hit");
+            base.TakeDamge(0, stunDamge, trueDamge);
             return;
         }
         base.TakeDamge(damge, stunDamge, trueDamge);
@@ -79,9 +80,16 @@ public class PlayerTakeDamge : StatsAlive
         }
         if(stunDamge > StunResistance)
         {
+            if(PlayerAim == null) return;
             int stun = stunDamge - StunResistance;
             GetComponent<PlayerAim>().ClosestEnemy();
-            if(stun > 100)
+            if(stun > 4000)
+            {
+                PlayerAim.SetTrigger("Hit3");
+                CameraShake.Instance.StartShake(duration[2], magnitude[2]);
+                ApplyKnockback(knockbackForce[3], knockBackTime[3]);
+            }
+            else if(stun >= 100 && stun <= 4000)
             {
                 PlayerAim.SetTrigger("Hit3");
                 CameraShake.Instance.StartShake(duration[2], magnitude[2]);
@@ -139,7 +147,7 @@ public class PlayerTakeDamge : StatsAlive
 
     public void Death()
     {
-        audioP.PlayClip(10);
+        if (PlayerAim == null) return;
         PlayerAim.SetBool("IsDeath", true);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
