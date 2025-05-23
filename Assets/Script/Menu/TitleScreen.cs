@@ -6,24 +6,37 @@ using System.Collections;
 public class TitleScreenManager : MonoBehaviour
 {
     public TextMeshProUGUI pressAnyButtonText;
+    public GameObject messagePanel;      // <- NEW
     public GameObject mainMenuPanel;
+
     public float fadeDuration = 1.5f;
 
-    private bool hasPressed = false;
+    private int pressStep = 0;
 
     void Start()
     {
-        mainMenuPanel.SetActive(false); // Ẩn menu lúc đầu
+        mainMenuPanel.SetActive(false); 
+        messagePanel.SetActive(false); // <- NEW
         StartCoroutine(FadeLoop());
     }
 
     void Update()
     {
-        if (!hasPressed && Input.anyKeyDown)
+        if (Input.anyKeyDown)
         {
-            hasPressed = true;
-            StopAllCoroutines();
-            StartCoroutine(ShowMainMenu());
+            pressStep++;
+
+            if (pressStep == 1)
+            {
+                StopAllCoroutines();
+                StartCoroutine(FadeOutPressText());
+            }
+            else if (pressStep == 2)
+            {
+                messagePanel.SetActive(false);
+                mainMenuPanel.SetActive(true);
+                this.enabled = false;
+            }
         }
     }
 
@@ -55,11 +68,11 @@ public class TitleScreenManager : MonoBehaviour
         }
     }
 
-    IEnumerator ShowMainMenu()
+    IEnumerator FadeOutPressText()
     {
-        // Ẩn chữ "Press Any Button" bằng fade out
         Color c = pressAnyButtonText.color;
         float t = 0f;
+
         while (t < fadeDuration)
         {
             t += Time.deltaTime;
@@ -69,6 +82,6 @@ public class TitleScreenManager : MonoBehaviour
         }
 
         pressAnyButtonText.gameObject.SetActive(false);
-        mainMenuPanel.SetActive(true);
+        messagePanel.SetActive(true); // <- hiện message
     }
 }
