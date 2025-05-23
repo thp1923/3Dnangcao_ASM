@@ -1,4 +1,4 @@
-using Invector.vCharacterController;
+﻿using Invector.vCharacterController;
 using StatsManager;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,11 +10,16 @@ public class PlayerTakeDamge : StatsAlive
     Animator PlayerAim;
     Rigidbody rb;
 
-    public bool isBlock;
-    public bool isDeath;
-    public bool noTakeDamge;
+    internal bool isBlock;
+    internal bool isDeath;
+    internal bool noTakeDamge;
 
     public GameObject DamPopUp;
+
+    [Header("---------Knock Back----------")]
+    public float[] knockbackForce;
+    public float[] knockBackTime;
+    private Coroutine knockbackRoutine;
 
     [Header("-------------CD----------")]
 
@@ -60,7 +65,7 @@ public class PlayerTakeDamge : StatsAlive
 
     public override void TakeDamge(int damge, int stunDamge, int trueDamge)
     {
-        if (noTakeDamge) return;
+        if (noTakeDamge || GetComponent<PlayerDodge>().isDodging) return;
         if (isBlock)
         {
             PlayerAim.SetTrigger("Hit");
@@ -80,19 +85,58 @@ public class PlayerTakeDamge : StatsAlive
             {
                 PlayerAim.SetTrigger("Hit3");
                 CameraShake.Instance.StartShake(duration[2], magnitude[2]);
+                ApplyKnockback(knockbackForce[2], knockBackTime[2]);
             }
             else if(stun < 100 && stun >=50)
             {
                 PlayerAim.SetTrigger("Hit2");
                 CameraShake.Instance.StartShake(duration[1], magnitude[1]);
+                ApplyKnockback(knockbackForce[1], knockBackTime[1]);
             }
             else
             {
                 PlayerAim.SetTrigger("Hit");
                 CameraShake.Instance.StartShake(duration[0], magnitude[0]);
+                ApplyKnockback(knockbackForce[0], knockBackTime[0]);
             }
         }
     }
+
+    public void ApplyKnockback(float knockForce, float lockDuration)
+    {
+        // Nếu đang knockback thì dừng cũ trước
+        if (knockbackRoutine != null)
+            StopCoroutine(knockbackRoutine);
+
+        knockbackRoutine = StartCoroutine(KnockbackCoroutine(knockForce, lockDuration));
+    }
+
+    private IEnumerator KnockbackCoroutine(float knockForce, float lockDuration)
+    {
+
+        Vector3 knockbackDir = -transform.forward.normalized;
+        float timer = 0f;
+
+        while (timer < lockDuration)
+        {
+            rb.MovePosition(rb.position + knockbackDir * knockForce * Time.fixedDeltaTime);
+            timer += Time.fixedDeltaTime;
+            yield return new WaitForFixedUpdate();
+        }
+
+    }
+
+    public void CancelKnockback()
+    {
+        if (knockbackRoutine != null)
+        {
+            StopCoroutine(knockbackRoutine);
+            knockbackRoutine = null;
+        }
+    }
+
+
+
     public void Death()
     {
         audioP.PlayClip(10);
