@@ -4,18 +4,31 @@ using UnityEngine;
 
 public class DragonAttackEffect : MonoBehaviour
 {
+    public AudioSource sourceSFX;
+    public AudioSource sourceGoar;
+    [Header("------------Fire Ball------------")]
     public GameObject FireBall;
     public Transform fireBallPoint;
+    public AudioClip fireBallClip;
 
+    [Header("------------Trans Form------------")]
     public GameObject[] fireDragonEffect;
 
+    [Header("------------Lightning------------")]
     public GameObject[] dragonLightning;
+    public AudioClip lightningClip;
 
     public float lightningRate = 1f;
 
+    [Header("------------Breath------------")]
     public ParticleSystem[] dragonBreath;
+    public AudioClip breathSound;
 
+    [Header("------------Claw------------")]
     public ParticleSystem dragonClaw;
+
+    [Header("------------Goar------------")]
+    public AudioClip[] dragonGoar;
 
     private void Start()
     {
@@ -45,6 +58,7 @@ public class DragonAttackEffect : MonoBehaviour
     public void FlyBreath()
     {
         Instantiate(FireBall, fireBallPoint.transform.position, Quaternion.identity);
+        sourceSFX.PlayOneShot(fireBallClip);
     }
 
     public void TransPhase()
@@ -65,6 +79,7 @@ public class DragonAttackEffect : MonoBehaviour
         foreach (var l in dragonLightning)
         {
             l.SetActive(true);
+            sourceSFX.PlayOneShot(lightningClip);
             yield return new WaitForSeconds(lightningRate);
         }
     }
@@ -89,6 +104,7 @@ public class DragonAttackEffect : MonoBehaviour
             {
                 d.Stop();
             }
+            sourceSFX.Stop();
         }
         else
         {
@@ -96,6 +112,16 @@ public class DragonAttackEffect : MonoBehaviour
             {
                 d.Play();
             }
+            sourceSFX.PlayOneShot(breathSound);
         }
+    }
+
+    public void StartGoar(int goarNum)
+    {
+        sourceGoar.PlayOneShot(dragonGoar[goarNum]);
+    }
+    public void StopGoar()
+    {
+        sourceGoar.Stop(); 
     }
 }

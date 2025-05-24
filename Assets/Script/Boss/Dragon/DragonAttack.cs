@@ -16,11 +16,16 @@ public class DragonAttack : StatsAttack
 
     public float breathRate;
 
+    [Header("--------Audio--------")]
+    public AudioSource source;
+    public AudioClip clawClip;
+
     public override void Attack(int attackNumber)
     {
         base.Attack(attackNumber);
         if(attackNumber < 4)
         {
+            source.PlayOneShot(clawClip);
             BaseAttack(attackNumber);
         }
         else
