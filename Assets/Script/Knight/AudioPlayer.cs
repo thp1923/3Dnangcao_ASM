@@ -1,46 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class AudioPlayer : MonoBehaviour
 {
-    public Audio audioP;
-    public AudioPlayerRun audioPR;
+    public AudioSource source;
+    public AudioClip[] clipStep;
     Animator animator;
-    // Start is called before the first frame update
-    void Start()
+
+    private void Start()
     {
         animator = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
-    void Update()
+    int pos;
+    public void playSourceWalk()
     {
+        if (animator.GetFloat("InputMagnitude") < 0.5) return;
+        if (clipStep.Length == 0) return; // Kiểm tra danh sách có clip không
 
+        source.PlayOneShot(clipStep[pos]); // Phát clip hiện tại
+
+        pos++; // Tăng chỉ mục lên
+        if (pos >= clipStep.Length) pos = 0;
     }
-    public void AudioWalk()
-    {
-        if(animator.GetFloat("InputMagnitude") < 0.3f) return;
-        audioPR.playSourceWalk();
-    }
-    public void PlayAudio(int index)
-    {
-        audioP.PlayClip(index);
-    }
-    public void PlayAudioAlways(int index)
-    {
-        audioP.PlayClipAlways(index);
-    }
-    public void PlayAlwaysUpPitch(int index, float pitch)
-    {
-        audioP.PlayClipAlwaysUpPich(index, pitch);
-    }
-    public void PlayAudioStop(int index)
-    {
-        audioP.StopPlay(index);
-    }
-    public void ResetPitch()
-    {
-        audioP.ResetPitch();
-    }
+
 }

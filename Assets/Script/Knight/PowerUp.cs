@@ -56,7 +56,6 @@ public class PowerUp : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.E) && !powerUp && _timeCD <= 0)
         {
-            GetComponent<AudioPlayer>().PlayAudio(3);
             anim.SetTrigger("PowerUp");
             PowerUpOn();
             _timeCD = timeCD;
@@ -66,7 +65,6 @@ public class PowerUp : MonoBehaviour
     public void PowerUpOn()
     {
         powerUp = true;
-        GetComponent<AudioPlayer>().PlayAudioAlways(4);
         Invoke(nameof(PowerUpOff), timeBuff);
         //anim.speed += 0.5f;
         //GetComponent<vThirdPersonController>().moveSpeed += 10;
@@ -74,7 +72,6 @@ public class PowerUp : MonoBehaviour
     public void PowerUpOff()
     {
         powerUp = false;
-        GetComponent<AudioPlayer>().PlayAudioStop(4);
         //GetComponent<vThirdPersonController>().moveSpeed -= 10;
         //anim.speed -= 0.5f;
     }

@@ -8,7 +8,6 @@ public class Skill : MonoBehaviour
     public Transform UntilSpawm;
     public void Until()
     {
-        GetComponent<AudioPlayer>().PlayAudio(6);
         Instantiate(UntilOj, UntilSpawm.position, UntilSpawm.rotation);
     }
     // Start is called before the first frame update

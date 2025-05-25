@@ -23,7 +23,6 @@ public class PlayerTakeDamge : StatsAlive
 
     [Header("-------------CD----------")]
 
-    public Audio audioP;
 
     [Header("Test")]
     public int stunDamgeTest;
@@ -73,7 +72,6 @@ public class PlayerTakeDamge : StatsAlive
             return;
         }
         base.TakeDamge(damge, stunDamge, trueDamge);
-        audioP.PlayClip(7);
         if(currentHP <= 0)
         {
             Death();

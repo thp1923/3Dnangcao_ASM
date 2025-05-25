@@ -127,7 +127,6 @@ public class PlayerAttackController : LockMouse
         if (Input.GetKeyDown(KeyCode.Q) && playerAim.GetBool("IsGrounded") && timeSinceUntil <= 0 && CursorLocked)
         {
             if(isAttacking) return;
-            GetComponent<AudioPlayer>().PlayAudio(5);
             playerAim.SetTrigger("Until");
             GetComponent<PlayerAim>().ClosestEnemy();
         }
