@@ -18,14 +18,14 @@ public class DragonAttack : StatsAttack
 
     [Header("--------Audio--------")]
     public AudioSource source;
-    public AudioClip clawClip;
+    public AudioClip[] attackClip;
 
     public override void Attack(int attackNumber)
     {
         base.Attack(attackNumber);
         if(attackNumber < 4)
         {
-            source.PlayOneShot(clawClip);
+            source.PlayOneShot(attackClip[attackNumber]);
             BaseAttack(attackNumber);
         }
         else

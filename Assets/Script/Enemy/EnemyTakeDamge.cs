@@ -14,7 +14,6 @@ public class EnemyTakeDamge : StatsAlive
     {
         base.Start();
         aim = GetComponent<Animator>();
-        audioE = GameObject.FindGameObjectWithTag("Audio").GetComponent<Audio>();
     }
 
     // Update is called once per frame

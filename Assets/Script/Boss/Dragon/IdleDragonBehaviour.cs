@@ -43,19 +43,22 @@ public class IdleDragonBehaviour : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         float distance = Vector3.Distance(player.position, animator.transform.position);
-        if(distance <= attackRange && !isChange)
+        if (distance <= attackRange)
         {
             Vector3 directionToPlayer = (player.position - animator.transform.position).normalized;
-
-            // Tính góc giữa hướng nhìn và hướng tới player
             float angle = Vector3.Angle(animator.transform.forward, directionToPlayer);
 
             if (angle > angleThreshold)
             {
-                animator.SetTrigger("Attack" + 2);
-                isChange = true;
-                return;
+                animator.GetComponent<DragonRotation>().enabled = true;
             }
+            else
+            {
+                animator.GetComponent<DragonRotation>().enabled = false;
+            }
+        }
+        if (distance <= attackRange && !isChange)
+        {
             if (distance < comboDistance)
             {
                 typeChange[0] -= 50;
