@@ -8,6 +8,7 @@ public class TitleScreenManager : MonoBehaviour
     public TextMeshProUGUI pressAnyButtonText;
     public GameObject messagePanel;      // <- NEW
     public GameObject mainMenuPanel;
+    public GameObject optionsPanel;
 
     public float fadeDuration = 1.5f;
 
@@ -38,6 +39,17 @@ public class TitleScreenManager : MonoBehaviour
                 this.enabled = false;
             }
         }
+    }
+    public void ShowOptions()
+    {
+        mainMenuPanel.SetActive(false);
+        optionsPanel.SetActive(true);
+    }
+
+    public void BackToMainMenu()
+    {
+        optionsPanel.SetActive(false);
+        mainMenuPanel.SetActive(true);
     }
 
     IEnumerator FadeLoop()
