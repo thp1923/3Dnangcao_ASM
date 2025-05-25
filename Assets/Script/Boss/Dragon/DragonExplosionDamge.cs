@@ -12,6 +12,7 @@ public class DragonExplosionDamge : StatsAttack
 
     private void Start()
     {
+        Destroy(gameObject, 4f);
         StartCoroutine(ExplosionDamge());
     }
 
