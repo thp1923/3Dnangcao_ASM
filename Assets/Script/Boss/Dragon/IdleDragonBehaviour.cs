@@ -37,26 +37,15 @@ public class IdleDragonBehaviour : StateMachineBehaviour
         agent = animator.GetComponent<NavMeshAgent>();
         agent.enabled = false;
         player = GameObject.FindGameObjectWithTag("Player").transform;
+        animator.GetComponent<DragonRotation>().enabled = false;
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         float distance = Vector3.Distance(player.position, animator.transform.position);
-        if (distance <= attackRange)
-        {
-            Vector3 directionToPlayer = (player.position - animator.transform.position).normalized;
-            float angle = Vector3.Angle(animator.transform.forward, directionToPlayer);
-
-            if (angle > angleThreshold)
-            {
-                animator.GetComponent<DragonRotation>().enabled = true;
-            }
-            else
-            {
-                animator.GetComponent<DragonRotation>().enabled = false;
-            }
-        }
+        Vector3 directionToPlayer = (player.position - animator.transform.position).normalized;
+        float angle = Vector3.Angle(animator.transform.forward, directionToPlayer);
         if (distance <= attackRange && !isChange)
         {
             if (distance < comboDistance)
@@ -80,7 +69,7 @@ public class IdleDragonBehaviour : StateMachineBehaviour
             {
                 case TypeAttack.Base:
                     float randomAttack = Random.Range(0, 100f);
-                    if (distance < comboDistance)
+                    if (distance < comboDistance || angle > angleThreshold)
                     {
                         animator.SetTrigger("Attack" + 2);
                     }
