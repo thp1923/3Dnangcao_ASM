@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class DragonAttackEffect : MonoBehaviour
 {
+    internal bool isTrans = false;
+
     public AudioSource sourceSFX;
     public AudioSource sourceGoar;
     [Header("------------Fire Ball------------")]
@@ -30,9 +32,13 @@ public class DragonAttackEffect : MonoBehaviour
     [Header("------------Goar------------")]
     public AudioClip[] dragonGoar;
 
+    [Header("------------Damge------------")]
+    public int bonusDamge = 400;
+
     private void Start()
     {
         dragonClaw.Stop();
+        isTrans = false;
         foreach(var f in fireDragonEffect)
         {
             f.SetActive(false);
@@ -47,14 +53,6 @@ public class DragonAttackEffect : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            TransPhase();
-        }
-    }
-
     public void FlyBreath()
     {
         Instantiate(FireBall, fireBallPoint.transform.position, Quaternion.identity);
@@ -63,10 +61,12 @@ public class DragonAttackEffect : MonoBehaviour
 
     public void TransPhase()
     {
+        if (isTrans) return;
         foreach (var f in fireDragonEffect)
         {
             f.SetActive(true);
         }
+        GetComponent<DragonAttack>().BaseATK += bonusDamge;
     }
 
     public void DragonLightning()

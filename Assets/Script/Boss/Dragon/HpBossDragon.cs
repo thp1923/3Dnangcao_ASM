@@ -17,6 +17,10 @@ public class HpBossDragon : StatsAlive
     public override void TakeDamge(int damge, int stunDamge, int trueDamge)
     {
         base.TakeDamge(damge, stunDamge, trueDamge);
+        if(currentHP <= MaxHP / 2)
+        {
+            GetComponent<DragonAttackEffect>().TransPhase();
+        }
         if(currentHP <= 0)
         {
             aim.SetBool("IsDeath", true);

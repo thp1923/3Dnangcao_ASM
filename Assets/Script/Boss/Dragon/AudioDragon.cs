@@ -27,7 +27,7 @@ public class AudioDragon : MonoBehaviour
     {
         if (clipWing.Count == 0) return; // Kiểm tra danh sách có clip không
 
-        source[1].PlayOneShot(clipWalk[posWing]); // Phát clip hiện tại
+        source[1].PlayOneShot(clipWing[posWing]); // Phát clip hiện tại
 
         posWing++; // Tăng chỉ mục lên
         if (posWing >= clipWing.Count) posWing = 0;
