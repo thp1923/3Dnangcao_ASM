@@ -38,6 +38,7 @@ public class DragonAttackEffect : MonoBehaviour
     private void Start()
     {
         dragonClaw.Stop();
+        dragonClaw.GetComponentInChildren<Light>().enabled = false;
         isTrans = false;
         foreach(var f in fireDragonEffect)
         {
@@ -46,6 +47,7 @@ public class DragonAttackEffect : MonoBehaviour
         foreach(var d in dragonBreath)
         {
             d.Stop();
+            d.GetComponent<Light>().enabled = false;
         }
         foreach (var l in dragonLightning)
         {
@@ -89,10 +91,12 @@ public class DragonAttackEffect : MonoBehaviour
         if (num != 0)
         {
             dragonClaw.Stop();
+            dragonClaw.GetComponentInChildren<Light>().enabled = false;
         }
         else
         {
             dragonClaw.Play();
+            dragonClaw.GetComponentInChildren<Light>().enabled = true;
         }
     }
 
@@ -103,6 +107,7 @@ public class DragonAttackEffect : MonoBehaviour
             foreach (var d in dragonBreath)
             {
                 d.Stop();
+                d.GetComponent<Light>().enabled = false;
             }
             sourceSFX.Stop();
         }
@@ -111,6 +116,7 @@ public class DragonAttackEffect : MonoBehaviour
             foreach (var d in dragonBreath)
             {
                 d.Play();
+                d.GetComponent<Light>().enabled = true;
             }
             sourceSFX.PlayOneShot(breathSound);
         }
