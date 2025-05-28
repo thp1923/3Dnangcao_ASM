@@ -76,10 +76,10 @@ public class PlayerTakeDamge : StatsAlive
         {
             Death();
         }
-        if(stunDamge > StunResistance)
+        if(stunDamge > (StunResistance + stunResistanceBonus))
         {
             if(PlayerAim == null) return;
-            int stun = stunDamge - StunResistance;
+            int stun = stunDamge - (StunResistance + stunResistanceBonus);
             GetComponent<PlayerAim>().ClosestEnemy();
             if(stun > 4000)
             {
@@ -147,6 +147,7 @@ public class PlayerTakeDamge : StatsAlive
     {
         if (PlayerAim == null) return;
         PlayerAim.SetBool("IsDeath", true);
+        PlayerAim.SetFloat("InputMagnitude", -1f);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         isDeath = true;

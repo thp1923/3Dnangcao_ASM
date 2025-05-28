@@ -21,6 +21,9 @@ namespace StatsManager
         public TypeTakeDamge type;
         #endregion
 
+        internal int defenseBonus;
+        internal int stunResistanceBonus;
+
         protected int currentHP;
 
         protected virtual void Start()
@@ -35,7 +38,7 @@ namespace StatsManager
 
         public virtual void TakeDamge(int damge, int stunDamge, int trueDamge)
         {
-            int Damge = Mathf.FloorToInt((damge / Defense) * 1.14f);
+            int Damge = Mathf.FloorToInt((damge / (Defense + defenseBonus)) * 1.14f);
             Damge = Mathf.Max(Damge, 1); // luôn gây damge ít nhất là 1
             currentHP -= Damge + trueDamge;
             HpSlider.value = currentHP;
@@ -57,11 +60,12 @@ namespace StatsManager
         public int[] stunDamge;
         #endregion
 
+        internal int atkBonus;
         protected int atk;
 
         public virtual void Attack(int attackNumber)
         {
-            int damge = Mathf.FloorToInt(BaseATK * (ATK[attackNumber]/100));
+            int damge = Mathf.FloorToInt((BaseATK + atkBonus) * (ATK[attackNumber]/100));
             if(Random.Range(0, 1f) <= critRate)
             {
                 atk = Mathf.FloorToInt(damge * (1f + critDamge));
@@ -80,11 +84,16 @@ namespace StatsManager
         public float RecoverStaminaTime;
 
         protected float _recoverStaminaTime;
-        protected int stamina;
+        internal int stamina;
 
         public virtual void LostStamina(int staminaLost)
         {
             stamina -= staminaLost;
+        }
+
+        protected virtual void Update()
+        {
+            RecoveStamina();
         }
 
         public void RecoveStamina()

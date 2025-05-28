@@ -1,6 +1,5 @@
 using Invector.vCharacterController;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerAttackController : LockMouse
@@ -19,16 +18,7 @@ public class PlayerAttackController : LockMouse
     private GameObject sword;
 
     internal bool isAttacking;
-    public bool isUntil;
-    
-    public bool isBuff;
-    public float timeCDUntil;
-    private float timeSinceAttack;
-    private float timeSinceUntil;
 
-    public GameObject efAttack;
-    public GameObject efUntil;
-    public GameObject Light;
 
     public bool canRecceiveInput;
     public bool inputRecceived;
@@ -61,7 +51,6 @@ public class PlayerAttackController : LockMouse
     public void ResetAttack()
     {
         isAttacking = false;
-        isUntil = false;
     }
     
     // Start is called before the first frame update
@@ -76,8 +65,6 @@ public class PlayerAttackController : LockMouse
     void Update()
     {
         AttackCombo();
-        timeSinceUntil -= Time.deltaTime;
-        Until();
         UpdateCursorLock();
         //LockMove();
     }
@@ -95,13 +82,7 @@ public class PlayerAttackController : LockMouse
         }
     }
 
-    public void Effect(int number)
-    {
-        if(number == 0)
-            efAttack.SetActive(true);
-        else 
-            efAttack.SetActive(false);
-    }
+
     public void AttackCombo()
     {
         if (Input.GetMouseButtonDown(0) && playerAim.GetBool("IsGrounded") && CursorLocked && !GetComponent<PlayerTakeDamge>().isBlock && canClick)
@@ -119,32 +100,6 @@ public class PlayerAttackController : LockMouse
                 return;
             }
         }
-    }
-    
-
-    void Until()
-    {
-        if (Input.GetKeyDown(KeyCode.Q) && playerAim.GetBool("IsGrounded") && timeSinceUntil <= 0 && CursorLocked)
-        {
-            if(isAttacking) return;
-            playerAim.SetTrigger("Until");
-            GetComponent<PlayerAim>().ClosestEnemy();
-        }
-    }
-    
-    public void UntilAim()
-    {
-        isUntil = true;
-        efUntil.SetActive(true);
-        Vector3 spawnPosition = new Vector3(sword.transform.position.x, sword.transform.position.y + 5, sword.transform.position.z);
-        Quaternion spawnRotation = Quaternion.Euler(90, 0, 0);
-        Instantiate(Light, spawnPosition, spawnRotation);
-        timeSinceUntil = timeCDUntil;
-        Invoke(nameof(EndUntil), 4f);
-    }
-    void EndUntil()
-    {
-        efUntil.SetActive(false);
     }
 
     

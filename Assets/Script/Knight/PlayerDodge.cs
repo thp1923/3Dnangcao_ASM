@@ -16,6 +16,8 @@ public class PlayerDodge : MonoBehaviour
 
     public Transform positionToSpawn;
 
+    public KeyCode dodgeKey;
+
     [Header("Skinned Mesh Relashed")]
     private SkinnedMeshRenderer[] skinnedMeshRenderers;
 
@@ -48,7 +50,7 @@ public class PlayerDodge : MonoBehaviour
             StartCoroutine(ActivateTrail(activeTime));
         }
 
-        if (!isDodging && Input.GetKeyDown(KeyCode.Space))
+        if (!isDodging && Input.GetKeyDown(dodgeKey))
         {
             anim.SetTrigger("Dodge");
         }

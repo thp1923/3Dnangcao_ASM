@@ -151,8 +151,7 @@ namespace Invector.vCharacterController
         {
             if(!canJump) return;
             if (PlayerAttackController.Instance.isAttacking 
-                || GetComponent<PlayerTakeDamge>().isBlock
-                || PlayerAttackController.Instance.isUntil)
+                || GetComponent<PlayerTakeDamge>().isBlock)
                 return;
             if (Input.GetKeyDown(jumpInput) && JumpConditions())
                 cc.Jump();
