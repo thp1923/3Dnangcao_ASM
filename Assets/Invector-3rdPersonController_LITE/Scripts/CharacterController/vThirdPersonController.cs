@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Invector.vCharacterController
 {
@@ -20,7 +21,10 @@ namespace Invector.vCharacterController
 
         public virtual void ControlLocomotionType()
         {
-            if (lockMovement) return;
+            if (lockMovement)
+            {
+                return;
+            }
 
             if (locomotionType.Equals(LocomotionType.FreeWithStrafe) && !isStrafing || locomotionType.Equals(LocomotionType.OnlyFree))
             {
@@ -38,15 +42,8 @@ namespace Invector.vCharacterController
                 MoveCharacter(moveDirection);
         }
 
-        private PlayerAttackController playConAt;
-
-        private void Awake()
-        {
-            playConAt = GetComponent<PlayerAttackController>();
-        }
         public virtual void ControlRotationType()
         {
-            if(playConAt.isAttacking) return;
             if (lockRotation) return;
 
             bool validInput = input != Vector3.zero || (isStrafing ? strafeSpeed.rotateWithCamera : freeSpeed.rotateWithCamera);
@@ -130,6 +127,11 @@ namespace Invector.vCharacterController
                 animator.CrossFadeInFixedTime("Jump", 0.1f);
             else
                 animator.CrossFadeInFixedTime("JumpMove", .2f);
+        }
+
+        internal void SetInput(Vector2 zero)
+        {
+            throw new NotImplementedException();
         }
     }
 }

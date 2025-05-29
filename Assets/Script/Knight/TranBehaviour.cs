@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Searcher.SearcherWindow.Alignment;
 
 public class TranBehaviour : StateMachineBehaviour
 {
@@ -8,18 +9,25 @@ public class TranBehaviour : StateMachineBehaviour
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        PlayerAttackController.Instance.InputManager();
+        PlayerAttackController.Instance.canRecceiveInput = true;
+        animator.GetComponent<SwordTrailEffect>().PlayPartical(1);
+        animator.GetComponent<MoveManager>().CheckLockMove(true);
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (PlayerAttackController.Instance.inputRecceived)
+        animator.GetComponent<MoveManager>().CheckSleep(true);
+        if (PlayerAttackController.Instance.inputRecceived && !animator.GetComponent<PlayerDodge>().isDodging)
         {
-            animator.SetTrigger("Attack"+ currentAttack);
+            animator.SetTrigger("Attack" + currentAttack);
             PlayerAttackController.Instance.InputManager();
-            PlayerAttackController.Instance.inputRecceived = false;
+            //PlayerAttackController.Instance.inputRecceived = false;
             PlayerAttackController.Instance.isAttacking = true;
+        }
+        else if (!Input.GetMouseButtonDown(0) && (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0 || Input.GetKey(KeyCode.LeftShift)))
+        {
+            animator.SetBool("hasInput", true);
         }
     }
 
@@ -27,6 +35,7 @@ public class TranBehaviour : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         PlayerAttackController.Instance.inputRecceived = false;
+        animator.SetBool("hasInput", false);
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

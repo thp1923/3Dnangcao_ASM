@@ -11,17 +11,28 @@ public class IdleBehaviour : StateMachineBehaviour
         PlayerAttackController.Instance.ResetAttack();
         PlayerAttackController.Instance.canRecceiveInput = true;
         animator.SetFloat("InputMagnitude", 0f);
+        animator.GetComponent<MoveManager>().CheckLockMove(false);
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (PlayerAttackController.Instance.inputRecceived)
+        if (PlayerAttackController.Instance.inputRecceived && !animator.GetComponent<PlayerDodge>().isDodging)
         {
-            animator.SetTrigger("Attack1");
-            PlayerAttackController.Instance.InputManager();
-            PlayerAttackController.Instance.inputRecceived = false;
-            PlayerAttackController.Instance.isAttacking = true;
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                animator.SetTrigger("AttackRun");
+                PlayerAttackController.Instance.InputManager();
+                PlayerAttackController.Instance.inputRecceived = false;
+                PlayerAttackController.Instance.isAttacking = true;
+            }
+            else
+            {
+                animator.SetTrigger("Attack1");
+                PlayerAttackController.Instance.InputManager();
+                PlayerAttackController.Instance.inputRecceived = false;
+                PlayerAttackController.Instance.isAttacking = true;
+            }
         }
     }
 

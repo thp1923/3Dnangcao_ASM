@@ -24,6 +24,11 @@ public class PlayerAim : MonoBehaviour
 
     }
 
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.grey;
+        Gizmos.DrawWireSphere(transform.position, aimRange);
+    }
     public void ClosestEnemy()
     {
         float range = aimRange;

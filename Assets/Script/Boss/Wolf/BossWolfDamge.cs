@@ -54,10 +54,9 @@ public class BossWolfDamge : MonoBehaviour
         {
             if (player.GetComponent<PlayerTakeDamge>().isBlock)
             {
-                GetComponent<EnemyTakeDamge>().TakeDamge(0, 1000);
                 return;
             }
-            player.GetComponent<PlayerTakeDamge>().TakeDamge(Damge, stunDamge, knockBack);
+            player.GetComponent<PlayerTakeDamge>().TakeDamge(Damge, stunDamge, 0);
         }
     }
     public void Attack2()
@@ -67,10 +66,9 @@ public class BossWolfDamge : MonoBehaviour
         {
             if (player.GetComponent<PlayerTakeDamge>().isBlock)
             {
-                GetComponent<EnemyTakeDamge>().TakeDamge(0, 1000);
                 return;
             }
-            player.GetComponent<PlayerTakeDamge>().TakeDamge(Damge, stunDamge, knockBack);
+            player.GetComponent<PlayerTakeDamge>().TakeDamge(Damge, stunDamge, 0);
         }
     }
     private void OnDrawGizmosSelected()
