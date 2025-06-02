@@ -12,6 +12,9 @@ public class AuthUIManager : MonoBehaviour
     public GameObject loginPanel;
     public GameObject registerPanel;
     public GameObject confirmEmailPanel;
+    public GameObject forgotPasswordPanel;
+    public GameObject resetPasswordPanel;
+    public GameObject changePasswordPanel; // New panel for change-password
 
     [Header("Login UI")]
     public TMP_InputField inputLoginUsername;
@@ -29,13 +32,34 @@ public class AuthUIManager : MonoBehaviour
     public TMP_InputField inputConfirmCode;
     public TextMeshProUGUI textStatus_confirm;
 
-    private string apiUrl = "http://localhost:5203/api/auth";
+    [Header("Forgot Password UI")]
+    public TMP_InputField inputForgotEmail;
+    public TextMeshProUGUI textStatus_forgot;
+
+    [Header("Reset Password UI")]
+    public TMP_InputField inputResetCode;
+    public TMP_InputField inputNewPassword;
+    public TMP_InputField inputConfirmNewPassword;
+    public TextMeshProUGUI textStatus_reset;
+
+    [Header("Change Password UI")] // New fields
+    public TMP_InputField inputChangeUsername;
+    public TMP_InputField inputChangeOldPassword;
+    public TMP_InputField inputChangeNewPassword;
+    public TMP_InputField inputChangeConfirmNewPassword;
+    public TextMeshProUGUI textStatus_change;
+
+    private string apiUrl = "https://database-namelessknightii.onrender.com/api/auth";
+
 
     public void ShowLoginPanel()
     {
         loginPanel.SetActive(true);
         registerPanel.SetActive(false);
         confirmEmailPanel.SetActive(false);
+        forgotPasswordPanel.SetActive(false);
+        resetPasswordPanel.SetActive(false);
+        changePasswordPanel.SetActive(false);
     }
 
     public void ShowRegisterPanel()
@@ -43,6 +67,9 @@ public class AuthUIManager : MonoBehaviour
         loginPanel.SetActive(false);
         registerPanel.SetActive(true);
         confirmEmailPanel.SetActive(false);
+        forgotPasswordPanel.SetActive(false);
+        resetPasswordPanel.SetActive(false);
+        changePasswordPanel.SetActive(false);
     }
 
     public void ShowConfirmPanel()
@@ -50,230 +77,365 @@ public class AuthUIManager : MonoBehaviour
         loginPanel.SetActive(false);
         registerPanel.SetActive(false);
         confirmEmailPanel.SetActive(true);
+        forgotPasswordPanel.SetActive(false);
+        resetPasswordPanel.SetActive(false);
+        changePasswordPanel.SetActive(false);
+    }
+
+    public void ShowForgotPasswordPanel()
+    {
+        loginPanel.SetActive(false);
+        registerPanel.SetActive(false);
+        confirmEmailPanel.SetActive(false);
+        forgotPasswordPanel.SetActive(true);
+        resetPasswordPanel.SetActive(false);
+        changePasswordPanel.SetActive(false);
+    }
+
+    public void ShowResetPasswordPanel()
+    {
+        loginPanel.SetActive(false);
+        registerPanel.SetActive(false);
+        confirmEmailPanel.SetActive(false);
+        forgotPasswordPanel.SetActive(false);
+        resetPasswordPanel.SetActive(true);
+        changePasswordPanel.SetActive(false);
+    }
+
+    public void ShowChangePasswordPanel()
+    {
+        loginPanel.SetActive(false);
+        registerPanel.SetActive(false);
+        confirmEmailPanel.SetActive(false);
+        forgotPasswordPanel.SetActive(false);
+        resetPasswordPanel.SetActive(false);
+        changePasswordPanel.SetActive(true);
     }
 
     public void OnLoginClicked() => StartCoroutine(Login());
-    public void OnRegisterClicked() => StartCoroutine(RegisterRequest());
+    public void OnRegisterClicked() => StartCoroutine(RegisterRoutine());
     public void OnConfirmClicked() => StartCoroutine(ConfirmEmail());
-    public void OnResendClicked() => StartCoroutine(RegisterRequest());
+    public void OnResendClicked() => StartCoroutine(RegisterRoutine());
+    public void OnSendForgotCodeClicked() => StartCoroutine(SendForgotPasswordCode());
+    public void OnResetPasswordClicked() => StartCoroutine(ResetPassword());
+    public void OnChangePasswordClicked() => StartCoroutine(ChangePassword()); // New hook
 
     IEnumerator Login()
-{
-    var data = new LoginData
     {
-        username = inputLoginUsername.text.Trim(), 
-        Password = inputLoginPassword.text.Trim(),
-        CreateAccount = false
-    };
-
-    string json = JsonUtility.ToJson(data);
-
-    using (UnityWebRequest www = new UnityWebRequest(apiUrl + "/login", "POST"))
-    {
-        www.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(json));
-        www.downloadHandler = new DownloadHandlerBuffer();
-        www.SetRequestHeader("Content-Type", "application/json");
-
-        yield return www.SendWebRequest();
-
-        string serverMessage = www.downloadHandler.text;
-
-        if (www.result != UnityWebRequest.Result.Success)
+        var data = new LoginData
         {
-            textStatus_login.text = serverMessage;
-        }
-        else if (www.responseCode == 400)
+            username = inputLoginUsername.text.Trim(),
+            Password = inputLoginPassword.text.Trim(),
+            CreateAccount = false
+        };
+
+        string json = JsonUtility.ToJson(data);
+
+        using (UnityWebRequest www = new UnityWebRequest(apiUrl + "/login", "POST"))
         {
-            Debug.LogError("[LOGIN] 400 Bad Request. Server: " + serverMessage);
+            www.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(json));
+            www.downloadHandler = new DownloadHandlerBuffer();
+            www.SetRequestHeader("Content-Type", "application/json");
 
-            if (serverMessage.Contains("Username không tồn tại"))
-                textStatus_login.text = "Tài khoản không tồn tại.";
-            else if (serverMessage.Contains("Password không đúng"))
-                textStatus_login.text = "Mật khẩu không đúng.";
-            else if (serverMessage.Contains("Email chưa xác thực"))
-                textStatus_login.text = "Email chưa xác thực.";
-            else
-                textStatus_login.text = "Đăng nhập thất bại.";
-        }
-        else // ✅ Thành công
-        {
+            yield return www.SendWebRequest();
 
-            var res = JsonUtility.FromJson<AuthResponse>(FixJson(serverMessage));
-            PlayerPrefs.SetString("jwt_token", res.token);
-            PlayerPrefs.SetString("user_role", res.role);
-            PlayerPrefs.Save();
+            string serverMessage = www.downloadHandler.text;
 
-            textStatus_login.text = "Đăng nhập thành công.";
-        }
-    }
-}
-
-
-   IEnumerator RegisterRequest()
-{
-    string password = inputRegisterPassword.text.Trim();
-    string confirmPassword = inputRegisterConfirmPassword.text.Trim();
-    string email = inputRegisterEmail.text.Trim();
-
-    // Check empty fields
-    if (string.IsNullOrWhiteSpace(inputRegisterUsername.text) ||
-        string.IsNullOrWhiteSpace(email) ||
-        string.IsNullOrWhiteSpace(password) ||
-        string.IsNullOrWhiteSpace(confirmPassword))
-    {
-        textStatus_register.text = "Không được để trống bất kỳ trường nào.";
-        yield break;
-    }
-
-    // Check email format
-    if (!IsValidEmail(email))
-    {
-        textStatus_register.text = "Email không hợp lệ.";
-        yield break;
-    }
-
-    // Only allow @gmail.com domain
-    if (!email.EndsWith("@gmail.com"))
-    {
-        textStatus_register.text = "Chỉ chấp nhận địa chỉ Gmail.";
-        yield break;
-    }
-
-    // Check password match
-    if (password != confirmPassword)
-    {
-        textStatus_register.text = "Mật khẩu không khớp với mật khẩu xác nhận.";
-        yield break;
-    }
-
-    var data = new RegisterRequest
-    {
-        Username = inputRegisterUsername.text.Trim(),
-        Email = email,
-        Password = password,
-        ConfirmPassword = confirmPassword
-    };
-
-    string json = JsonUtility.ToJson(data);
-    Debug.Log("[REGISTER] JSON gửi đi: " + json);
-
-    using (UnityWebRequest www = new UnityWebRequest(apiUrl + "/register-request", "POST"))
-    {
-        www.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(json));
-        www.downloadHandler = new DownloadHandlerBuffer();
-        www.SetRequestHeader("Content-Type", "application/json");
-
-        yield return www.SendWebRequest();
-
-        string serverMessage = www.downloadHandler.text;
-        Debug.Log("[REGISTER] Server response: " + serverMessage);
-        
-
-        if (www.result != UnityWebRequest.Result.Success)
+            if (www.result != UnityWebRequest.Result.Success)
             {
-                textStatus_register.text = "Không kết nối được máy chủ.";
+                StartCoroutine(ShowTemporaryMessage(textStatus_login, ExtractErrorMessage(serverMessage)));
+            }
+            else if (www.responseCode == 400)
+            {
+                if (serverMessage.Contains("Username không tồn tại"))
+                    StartCoroutine(ShowTemporaryMessage(textStatus_login, "Tài khoản không tồn tại."));
+                else if (serverMessage.Contains("Password không đúng"))
+                    StartCoroutine(ShowTemporaryMessage(textStatus_login, "Mật khẩu không đúng."));
+                else if (serverMessage.Contains("Email chưa xác thực"))
+                    StartCoroutine(ShowTemporaryMessage(textStatus_login, "Email chưa xác thực."));
+                else
+                    StartCoroutine(ShowTemporaryMessage(textStatus_login, "Đăng nhập thất bại."));
+            }
+            else
+            {
+                var res = JsonUtility.FromJson<AuthResponse>(FixJson(serverMessage));
+                PlayerPrefs.SetString("jwt_token", res.token);
+                PlayerPrefs.SetString("user_role", res.role);
+                PlayerPrefs.Save();
+                StartCoroutine(ShowTemporaryMessage(textStatus_login, "Đăng nhập thành công."));
+            }
+        }
+    }
+
+    IEnumerator RegisterRoutine()
+    {
+        string password = inputRegisterPassword.text.Trim();
+        string confirmPassword = inputRegisterConfirmPassword.text.Trim();
+        string email = inputRegisterEmail.text.Trim();
+
+        if (string.IsNullOrWhiteSpace(inputRegisterUsername.text) ||
+            string.IsNullOrWhiteSpace(email) ||
+            string.IsNullOrWhiteSpace(password) ||
+            string.IsNullOrWhiteSpace(confirmPassword))
+        {
+            StartCoroutine(ShowTemporaryMessage(textStatus_register, "Không được để trống bất kỳ trường nào."));
+            yield break;
+        }
+
+        if (!IsValidEmail(email))
+        {
+            StartCoroutine(ShowTemporaryMessage(textStatus_register, "Email không hợp lệ."));
+            yield break;
+        }
+
+        if (!email.EndsWith("@gmail.com"))
+        {
+            StartCoroutine(ShowTemporaryMessage(textStatus_register, "Chỉ chấp nhận địa chỉ Gmail."));
+            yield break;
+        }
+
+        if (password != confirmPassword)
+        {
+            StartCoroutine(ShowTemporaryMessage(textStatus_register, "Mật khẩu không khớp với mật khẩu xác nhận."));
+            yield break;
+        }
+
+        var data = new RegisterRequest
+        {
+            Username = inputRegisterUsername.text.Trim(),
+            Email = email,
+            Password = password,
+            ConfirmPassword = confirmPassword
+        };
+
+        string json = JsonUtility.ToJson(data);
+
+        using (UnityWebRequest www = new UnityWebRequest(apiUrl + "/register-request", "POST"))
+        {
+            www.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(json));
+            www.downloadHandler = new DownloadHandlerBuffer();
+            www.SetRequestHeader("Content-Type", "application/json");
+
+            yield return www.SendWebRequest();
+
+            string serverMessage = www.downloadHandler.text;
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                StartCoroutine(ShowTemporaryMessage(textStatus_register, ExtractErrorMessage(serverMessage)));
             }
             else if ((int)www.responseCode == 500 && serverMessage.Contains("Gửi email thất bại"))
             {
-                textStatus_register.text = "Địa chỉ Gmail không hợp lệ hoặc không tồn tại.";
+                StartCoroutine(ShowTemporaryMessage(textStatus_register, "Địa chỉ Gmail không hợp lệ hoặc không tồn tại."));
             }
             else if (www.responseCode == 400)
             {
                 if (serverMessage.Contains("Username đã tồn tại"))
-                    textStatus_register.text = "Username đã tồn tại.";
+                    StartCoroutine(ShowTemporaryMessage(textStatus_register, "Username đã tồn tại."));
                 else if (serverMessage.Contains("Email này đã được sử dụng"))
-                    textStatus_register.text = "Email đã được sử dụng.";
+                    StartCoroutine(ShowTemporaryMessage(textStatus_register, "Email đã được sử dụng."));
                 else
-                    textStatus_register.text = "Lỗi đăng ký.";
+                    StartCoroutine(ShowTemporaryMessage(textStatus_register, "Lỗi đăng ký."));
             }
             else
             {
                 PlayerPrefs.SetString("pending_email", email);
                 PlayerPrefs.Save();
-                textStatus_register.text = "Đã gửi mã xác thực tới email của bạn.";
-                ShowConfirmPanel(); // Switch to confirm panel
+                StartCoroutine(ShowTemporaryMessage(textStatus_register, "Đã gửi mã xác thực tới email của bạn."));
+                ShowConfirmPanel();
             }
+        }
     }
-}
-
-// Add this method inside the same class
-bool IsValidEmail(string email)
-{
-    if (string.IsNullOrWhiteSpace(email))
-        return false;
-    string pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
-    return System.Text.RegularExpressions.Regex.IsMatch(email, pattern);
-}
-
 
     IEnumerator ConfirmEmail()
-{
-    string email = PlayerPrefs.GetString("pending_email", "").Trim();
-    string code = inputConfirmCode.text.Trim();
-
-    Debug.Log($"[CONFIRM EMAIL] Email từ PlayerPrefs: {email}");
-    Debug.Log($"[CONFIRM EMAIL] Mã xác thực nhập: {code}");
-
-    if (string.IsNullOrWhiteSpace(code))
     {
-        textStatus_confirm.text = "Vui lòng nhập mã xác thực.";
-        yield break;
-    }
+        string email = PlayerPrefs.GetString("pending_email", "").Trim();
+        string code = inputConfirmCode.text.Trim();
 
-    if (string.IsNullOrEmpty(email))
-    {
-        textStatus_confirm.text = "Không tìm thấy email để xác thực. Vui lòng đăng ký lại.";
-        yield break;
-    }
-
-    var data = new ConfirmEmailRequest
-    {
-        Email = email,
-        Code = code
-    };
-
-    string json = JsonUtility.ToJson(data);
-    Debug.Log($"[CONFIRM EMAIL] JSON gửi: {json}");
-
-    using (UnityWebRequest www = new UnityWebRequest(apiUrl + "/confirm-email", "POST"))
-    {
-        www.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(json));
-        www.downloadHandler = new DownloadHandlerBuffer();
-        www.SetRequestHeader("Content-Type", "application/json");
-
-        yield return www.SendWebRequest();
-
-        string serverMessage = www.downloadHandler.text;
-        Debug.Log($"[CONFIRM EMAIL] Server response: {serverMessage}");
-
-        if (www.result != UnityWebRequest.Result.Success)
+        if (string.IsNullOrWhiteSpace(code))
         {
-            textStatus_confirm.text = "Không thể kết nối tới máy chủ.";
+            StartCoroutine(ShowTemporaryMessage(textStatus_confirm, "Vui lòng nhập mã xác thực."));
+            yield break;
         }
-        else if (www.responseCode == 400)
+
+        if (string.IsNullOrEmpty(email))
         {
-            if (serverMessage.Contains("Mã xác thực không hợp lệ") || serverMessage.Contains("đã hết hạn"))
-                textStatus_confirm.text = "Mã xác thực không đúng hoặc đã hết hạn.";
-            else if (serverMessage.Contains("Email đã được xác thực"))
-                textStatus_confirm.text = "Email đã được xác thực trước đó.";
-            else if (serverMessage.Contains("Username đã được tạo"))
-                textStatus_confirm.text = "Username đã được người khác xác thực trước.";
+            StartCoroutine(ShowTemporaryMessage(textStatus_confirm, "Không tìm thấy email để xác thực."));
+            yield break;
+        }
+
+        var data = new ConfirmEmailRequest { Email = email, Code = code };
+        string json = JsonUtility.ToJson(data);
+
+        using (UnityWebRequest www = new UnityWebRequest(apiUrl + "/confirm-email", "POST"))
+        {
+            www.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(json));
+            www.downloadHandler = new DownloadHandlerBuffer();
+            www.SetRequestHeader("Content-Type", "application/json");
+
+            yield return www.SendWebRequest();
+
+            string serverMessage = www.downloadHandler.text;
+
+            if (www.result != UnityWebRequest.Result.Success)
+                StartCoroutine(ShowTemporaryMessage(textStatus_confirm, "Không thể kết nối."));
+            else if (www.responseCode == 400)
+                StartCoroutine(ShowTemporaryMessage(textStatus_confirm, "Mã không đúng hoặc đã hết hạn."));
             else
-                textStatus_confirm.text = "Xác thực thất bại.";
-        }
-        else
-        {
-            textStatus_confirm.text = "✅ Tài khoản đã xác thực thành công!";
-            PlayerPrefs.DeleteKey("pending_email");
-
-            yield return new WaitForSeconds(1.5f); // Cho người dùng thấy thông báo
-
-            ShowLoginPanel(); // 👈 chuyển về login sau khi xác thực
+            {
+                StartCoroutine(ShowTemporaryMessage(textStatus_confirm, "Xác thực thành công"));
+                PlayerPrefs.DeleteKey("pending_email");
+                yield return new WaitForSeconds(1.5f);
+                ShowLoginPanel();
+            }
         }
     }
-}
 
+    IEnumerator SendForgotPasswordCode()
+    {
+        string email = inputForgotEmail.text.Trim();
+        if (string.IsNullOrEmpty(email))
+        {
+            StartCoroutine(ShowTemporaryMessage(textStatus_forgot, "Vui lòng nhập email."));
+            yield break;
+        }
 
+        var data = new ForgotPasswordRequest { Email = email };
+        string json = JsonUtility.ToJson(data);
+
+        using (UnityWebRequest www = new UnityWebRequest(apiUrl + "/forgot-password", "POST"))
+        {
+            www.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(json));
+            www.downloadHandler = new DownloadHandlerBuffer();
+            www.SetRequestHeader("Content-Type", "application/json");
+
+            yield return www.SendWebRequest();
+
+            if (www.result == UnityWebRequest.Result.Success)
+            {
+                PlayerPrefs.SetString("reset_email", email);
+                ShowResetPasswordPanel();
+            }
+            else
+            {
+                StartCoroutine(ShowTemporaryMessage(textStatus_forgot, ExtractErrorMessage(www.downloadHandler.text)));
+            }
+        }
+    }
+
+    IEnumerator ResetPassword()
+    {
+        string email = PlayerPrefs.GetString("reset_email", "");
+        string code = inputResetCode.text.Trim();
+        string newPass = inputNewPassword.text;
+        string confirmPass = inputConfirmNewPassword.text;
+
+        if (string.IsNullOrEmpty(code) || string.IsNullOrEmpty(newPass) || string.IsNullOrEmpty(confirmPass))
+        {
+            StartCoroutine(ShowTemporaryMessage(textStatus_reset, "Vui lòng điền đầy đủ thông tin."));
+            yield break;
+        }
+
+        if (newPass != confirmPass)
+        {
+            StartCoroutine(ShowTemporaryMessage(textStatus_reset, "Mật khẩu xác nhận không khớp."));
+            yield break;
+        }
+
+        var req = new ResetPasswordConfirmRequest
+        {
+            Email = email,
+            Code = code,
+            NewPassword = newPass,
+            ConfirmNewPassword = confirmPass
+        };
+
+        string json = JsonUtility.ToJson(req);
+
+        using (UnityWebRequest www = new UnityWebRequest(apiUrl + "/reset-password", "POST"))
+        {
+            www.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(json));
+            www.downloadHandler = new DownloadHandlerBuffer();
+            www.SetRequestHeader("Content-Type", "application/json");
+
+            yield return www.SendWebRequest();
+
+            if (www.result == UnityWebRequest.Result.Success)
+            {
+                StartCoroutine(ShowTemporaryMessage(textStatus_reset, "Đổi mật khẩu thành công."));
+                yield return new WaitForSeconds(1.5f);
+                ShowLoginPanel();
+            }
+            else
+            {
+                StartCoroutine(ShowTemporaryMessage(textStatus_reset, ExtractErrorMessage(www.downloadHandler.text)));
+            }
+        }
+    }
+
+    IEnumerator ChangePassword()
+    {
+        string username = inputChangeUsername.text.Trim();
+        string oldPass = inputChangeOldPassword.text;
+        string newPass = inputChangeNewPassword.text;
+        string confirmPass = inputChangeConfirmNewPassword.text;
+
+        if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(oldPass) ||
+            string.IsNullOrEmpty(newPass) || string.IsNullOrEmpty(confirmPass))
+        {
+            StartCoroutine(ShowTemporaryMessage(textStatus_change, "Vui lòng điền đầy đủ thông tin."));
+            yield break;
+        }
+
+        if (newPass != confirmPass)
+        {
+            StartCoroutine(ShowTemporaryMessage(textStatus_change, "Mật khẩu mới và xác nhận không khớp."));
+            yield break;
+        }
+
+        if (newPass.Length < 6 || newPass.Length > 24)
+        {
+            StartCoroutine(ShowTemporaryMessage(textStatus_change, "Mật khẩu phải từ 6 đến 24 ký tự."));
+            yield break;
+        }
+
+        var data = new ChangePasswordRequest
+        {
+            Username = username,
+            OldPassword = oldPass,
+            NewPassword = newPass,
+            ConfirmNewPassword = confirmPass
+        };
+
+        string json = JsonUtility.ToJson(data);
+
+        using (UnityWebRequest www = new UnityWebRequest(apiUrl + "/change-password", "POST"))
+        {
+            www.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(json));
+            www.downloadHandler = new DownloadHandlerBuffer();
+            www.SetRequestHeader("Content-Type", "application/json");
+
+            yield return www.SendWebRequest();
+
+            if (www.result == UnityWebRequest.Result.Success)
+            {
+                StartCoroutine(ShowTemporaryMessage(textStatus_change, "Đổi mật khẩu thành công."));
+                yield return new WaitForSeconds(1.5f);
+                ShowLoginPanel();
+            }
+            else
+            {
+                StartCoroutine(ShowTemporaryMessage(textStatus_change, ExtractErrorMessage(www.downloadHandler.text)));
+            }
+        }
+    }
+
+    bool IsValidEmail(string email)
+    {
+        if (string.IsNullOrWhiteSpace(email)) return false;
+        string pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+        return System.Text.RegularExpressions.Regex.IsMatch(email, pattern);
+    }
 
     string FixJson(string value)
     {
@@ -282,36 +444,34 @@ bool IsValidEmail(string email)
                     .Replace("\"Role\"", "\"role\"");
     }
 
-    [System.Serializable]
-    public class LoginData
+    IEnumerator ShowTemporaryMessage(TextMeshProUGUI label, string message, float duration = 3f)
     {
-        public string username;
-        public string Password;
-        public bool CreateAccount;
+        label.text = message;
+        label.gameObject.SetActive(true);
+        yield return new WaitForSeconds(duration);
+        label.text = "";
+        label.gameObject.SetActive(false);
     }
 
-    [System.Serializable]
-    public class AuthResponse
+    string ExtractErrorMessage(string json)
     {
-        public string token;
-        public string username;
-        public string role;
+        try
+        {
+            ErrorResponse errorRes = JsonUtility.FromJson<ErrorResponse>(json);
+            return string.IsNullOrEmpty(errorRes.error) ? "Lỗi không xác định." : errorRes.error;
+        }
+        catch
+        {
+            return "Định dạng phản hồi không hợp lệ.";
+        }
     }
 
-
-    [System.Serializable]
-    public class ConfirmEmailRequest
-    {
-        public string Email;
-        public string Code;
-    }
-}
-
-[System.Serializable]
-public class RegisterRequest
-{
-    public string Username;
-    public string Email;
-    public string Password;
-    public string ConfirmPassword;
+    [System.Serializable] public class LoginData { public string username; public string Password; public bool CreateAccount; }
+    [System.Serializable] public class AuthResponse { public string token; public string username; public string role; }
+    [System.Serializable] public class ConfirmEmailRequest { public string Email; public string Code; }
+    [System.Serializable] public class ForgotPasswordRequest { public string Email; }
+    [System.Serializable] public class ResetPasswordConfirmRequest { public string Email; public string Code; public string NewPassword; public string ConfirmNewPassword; }
+    [System.Serializable] private class RegisterRequest { public string Username; public string Email; public string Password; public string ConfirmPassword; }
+    [System.Serializable] private class ChangePasswordRequest { public string Username; public string OldPassword; public string NewPassword; public string ConfirmNewPassword; }
+    [System.Serializable] public class ErrorResponse { public string error; }
 }
