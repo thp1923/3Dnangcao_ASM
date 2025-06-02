@@ -1,9 +1,9 @@
-using Unity.VisualScripting;
+using UnityEngine.VFX;
 using UnityEngine;
 
 public class SwordTrailEffect : MonoBehaviour
 {
-    public ParticleSystem trailEffect;
+    public VisualEffect trailEffect;
 
     bool damageEnabled;
 
@@ -22,12 +22,12 @@ public class SwordTrailEffect : MonoBehaviour
     {
         if (number != 0)
         {
-            trailEffect.Play();
+            trailEffect.gameObject.SetActive(true);
             damageEnabled = true;
         }
         else
         {
-            trailEffect.Stop();
+            trailEffect.gameObject.SetActive(false);
             damageEnabled = false;
             currentWeapon.ResetSettings();
         }
