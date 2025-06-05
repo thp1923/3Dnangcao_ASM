@@ -23,6 +23,7 @@ public class AttackRunBehaviour : StateMachineBehaviour
         animator.ResetTrigger("AttackRun");
         animator.GetComponent<PlayerAttackController>().canClick = true;
         animator.GetComponent<PlayerAttackController>().inputRecceived = false;
+        animator.GetComponent<PlayerAttackController>().ResetAttack();
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

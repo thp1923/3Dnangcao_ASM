@@ -10,6 +10,7 @@ public class AttackBehaviour : StateMachineBehaviour
     {
         animator.GetComponent<PlayerAttackController>().canClick = false;
         animator.GetComponent<MoveManager>().CheckLockMove(true);
+        animator.GetComponent<PlayerAttackController>().isAttacking = true;
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -25,6 +26,7 @@ public class AttackBehaviour : StateMachineBehaviour
         animator.GetComponent<PlayerAttackController>().canClick = true;
         animator.GetComponent<PlayerAttackController>().inputRecceived = false;
         animator.GetComponent<SwordTrailEffect>().PlayPartical(0);
+        animator.GetComponent<PlayerAttackController>().ResetAttack();
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

@@ -16,7 +16,7 @@ public class PlayerDodge : MonoBehaviour
 
     public Transform positionToSpawn;
 
-    public KeyCode dodgeKey;
+    public KeyCode dodgeKey = KeyCode.Space;
 
     [Header("Skinned Mesh Relashed")]
     private SkinnedMeshRenderer[] skinnedMeshRenderers;

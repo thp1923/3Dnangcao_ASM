@@ -19,6 +19,7 @@ public class PlayerAttackController : LockMouse
 
     internal bool isAttacking;
 
+    [SerializeField] private KeyCode attackKey = KeyCode.Mouse0;
 
     public bool canRecceiveInput;
     public bool inputRecceived;
@@ -66,6 +67,7 @@ public class PlayerAttackController : LockMouse
     {
         AttackCombo();
         UpdateCursorLock();
+        playerAim.SetBool("IsAttacking", isAttacking);
         //LockMove();
     }
 
@@ -85,14 +87,13 @@ public class PlayerAttackController : LockMouse
 
     public void AttackCombo()
     {
-        if (Input.GetMouseButtonDown(0) && playerAim.GetBool("IsGrounded") && CursorLocked && !GetComponent<PlayerTakeDamge>().isBlock && canClick)
+        if (Input.GetKeyDown(attackKey) && playerAim.GetBool("IsGrounded") && CursorLocked && !GetComponent<PlayerTakeDamge>().isBlock && canClick)
         {
 
             if (canRecceiveInput)
             {
                 inputRecceived = true;
                 canRecceiveInput = false;
-                isAttacking = true;
                 GetComponent<PlayerAim>().ClosestEnemy();
             }
             else

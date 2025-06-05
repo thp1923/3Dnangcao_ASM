@@ -13,16 +13,18 @@ public class PlayerTakeDamge : StatsAlive
     internal bool isBlock;
     internal bool isDeath;
     internal bool noTakeDamge;
-
-    public GameObject DamPopUp;
+    [SerializeField] private KeyCode blockKey = KeyCode.Mouse1;
 
     [Header("---------Knock Back----------")]
     public float[] knockbackForce;
     public float[] knockBackTime;
     private Coroutine knockbackRoutine;
 
-    [Header("-------------CD----------")]
-
+    [Header("-------------Heath----------")]
+    [SerializeField] private KeyCode heathKey = KeyCode.R;
+    public int heath;
+    public int heathCount;
+    int _heathCount;
 
     [Header("Test")]
     public int stunDamgeTest;
@@ -36,6 +38,7 @@ public class PlayerTakeDamge : StatsAlive
         base.Start();
         PlayerAim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
+        _heathCount = heathCount;
     }
 
     // Update is called once per frame
@@ -44,21 +47,38 @@ public class PlayerTakeDamge : StatsAlive
         Block();
         if(Input.GetKeyDown(KeyCode.J)) // Test take damge
             TakeDamge( 10000 ,stunDamgeTest, 0);
+        Heath();
     }
     
+    void Heath()
+    {
+        if (_heathCount <= 0 || isDeath)
+        {
+            return;
+        }
+        if (Input.GetKeyDown(heathKey))
+        {
+            HeathHp();
+        }
+    }
     
+    public void HeathHp()
+    {
+        currentHP += heath;
+        if (currentHP >= MaxHP)
+        {
+            currentHP = MaxHP;
+        }
+        heathCount -= 1;
+        HpSlider.value = currentHP;
+    }
+
     void Block()
     {
-        if (Input.GetKey(KeyCode.Mouse1) && PlayerAim.GetBool("IsGrounded") && PlayerAttackController.CursorLocked)
+        if (Input.GetKeyDown(blockKey) && PlayerAim.GetBool("IsGrounded") && PlayerAttackController.CursorLocked && !isBlock)
         {
             //audioP.PlayClip(9);
-            PlayerAim.SetBool("IsBlock", true);
-            isBlock = true;
-        }
-        else
-        {
-            isBlock = false;
-            PlayerAim.SetBool("IsBlock", false);
+            PlayerAim.SetTrigger("Block");
         }
     }
 

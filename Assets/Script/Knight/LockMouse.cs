@@ -5,6 +5,7 @@ using UnityEngine;
 public class LockMouse : MonoBehaviour
 {
     public static bool CursorLocked = true;
+    [SerializeField] protected KeyCode lockMouseKey = KeyCode.LeftAlt;
     // Start is called before the first frame update
     void Start()
     {
@@ -24,7 +25,7 @@ public class LockMouse : MonoBehaviour
             Cursor.visible = false;
 
             //UnlockMove();
-            if (Input.GetKeyDown(KeyCode.LeftAlt))
+            if (Input.GetKeyDown(lockMouseKey))
             {
                 CursorLocked = false;
             }
@@ -37,7 +38,7 @@ public class LockMouse : MonoBehaviour
             GetComponent<MoveManager>().CheckLockMove(true);
             GetComponent<MoveManager>().CheckDrag(true);
 
-            if (Input.GetKeyDown(KeyCode.LeftAlt))
+            if (Input.GetKeyDown(lockMouseKey))
             {
                 GetComponent<MoveManager>().CheckLockMove(false);
                 GetComponent<MoveManager>().CheckDrag(false);

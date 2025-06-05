@@ -5852,13 +5852,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e975a4c3160e8664098fb3f5bbb026dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHP: 5000
+  MaxHP: 500
   Defense: 150
   StunResistance: 100
   HpSlider: {fileID: 533780136}
   type: 0
-  DamPopUp: {fileID: 9009689952808642842, guid: ffec33ba5b4a5bd46aba7d787a00f13f,
-    type: 3}
+  blockKey: 324
   knockbackForce:
   - 0.5
   - 3
@@ -5869,6 +5868,9 @@ MonoBehaviour:
   - 1
   - 1
   - 1
+  heathKey: 114
+  heath: 100
+  heathCount: 6
   stunDamgeTest: 210
   duration:
   - 0.2
@@ -5903,9 +5905,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd799bc42b698ba4c971637ea094252f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lockMouseKey: 308
   tcp: {fileID: 1310050725}
   playerAim: {fileID: 1310050726}
   sword: {fileID: 1480770043}
+  attackKey: 323
   canRecceiveInput: 0
   inputRecceived: 0
   canClick: 0
@@ -6119,13 +6123,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   classPlayer: 1
   BuffKey: 101
-  CD: 30
+  CD: 20
   atkBonus: 150
   attackEffect:
   - {fileID: 786631419}
   - {fileID: 1427444619}
   - {fileID: 793271737}
   - {fileID: 825017716}
+  effect: {fileID: 696046772}
+  colorEffect: {r: 1, g: 0.39090377, b: 0, a: 1}
   defBonus: 200
   stunDefBonus: 100
   defMaterial: {fileID: 2100000, guid: fff43cc35cec84641a5ca5f3d099b90a, type: 2}
@@ -9727,22 +9733,22 @@ PrefabInstance:
     - target: {fileID: 2882021416711113407, guid: 591077b27f50d3e4c80d7cf86b30c11d,
         type: 3}
       propertyPath: m_PropertySheet.m_Vector4f.m_Array.Array.data[0].m_Value.w
-      value: 0.7372549
+      value: 0.8156863
       objectReference: {fileID: 0}
     - target: {fileID: 2882021416711113407, guid: 591077b27f50d3e4c80d7cf86b30c11d,
         type: 3}
       propertyPath: m_PropertySheet.m_Vector4f.m_Array.Array.data[0].m_Value.x
-      value: 0.7490197
+      value: 0.8962264
       objectReference: {fileID: 0}
     - target: {fileID: 2882021416711113407, guid: 591077b27f50d3e4c80d7cf86b30c11d,
         type: 3}
       propertyPath: m_PropertySheet.m_Vector4f.m_Array.Array.data[0].m_Value.y
-      value: 0.7490197
+      value: 0.8962264
       objectReference: {fileID: 0}
     - target: {fileID: 2882021416711113407, guid: 591077b27f50d3e4c80d7cf86b30c11d,
         type: 3}
       propertyPath: m_PropertySheet.m_Vector4f.m_Array.Array.data[0].m_Value.z
-      value: 0.7490197
+      value: 0.8962264
       objectReference: {fileID: 0}
     - target: {fileID: 2882021416711113407, guid: 591077b27f50d3e4c80d7cf86b30c11d,
         type: 3}
@@ -12325,7 +12331,7 @@ VisualEffect:
         m_Overridden: 0
     m_Vector4f:
       m_Array:
-      - m_Value: {x: 5.5908804, y: 2.1368287, z: 0.20490138, w: 0}
+      - m_Value: {x: 5.5908804, y: 2.1368287, z: 0.20490138, w: 1}
         m_Name: Color
         m_Overridden: 1
     m_Uint:

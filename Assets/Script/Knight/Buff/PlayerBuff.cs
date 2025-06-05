@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+using UnityEngine.VFX;
 using UnityEngine;
 
 public class PlayerBuff : MonoBehaviour
@@ -15,7 +15,7 @@ public class PlayerBuff : MonoBehaviour
     PlayerTakeDamge ptd;
     Animator animator;
 
-    public KeyCode BuffKey;
+    public KeyCode BuffKey = KeyCode.E;
 
     [Header("--------CD--------")]
     public float CD;
@@ -23,6 +23,9 @@ public class PlayerBuff : MonoBehaviour
     [Header("--------Atk--------")]
     public int atkBonus;
     public ParticleSystem[] attackEffect;
+    public VisualEffect effect;
+    public Color colorEffect;
+    private Color currentColor;
     [Header("--------Def--------")]
     public int defBonus;
     public int stunDefBonus;
@@ -34,6 +37,8 @@ public class PlayerBuff : MonoBehaviour
         atp = GetComponent<AttackDamgePlayer>();
         ptd = GetComponent<PlayerTakeDamge>();
         animator = GetComponent<Animator>();
+        Vector4 colorVec = effect.GetVector4("Color");
+        currentColor = new Color(colorVec.x, colorVec.y, colorVec.z, colorVec.w);
         foreach (var atkEf in attackEffect)
         {
             atkEf.Stop();
@@ -67,6 +72,7 @@ public class PlayerBuff : MonoBehaviour
         {
             case ClassPlayer.Atk:
                 atp.atkBonus += atkBonus;
+                effect.SetVector4("Color", (Vector4)colorEffect);
                 foreach (var atkEf in attackEffect)
                 {
                     atkEf.Play();
@@ -107,6 +113,7 @@ public class PlayerBuff : MonoBehaviour
         {
             case ClassPlayer.Atk:
                 atp.atkBonus -= atkBonus;
+                effect.SetVector4("Color", (Vector4)currentColor);
                 foreach (var atkEf in attackEffect)
                 {
                     atkEf.Stop();

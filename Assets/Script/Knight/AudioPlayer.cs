@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Invector.vCharacterController;
+using UnityEngine;
 
 public class AudioPlayer : MonoBehaviour
 {
@@ -14,7 +15,7 @@ public class AudioPlayer : MonoBehaviour
     int pos;
     public void playSourceWalk()
     {
-        if (animator.GetFloat("InputMagnitude") < 0.5) return;
+        if (animator.GetFloat("InputMagnitude") < 0.5f || GetComponent<PlayerTakeDamge>().noTakeDamge) return;
         if (clipStep.Length == 0) return; // Kiểm tra danh sách có clip không
 
         source.PlayOneShot(clipStep[pos]); // Phát clip hiện tại
