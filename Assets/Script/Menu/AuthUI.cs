@@ -48,6 +48,17 @@ public class AuthUIManager : MonoBehaviour
     public TMP_InputField inputChangeNewPassword;
     public TMP_InputField inputChangeConfirmNewPassword;
     public TextMeshProUGUI textStatus_change;
+    [Header("Loading UI")]
+    public GameObject loadingPanel;
+    void ShowLoading() => loadingPanel.SetActive(true);
+    void HideLoading() => loadingPanel.SetActive(false);
+    [Header("Main Menu UI")]
+    public GameObject mainMenuPanel;
+    void ShowMainMenu()
+    {
+    loginPanel.SetActive(false);
+    mainMenuPanel.SetActive(true);
+    }
 
     private string apiUrl = "https://database-namelessknightii.onrender.com/api/auth";
 
@@ -122,6 +133,7 @@ public class AuthUIManager : MonoBehaviour
 
     IEnumerator Login()
     {
+        ShowLoading();
         var data = new LoginData
         {
             username = inputLoginUsername.text.Trim(),
@@ -163,12 +175,15 @@ public class AuthUIManager : MonoBehaviour
                 PlayerPrefs.SetString("user_role", res.role);
                 PlayerPrefs.Save();
                 StartCoroutine(ShowTemporaryMessage(textStatus_login, "Đăng nhập thành công."));
+                ShowMainMenu();
             }
+            HideLoading();
         }
     }
 
     IEnumerator RegisterRoutine()
     {
+        ShowLoading();
         string password = inputRegisterPassword.text.Trim();
         string confirmPassword = inputRegisterConfirmPassword.text.Trim();
         string email = inputRegisterEmail.text.Trim();
@@ -179,25 +194,32 @@ public class AuthUIManager : MonoBehaviour
             string.IsNullOrWhiteSpace(confirmPassword))
         {
             StartCoroutine(ShowTemporaryMessage(textStatus_register, "Không được để trống bất kỳ trường nào."));
+            HideLoading();
             yield break;
+            
         }
 
         if (!IsValidEmail(email))
         {
             StartCoroutine(ShowTemporaryMessage(textStatus_register, "Email không hợp lệ."));
             yield break;
+
         }
 
         if (!email.EndsWith("@gmail.com"))
         {
             StartCoroutine(ShowTemporaryMessage(textStatus_register, "Chỉ chấp nhận địa chỉ Gmail."));
+            HideLoading();
             yield break;
+
         }
 
         if (password != confirmPassword)
         {
             StartCoroutine(ShowTemporaryMessage(textStatus_register, "Mật khẩu không khớp với mật khẩu xác nhận."));
+            HideLoading();
             yield break;
+
         }
 
         var data = new RegisterRequest
@@ -244,23 +266,27 @@ public class AuthUIManager : MonoBehaviour
                 StartCoroutine(ShowTemporaryMessage(textStatus_register, "Đã gửi mã xác thực tới email của bạn."));
                 ShowConfirmPanel();
             }
+            HideLoading();
         }
     }
 
     IEnumerator ConfirmEmail()
     {
+        ShowLoading();
         string email = PlayerPrefs.GetString("pending_email", "").Trim();
         string code = inputConfirmCode.text.Trim();
 
         if (string.IsNullOrWhiteSpace(code))
         {
             StartCoroutine(ShowTemporaryMessage(textStatus_confirm, "Vui lòng nhập mã xác thực."));
+            HideLoading();
             yield break;
         }
 
         if (string.IsNullOrEmpty(email))
         {
             StartCoroutine(ShowTemporaryMessage(textStatus_confirm, "Không tìm thấy email để xác thực."));
+            HideLoading();
             yield break;
         }
 
@@ -288,15 +314,18 @@ public class AuthUIManager : MonoBehaviour
                 yield return new WaitForSeconds(1.5f);
                 ShowLoginPanel();
             }
+            HideLoading();
         }
     }
 
     IEnumerator SendForgotPasswordCode()
     {
+        ShowLoading();
         string email = inputForgotEmail.text.Trim();
         if (string.IsNullOrEmpty(email))
         {
             StartCoroutine(ShowTemporaryMessage(textStatus_forgot, "Vui lòng nhập email."));
+            HideLoading();
             yield break;
         }
 
@@ -311,6 +340,7 @@ public class AuthUIManager : MonoBehaviour
 
             yield return www.SendWebRequest();
 
+
             if (www.result == UnityWebRequest.Result.Success)
             {
                 PlayerPrefs.SetString("reset_email", email);
@@ -320,11 +350,13 @@ public class AuthUIManager : MonoBehaviour
             {
                 StartCoroutine(ShowTemporaryMessage(textStatus_forgot, ExtractErrorMessage(www.downloadHandler.text)));
             }
+            HideLoading();
         }
     }
 
     IEnumerator ResetPassword()
     {
+        ShowLoading();
         string email = PlayerPrefs.GetString("reset_email", "");
         string code = inputResetCode.text.Trim();
         string newPass = inputNewPassword.text;
@@ -333,12 +365,14 @@ public class AuthUIManager : MonoBehaviour
         if (string.IsNullOrEmpty(code) || string.IsNullOrEmpty(newPass) || string.IsNullOrEmpty(confirmPass))
         {
             StartCoroutine(ShowTemporaryMessage(textStatus_reset, "Vui lòng điền đầy đủ thông tin."));
+            HideLoading();
             yield break;
         }
 
         if (newPass != confirmPass)
         {
             StartCoroutine(ShowTemporaryMessage(textStatus_reset, "Mật khẩu xác nhận không khớp."));
+            HideLoading();
             yield break;
         }
 
@@ -370,11 +404,13 @@ public class AuthUIManager : MonoBehaviour
             {
                 StartCoroutine(ShowTemporaryMessage(textStatus_reset, ExtractErrorMessage(www.downloadHandler.text)));
             }
+            HideLoading();
         }
     }
 
     IEnumerator ChangePassword()
     {
+        ShowLoading();
         string username = inputChangeUsername.text.Trim();
         string oldPass = inputChangeOldPassword.text;
         string newPass = inputChangeNewPassword.text;
@@ -384,18 +420,21 @@ public class AuthUIManager : MonoBehaviour
             string.IsNullOrEmpty(newPass) || string.IsNullOrEmpty(confirmPass))
         {
             StartCoroutine(ShowTemporaryMessage(textStatus_change, "Vui lòng điền đầy đủ thông tin."));
+            HideLoading();
             yield break;
         }
 
         if (newPass != confirmPass)
         {
             StartCoroutine(ShowTemporaryMessage(textStatus_change, "Mật khẩu mới và xác nhận không khớp."));
+            HideLoading();
             yield break;
         }
 
         if (newPass.Length < 6 || newPass.Length > 24)
         {
             StartCoroutine(ShowTemporaryMessage(textStatus_change, "Mật khẩu phải từ 6 đến 24 ký tự."));
+            HideLoading();
             yield break;
         }
 
@@ -427,6 +466,7 @@ public class AuthUIManager : MonoBehaviour
             {
                 StartCoroutine(ShowTemporaryMessage(textStatus_change, ExtractErrorMessage(www.downloadHandler.text)));
             }
+            HideLoading();
         }
     }
 

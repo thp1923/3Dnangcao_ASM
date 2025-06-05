@@ -1,99 +1,52 @@
 using UnityEngine;
-using TMPro;
 using UnityEngine.UI;
-using System.Collections;
 
-public class TitleScreenManager : MonoBehaviour
+public class TitleScreen : MonoBehaviour
 {
-    public TextMeshProUGUI pressAnyButtonText;
-    public GameObject messagePanel;      // <- NEW
-    public GameObject mainMenuPanel;
-    public GameObject optionsPanel;
+    public GameObject pressAnyButtonText;
+    public GameObject messengerImage;
+    public GameObject panelLogin;
 
-    public float fadeDuration = 1.5f;
-
-    private int pressStep = 0;
+    private bool canPress = false;
+    private int pressCount = 0;
 
     void Start()
     {
-        mainMenuPanel.SetActive(false); 
-        messagePanel.SetActive(false); // <- NEW
-        StartCoroutine(FadeLoop());
+        pressAnyButtonText.SetActive(false);
+        messengerImage.SetActive(false);
+        panelLogin.SetActive(false);
+
+        // Sau 5s mới hiện PRESS ANY BUTTON
+        Invoke(nameof(ShowPressAnyButton), 5f);
+    }
+
+    void ShowPressAnyButton()
+    {
+        pressAnyButtonText.SetActive(true);
+        canPress = true;
     }
 
     void Update()
     {
-        if (Input.anyKeyDown)
+        if (canPress && Input.anyKeyDown)
         {
-            pressStep++;
+            pressCount++;
 
-            if (pressStep == 1)
+            if (pressCount == 1)
             {
-                StopAllCoroutines();
-                StartCoroutine(FadeOutPressText());
+                // Lần đầu nhấn: hiện Messenger
+                messengerImage.SetActive(true);
             }
-            else if (pressStep == 2)
+            else if (pressCount == 2)
             {
-                messagePanel.SetActive(false);
-                mainMenuPanel.SetActive(true);
-                this.enabled = false;
+                // Lần nhấn thứ 2: hiện Panel Login
+                panelLogin.SetActive(true);
+
+                // Ẩn những thứ không cần nữa
+                messengerImage.SetActive(false);
+                pressAnyButtonText.SetActive(false);
+                this.enabled = false; // tắt script
             }
         }
-    }
-    public void ShowOptions()
-    {
-        mainMenuPanel.SetActive(false);
-        optionsPanel.SetActive(true);
-    }
-
-    public void BackToMainMenu()
-    {
-        optionsPanel.SetActive(false);
-        mainMenuPanel.SetActive(true);
-    }
-
-    IEnumerator FadeLoop()
-    {
-        Color c = pressAnyButtonText.color;
-
-        while (true)
-        {
-            // Fade In
-            float t = 0f;
-            while (t < fadeDuration)
-            {
-                t += Time.deltaTime;
-                c.a = Mathf.Lerp(0, 1, t / fadeDuration);
-                pressAnyButtonText.color = c;
-                yield return null;
-            }
-
-            // Fade Out
-            t = 0f;
-            while (t < fadeDuration)
-            {
-                t += Time.deltaTime;
-                c.a = Mathf.Lerp(1, 0, t / fadeDuration);
-                pressAnyButtonText.color = c;
-                yield return null;
-            }
-        }
-    }
-
-    IEnumerator FadeOutPressText()
-    {
-        Color c = pressAnyButtonText.color;
-        float t = 0f;
-
-        while (t < fadeDuration)
-        {
-            t += Time.deltaTime;
-            c.a = Mathf.Lerp(1, 0, t / fadeDuration);
-            pressAnyButtonText.color = c;
-            yield return null;
-        }
-
-        pressAnyButtonText.gameObject.SetActive(false);
-        messagePanel.SetActive(true); // <- hiện message
     }
 }
