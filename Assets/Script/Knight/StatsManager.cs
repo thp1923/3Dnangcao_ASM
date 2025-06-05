@@ -24,6 +24,8 @@ namespace StatsManager
         internal int defenseBonus;
         internal int stunResistanceBonus;
 
+        protected int DefenseMax = 2000;
+        protected int StunResistanceMax = 2000;
         protected int currentHP;
 
         protected virtual void Start()
@@ -38,7 +40,9 @@ namespace StatsManager
 
         public virtual void TakeDamge(int damge, int stunDamge, int trueDamge)
         {
-            int Damge = Mathf.FloorToInt(((damge * 3) / (Defense + defenseBonus)) * 1.14f);
+            int Damge = Mathf.FloorToInt(damge 
+                * (1 - Mathf.Clamp((Defense + defenseBonus), 0, DefenseMax)
+                * (1 - Mathf.Clamp((StunResistance + stunResistanceBonus), 0, StunResistanceMax) / StunResistanceMax)/ 2500));
             Damge = Mathf.Max(Damge, 1); // luôn gây damge ít nhất là 1
             currentHP -= Damge + trueDamge;
             HpSlider.value = currentHP;
