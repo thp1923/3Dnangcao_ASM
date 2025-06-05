@@ -1,74 +1,52 @@
 using UnityEngine;
-using TMPro;
 using UnityEngine.UI;
-using System.Collections;
 
-public class TitleScreenManager : MonoBehaviour
+public class TitleScreen : MonoBehaviour
 {
-    public TextMeshProUGUI pressAnyButtonText;
-    public GameObject mainMenuPanel;
-    public float fadeDuration = 1.5f;
+    public GameObject pressAnyButtonText;
+    public GameObject messengerImage;
+    public GameObject panelLogin;
 
-    private bool hasPressed = false;
+    private bool canPress = false;
+    private int pressCount = 0;
 
     void Start()
     {
-        mainMenuPanel.SetActive(false); // Ẩn menu lúc đầu
-        StartCoroutine(FadeLoop());
+        pressAnyButtonText.SetActive(false);
+        messengerImage.SetActive(false);
+        panelLogin.SetActive(false);
+
+        // Sau 5s mới hiện PRESS ANY BUTTON
+        Invoke(nameof(ShowPressAnyButton), 5f);
+    }
+
+    void ShowPressAnyButton()
+    {
+        pressAnyButtonText.SetActive(true);
+        canPress = true;
     }
 
     void Update()
     {
-        if (!hasPressed && Input.anyKeyDown)
+        if (canPress && Input.anyKeyDown)
         {
-            hasPressed = true;
-            StopAllCoroutines();
-            StartCoroutine(ShowMainMenu());
-        }
-    }
+            pressCount++;
 
-    IEnumerator FadeLoop()
-    {
-        Color c = pressAnyButtonText.color;
-
-        while (true)
-        {
-            // Fade In
-            float t = 0f;
-            while (t < fadeDuration)
+            if (pressCount == 1)
             {
-                t += Time.deltaTime;
-                c.a = Mathf.Lerp(0, 1, t / fadeDuration);
-                pressAnyButtonText.color = c;
-                yield return null;
+                // Lần đầu nhấn: hiện Messenger
+                messengerImage.SetActive(true);
             }
-
-            // Fade Out
-            t = 0f;
-            while (t < fadeDuration)
+            else if (pressCount == 2)
             {
-                t += Time.deltaTime;
-                c.a = Mathf.Lerp(1, 0, t / fadeDuration);
-                pressAnyButtonText.color = c;
-                yield return null;
+                // Lần nhấn thứ 2: hiện Panel Login
+                panelLogin.SetActive(true);
+
+                // Ẩn những thứ không cần nữa
+                messengerImage.SetActive(false);
+                pressAnyButtonText.SetActive(false);
+                this.enabled = false; // tắt script
             }
         }
-    }
-
-    IEnumerator ShowMainMenu()
-    {
-        // Ẩn chữ "Press Any Button" bằng fade out
-        Color c = pressAnyButtonText.color;
-        float t = 0f;
-        while (t < fadeDuration)
-        {
-            t += Time.deltaTime;
-            c.a = Mathf.Lerp(1, 0, t / fadeDuration);
-            pressAnyButtonText.color = c;
-            yield return null;
-        }
-
-        pressAnyButtonText.gameObject.SetActive(false);
-        mainMenuPanel.SetActive(true);
     }
 }

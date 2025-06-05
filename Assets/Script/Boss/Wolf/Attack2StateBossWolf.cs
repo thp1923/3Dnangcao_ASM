@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -8,6 +8,9 @@ public class Attack2StateBossWolf : StateMachineBehaviour
     public float attackRange;
     NavMeshAgent agent;
     Transform player;
+
+    public float speedMultiplier = 1.5f;
+
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
@@ -30,7 +33,6 @@ public class Attack2StateBossWolf : StateMachineBehaviour
         Vector3 playerPosition = new Vector3(player.transform.position.x, 0, player.transform.position.z);
 
         // Make the animator's transform look at the player's position.
-        animator.transform.LookAt(playerPosition);
         float distance = Vector3.Distance(player.position, animator.transform.position);
         if (distance <= attackRange)
             animator.SetBool("IsRunning", false);
@@ -45,10 +47,20 @@ public class Attack2StateBossWolf : StateMachineBehaviour
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()
-    //override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //    // Implement code that processes and affects root motion
-    //}
+    override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        // Lấy root motion hiện tại từ Animator
+        Vector3 rootMotion = animator.deltaPosition;
+
+        // Tăng tốc root motion lên (hoặc tùy chỉnh nó)
+        Vector3 modifiedMotion = rootMotion * speedMultiplier;
+
+        // Di chuyển nhân vật theo root motion đã chỉnh sửa
+        animator.transform.position += modifiedMotion;
+
+        // Nếu muốn giữ hướng quay (rotation) thì thêm dòng sau:
+        animator.transform.rotation *= animator.deltaRotation;
+    }
 
     // OnStateIK is called right after Animator.OnAnimatorIK()
     //override public void OnStateIK(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
