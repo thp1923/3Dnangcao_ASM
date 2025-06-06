@@ -1,4 +1,4 @@
-// Made with Amplify Shader Editor v1.9.6.3
+// Made with Amplify Shader Editor v1.9.7.1
 // Available at the Unity Asset Store - http://u3d.as/y3X 
 Shader "/Vefects/SH_Vefects_Extra_Grid_01"
 {
@@ -180,28 +180,47 @@ Shader "/Vefects/SH_Vefects_Extra_Grid_01"
 			
 
 			HLSLPROGRAM
-            #define _NORMAL_DROPOFF_TS 1
-            #pragma shader_feature_local _RECEIVE_SHADOWS_OFF
-            #pragma multi_compile_fragment _ _SCREEN_SPACE_OCCLUSION
-            #pragma multi_compile_instancing
-            #pragma instancing_options renderinglayer
-            #pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
-            #pragma multi_compile_fog
-            #define ASE_FOG 1
-            #define ASE_SRP_VERSION 120111
 
-            #pragma multi_compile _ DOTS_INSTANCING_ON
+			
+
+			#pragma multi_compile_local_fragment _ALPHATEST_ON
+			#define _NORMAL_DROPOFF_TS 1
+			#pragma shader_feature_local _RECEIVE_SHADOWS_OFF
+			#pragma multi_compile_fragment _ _SCREEN_SPACE_OCCLUSION
+			#pragma multi_compile_instancing
+			#pragma instancing_options renderinglayer
+			#pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
+			#pragma multi_compile_fog
+			#define ASE_FOG 1
+			#define ASE_VERSION 19701
+			#define ASE_SRP_VERSION 140007
+
+
+			
 
 			#pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
 			#pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
+
+			
+            #pragma multi_compile _ EVALUATE_SH_MIXED EVALUATE_SH_VERTEX
+		
+
 			#pragma multi_compile_fragment _ _ADDITIONAL_LIGHT_SHADOWS
 			#pragma multi_compile_fragment _ _REFLECTION_PROBE_BLENDING
 			#pragma multi_compile_fragment _ _REFLECTION_PROBE_BOX_PROJECTION
+
+			
 			#pragma multi_compile_fragment _ _SHADOWS_SOFT
+           
+
+			
+
 			#pragma multi_compile_fragment _ _DBUFFER_MRT1 _DBUFFER_MRT2 _DBUFFER_MRT3
-			#pragma multi_compile_fragment _ _LIGHT_LAYERS
+			#pragma multi_compile _ _LIGHT_LAYERS
 			#pragma multi_compile_fragment _ _LIGHT_COOKIES
-			#pragma multi_compile _ _CLUSTERED_RENDERING
+			#pragma multi_compile _ _FORWARD_PLUS
+
+			
 
 			#pragma multi_compile _ LIGHTMAP_SHADOW_MIXING
 			#pragma multi_compile _ SHADOWS_SHADOWMASK
@@ -219,16 +238,37 @@ Shader "/Vefects/SH_Vefects_Extra_Grid_01"
 
 			#define SHADERPASS SHADERPASS_FORWARD
 
+			
+            #if ASE_SRP_VERSION >=140007
+			#include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl"
+			#endif
+		
+
+			
+			#if ASE_SRP_VERSION >=140007
+			#include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/RenderingLayers.hlsl"
+			#endif
+		
+
 			#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
 			#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Texture.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Input.hlsl"
 			#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/TextureStack.hlsl"
+
+			
+
+			
+
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Shadows.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ShaderGraphFunctions.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DBuffer.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/ShaderPass.hlsl"
+
+			#if defined(LOD_FADE_CROSSFADE)
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/LODCrossFade.hlsl"
+            #endif
 
 			#if defined(UNITY_INSTANCING_ENABLED) && defined(_TERRAIN_INSTANCED_PERPIXEL_NORMAL)
 				#define ENABLE_TERRAIN_PERPIXEL_NORMAL
@@ -479,13 +519,16 @@ Shader "/Vefects/SH_Vefects_Extra_Grid_01"
 						#ifdef ASE_DEPTH_WRITE_ON
 						,out float outputDepth : ASE_SV_DEPTH
 						#endif
+						#ifdef _WRITE_RENDERING_LAYERS
+						, out float4 outRenderingLayers : SV_Target1
+						#endif
 						 ) : SV_Target
 			{
 				UNITY_SETUP_INSTANCE_ID(IN);
 				UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(IN);
 
-				#ifdef LOD_FADE_CROSSFADE
-					LODDitheringTransition( IN.positionCS.xyz, unity_LODFade.x );
+				#if defined(LOD_FADE_CROSSFADE)
+					LODFadeCrossFade( IN.positionCS );
 				#endif
 
 				#if defined(ENABLE_TERRAIN_PERPIXEL_NORMAL)
@@ -639,23 +682,40 @@ Shader "/Vefects/SH_Vefects_Extra_Grid_01"
 				{
 					float shadow = _TransmissionShadow;
 
-					Light mainLight = GetMainLight( inputData.shadowCoord );
-					float3 mainAtten = mainLight.color * mainLight.distanceAttenuation;
-					mainAtten = lerp( mainAtten, mainAtten * mainLight.shadowAttenuation, shadow );
-					half3 mainTransmission = max(0 , -dot(inputData.normalWS, mainLight.direction)) * mainAtten * Transmission;
-					color.rgb += BaseColor * mainTransmission;
+					#define SUM_LIGHT_TRANSMISSION(Light)\
+						float3 atten = Light.color * Light.distanceAttenuation;\
+						atten = lerp( atten, atten * Light.shadowAttenuation, shadow );\
+						half3 transmission = max( 0, -dot( inputData.normalWS, Light.direction ) ) * atten * Transmission;\
+						color.rgb += BaseColor * transmission;
 
-					#ifdef _ADDITIONAL_LIGHTS
-						int transPixelLightCount = GetAdditionalLightsCount();
-						for (int i = 0; i < transPixelLightCount; ++i)
-						{
-							Light light = GetAdditionalLight(i, inputData.positionWS);
-							float3 atten = light.color * light.distanceAttenuation;
-							atten = lerp( atten, atten * light.shadowAttenuation, shadow );
+					SUM_LIGHT_TRANSMISSION( GetMainLight( inputData.shadowCoord ) );
 
-							half3 transmission = max(0 , -dot(inputData.normalWS, light.direction)) * atten * Transmission;
-							color.rgb += BaseColor * transmission;
-						}
+					#if defined(_ADDITIONAL_LIGHTS)
+						uint meshRenderingLayers = GetMeshRenderingLayer();
+						uint pixelLightCount = GetAdditionalLightsCount();
+						#if USE_FORWARD_PLUS
+							for (uint lightIndex = 0; lightIndex < min(URP_FP_DIRECTIONAL_LIGHTS_COUNT, MAX_VISIBLE_LIGHTS); lightIndex++)
+							{
+								FORWARD_PLUS_SUBTRACTIVE_LIGHT_CHECK
+
+								Light light = GetAdditionalLight(lightIndex, inputData.positionWS, inputData.shadowMask);
+								#ifdef _LIGHT_LAYERS
+								if (IsMatchingLightLayer(light.layerMask, meshRenderingLayers))
+								#endif
+								{
+									SUM_LIGHT_TRANSMISSION( light );
+								}
+							}
+						#endif
+						LIGHT_LOOP_BEGIN( pixelLightCount )
+							Light light = GetAdditionalLight(lightIndex, inputData.positionWS, inputData.shadowMask);
+							#ifdef _LIGHT_LAYERS
+							if (IsMatchingLightLayer(light.layerMask, meshRenderingLayers))
+							#endif
+							{
+								SUM_LIGHT_TRANSMISSION( light );
+							}
+						LIGHT_LOOP_END
 					#endif
 				}
 				#endif
@@ -669,28 +729,42 @@ Shader "/Vefects/SH_Vefects_Extra_Grid_01"
 					float ambient = _TransAmbient;
 					float strength = _TransStrength;
 
-					Light mainLight = GetMainLight( inputData.shadowCoord );
-					float3 mainAtten = mainLight.color * mainLight.distanceAttenuation;
-					mainAtten = lerp( mainAtten, mainAtten * mainLight.shadowAttenuation, shadow );
+					#define SUM_LIGHT_TRANSLUCENCY(Light)\
+						float3 atten = Light.color * Light.distanceAttenuation;\
+						atten = lerp( atten, atten * Light.shadowAttenuation, shadow );\
+						half3 lightDir = Light.direction + inputData.normalWS * normal;\
+						half VdotL = pow( saturate( dot( inputData.viewDirectionWS, -lightDir ) ), scattering );\
+						half3 translucency = atten * ( VdotL * direct + inputData.bakedGI * ambient ) * Translucency;\
+						color.rgb += BaseColor * translucency * strength;
 
-					half3 mainLightDir = mainLight.direction + inputData.normalWS * normal;
-					half mainVdotL = pow( saturate( dot( inputData.viewDirectionWS, -mainLightDir ) ), scattering );
-					half3 mainTranslucency = mainAtten * ( mainVdotL * direct + inputData.bakedGI * ambient ) * Translucency;
-					color.rgb += BaseColor * mainTranslucency * strength;
+					SUM_LIGHT_TRANSLUCENCY( GetMainLight( inputData.shadowCoord ) );
 
-					#ifdef _ADDITIONAL_LIGHTS
-						int transPixelLightCount = GetAdditionalLightsCount();
-						for (int i = 0; i < transPixelLightCount; ++i)
-						{
-							Light light = GetAdditionalLight(i, inputData.positionWS);
-							float3 atten = light.color * light.distanceAttenuation;
-							atten = lerp( atten, atten * light.shadowAttenuation, shadow );
+					#if defined(_ADDITIONAL_LIGHTS)
+						uint meshRenderingLayers = GetMeshRenderingLayer();
+						uint pixelLightCount = GetAdditionalLightsCount();
+						#if USE_FORWARD_PLUS
+							for (uint lightIndex = 0; lightIndex < min(URP_FP_DIRECTIONAL_LIGHTS_COUNT, MAX_VISIBLE_LIGHTS); lightIndex++)
+							{
+								FORWARD_PLUS_SUBTRACTIVE_LIGHT_CHECK
 
-							half3 lightDir = light.direction + inputData.normalWS * normal;
-							half VdotL = pow( saturate( dot( inputData.viewDirectionWS, -lightDir ) ), scattering );
-							half3 translucency = atten * ( VdotL * direct + inputData.bakedGI * ambient ) * Translucency;
-							color.rgb += BaseColor * translucency * strength;
-						}
+								Light light = GetAdditionalLight(lightIndex, inputData.positionWS, inputData.shadowMask);
+								#ifdef _LIGHT_LAYERS
+								if (IsMatchingLightLayer(light.layerMask, meshRenderingLayers))
+								#endif
+								{
+									SUM_LIGHT_TRANSLUCENCY( light );
+								}
+							}
+						#endif
+						LIGHT_LOOP_BEGIN( pixelLightCount )
+							Light light = GetAdditionalLight(lightIndex, inputData.positionWS, inputData.shadowMask);
+							#ifdef _LIGHT_LAYERS
+							if (IsMatchingLightLayer(light.layerMask, meshRenderingLayers))
+							#endif
+							{
+								SUM_LIGHT_TRANSLUCENCY( light );
+							}
+						LIGHT_LOOP_END
 					#endif
 				}
 				#endif
@@ -720,6 +794,11 @@ Shader "/Vefects/SH_Vefects_Extra_Grid_01"
 					outputDepth = DepthValue;
 				#endif
 
+				#ifdef _WRITE_RENDERING_LAYERS
+					uint renderingLayers = GetMeshRenderingLayer();
+					outRenderingLayers = float4( EncodeMeshRenderingLayer( renderingLayers ), 0, 0, 0 );
+				#endif
+
 				return color;
 			}
 
@@ -739,13 +818,19 @@ Shader "/Vefects/SH_Vefects_Extra_Grid_01"
 			ColorMask 0
 
 			HLSLPROGRAM
-            #define _NORMAL_DROPOFF_TS 1
-            #pragma multi_compile_instancing
-            #pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
-            #define ASE_FOG 1
-            #define ASE_SRP_VERSION 120111
 
-            #pragma multi_compile _ DOTS_INSTANCING_ON
+			
+
+			#pragma multi_compile_local_fragment _ALPHATEST_ON
+			#define _NORMAL_DROPOFF_TS 1
+			#pragma multi_compile_instancing
+			#pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
+			#define ASE_FOG 1
+			#define ASE_VERSION 19701
+			#define ASE_SRP_VERSION 140007
+
+
+			
 
 			#pragma multi_compile_vertex _ _CASTING_PUNCTUAL_LIGHT_SHADOW
 
@@ -758,14 +843,29 @@ Shader "/Vefects/SH_Vefects_Extra_Grid_01"
 
 			#define SHADERPASS SHADERPASS_SHADOWCASTER
 
+			
+            #if ASE_SRP_VERSION >=140007
+			#include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl"
+			#endif
+		
+
 			#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
 			#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Texture.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Input.hlsl"
 			#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/TextureStack.hlsl"
+
+			
+
+			
+
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ShaderGraphFunctions.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/ShaderPass.hlsl"
+
+			#if defined(LOD_FADE_CROSSFADE)
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/LODCrossFade.hlsl"
+            #endif
 
 			
 
@@ -1019,8 +1119,8 @@ Shader "/Vefects/SH_Vefects_Extra_Grid_01"
 					#endif
 				#endif
 
-				#ifdef LOD_FADE_CROSSFADE
-					LODDitheringTransition( IN.positionCS.xyz, unity_LODFade.x );
+				#if defined(LOD_FADE_CROSSFADE)
+					LODFadeCrossFade( IN.positionCS );
 				#endif
 
 				#ifdef ASE_DEPTH_WRITE_ON
@@ -1044,13 +1144,19 @@ Shader "/Vefects/SH_Vefects_Extra_Grid_01"
 			AlphaToMask Off
 
 			HLSLPROGRAM
-            #define _NORMAL_DROPOFF_TS 1
-            #pragma multi_compile_instancing
-            #pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
-            #define ASE_FOG 1
-            #define ASE_SRP_VERSION 120111
 
-            #pragma multi_compile _ DOTS_INSTANCING_ON
+			
+
+			#pragma multi_compile_local_fragment _ALPHATEST_ON
+			#define _NORMAL_DROPOFF_TS 1
+			#pragma multi_compile_instancing
+			#pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
+			#define ASE_FOG 1
+			#define ASE_VERSION 19701
+			#define ASE_SRP_VERSION 140007
+
+
+			
 
 			#pragma vertex vert
 			#pragma fragment frag
@@ -1061,14 +1167,29 @@ Shader "/Vefects/SH_Vefects_Extra_Grid_01"
 
 			#define SHADERPASS SHADERPASS_DEPTHONLY
 
+			
+            #if ASE_SRP_VERSION >=140007
+			#include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl"
+			#endif
+		
+
 			#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
 			#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Texture.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Input.hlsl"
 			#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/TextureStack.hlsl"
+
+			
+
+			
+
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ShaderGraphFunctions.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/ShaderPass.hlsl"
+
+			#if defined(LOD_FADE_CROSSFADE)
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/LODCrossFade.hlsl"
+            #endif
 
 			
 
@@ -1296,8 +1417,8 @@ Shader "/Vefects/SH_Vefects_Extra_Grid_01"
 					clip(Alpha - AlphaClipThreshold);
 				#endif
 
-				#ifdef LOD_FADE_CROSSFADE
-					LODDitheringTransition( IN.positionCS.xyz, unity_LODFade.x );
+				#if defined(LOD_FADE_CROSSFADE)
+					LODFadeCrossFade( IN.positionCS );
 				#endif
 
 				#ifdef ASE_DEPTH_WRITE_ON
@@ -1319,9 +1440,11 @@ Shader "/Vefects/SH_Vefects_Extra_Grid_01"
 			Cull Off
 
 			HLSLPROGRAM
+			#pragma multi_compile_local_fragment _ALPHATEST_ON
 			#define _NORMAL_DROPOFF_TS 1
 			#define ASE_FOG 1
-			#define ASE_SRP_VERSION 120111
+			#define ASE_VERSION 19701
+			#define ASE_SRP_VERSION 140007
 
 			#pragma shader_feature EDITOR_VISUALIZATION
 
@@ -1332,7 +1455,6 @@ Shader "/Vefects/SH_Vefects_Extra_Grid_01"
 				#define _SPECULAR_COLOR 1
 			#endif
 
-
 			#define SHADERPASS SHADERPASS_META
 
 			#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
@@ -1341,6 +1463,11 @@ Shader "/Vefects/SH_Vefects_Extra_Grid_01"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Input.hlsl"
 			#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/TextureStack.hlsl"
+
+			
+
+			
+
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ShaderGraphFunctions.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/MetaInput.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/ShaderPass.hlsl"
@@ -1614,9 +1741,11 @@ Shader "/Vefects/SH_Vefects_Extra_Grid_01"
 
 			HLSLPROGRAM
 
+			#pragma multi_compile_local_fragment _ALPHATEST_ON
 			#define _NORMAL_DROPOFF_TS 1
 			#define ASE_FOG 1
-			#define ASE_SRP_VERSION 120111
+			#define ASE_VERSION 19701
+			#define ASE_SRP_VERSION 140007
 
 
 			#pragma vertex vert
@@ -1634,6 +1763,11 @@ Shader "/Vefects/SH_Vefects_Extra_Grid_01"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Input.hlsl"
 			#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/TextureStack.hlsl"
+
+			
+
+			
+
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ShaderGraphFunctions.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/ShaderPass.hlsl"
 
@@ -1871,13 +2005,23 @@ Shader "/Vefects/SH_Vefects_Extra_Grid_01"
 			ZWrite On
 
 			HLSLPROGRAM
-            #define _NORMAL_DROPOFF_TS 1
-            #pragma multi_compile_instancing
-            #pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
-            #define ASE_FOG 1
-            #define ASE_SRP_VERSION 120111
 
-            #pragma multi_compile _ DOTS_INSTANCING_ON
+			
+
+			
+
+			#pragma multi_compile_local_fragment _ALPHATEST_ON
+			#define _NORMAL_DROPOFF_TS 1
+			#pragma multi_compile_instancing
+			#pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
+			#define ASE_FOG 1
+			#define ASE_VERSION 19701
+			#define ASE_SRP_VERSION 140007
+
+
+			
+
+			
 
 			#pragma vertex vert
 			#pragma fragment frag
@@ -1887,6 +2031,19 @@ Shader "/Vefects/SH_Vefects_Extra_Grid_01"
 			#endif
 
 			#define SHADERPASS SHADERPASS_DEPTHNORMALSONLY
+			//#define SHADERPASS SHADERPASS_DEPTHNORMALS
+
+			
+            #if ASE_SRP_VERSION >=140007
+			#include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl"
+			#endif
+		
+
+			
+			#if ASE_SRP_VERSION >=140007
+			#include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/RenderingLayers.hlsl"
+			#endif
+		
 
 			#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
 			#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Texture.hlsl"
@@ -1894,8 +2051,17 @@ Shader "/Vefects/SH_Vefects_Extra_Grid_01"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Input.hlsl"
 			#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/TextureStack.hlsl"
+
+			
+
+			
+
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ShaderGraphFunctions.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/ShaderPass.hlsl"
+
+			#if defined(LOD_FADE_CROSSFADE)
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/LODCrossFade.hlsl"
+            #endif
 
 			
 
@@ -2097,11 +2263,15 @@ Shader "/Vefects/SH_Vefects_Extra_Grid_01"
 			}
 			#endif
 
-			half4 frag(	VertexOutput IN
+			void frag(	VertexOutput IN
+						, out half4 outNormalWS : SV_Target0
 						#ifdef ASE_DEPTH_WRITE_ON
 						,out float outputDepth : ASE_SV_DEPTH
 						#endif
-						 ) : SV_TARGET
+						#ifdef _WRITE_RENDERING_LAYERS
+						, out float4 outRenderingLayers : SV_Target1
+						#endif
+						 )
 			{
 				UNITY_SETUP_INSTANCE_ID(IN);
 				UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX( IN );
@@ -2139,8 +2309,8 @@ Shader "/Vefects/SH_Vefects_Extra_Grid_01"
 					clip(Alpha - AlphaClipThreshold);
 				#endif
 
-				#ifdef LOD_FADE_CROSSFADE
-					LODDitheringTransition( IN.positionCS.xyz, unity_LODFade.x );
+				#if defined(LOD_FADE_CROSSFADE)
+					LODFadeCrossFade( IN.positionCS );
 				#endif
 
 				#ifdef ASE_DEPTH_WRITE_ON
@@ -2151,7 +2321,7 @@ Shader "/Vefects/SH_Vefects_Extra_Grid_01"
 					float2 octNormalWS = PackNormalOctQuadEncode(WorldNormal);
 					float2 remappedOctNormalWS = saturate(octNormalWS * 0.5 + 0.5);
 					half3 packedNormalWS = PackFloat2To888(remappedOctNormalWS);
-					return half4(packedNormalWS, 0.0);
+					outNormalWS = half4(packedNormalWS, 0.0);
 				#else
 					#if defined(_NORMALMAP)
 						#if _NORMAL_DROPOFF_TS
@@ -2166,7 +2336,12 @@ Shader "/Vefects/SH_Vefects_Extra_Grid_01"
 					#else
 						float3 normalWS = WorldNormal;
 					#endif
-					return half4(NormalizeNormalPerPixel(normalWS), 0.0);
+					outNormalWS = half4(NormalizeNormalPerPixel(normalWS), 0.0);
+				#endif
+
+				#ifdef _WRITE_RENDERING_LAYERS
+					uint renderingLayers = GetMeshRenderingLayer();
+					outRenderingLayers = float4( EncodeMeshRenderingLayer( renderingLayers ), 0, 0, 0 );
 				#endif
 			}
 			ENDHLSL
@@ -2187,36 +2362,67 @@ Shader "/Vefects/SH_Vefects_Extra_Grid_01"
 			
 
 			HLSLPROGRAM
-            #define _NORMAL_DROPOFF_TS 1
-            #pragma shader_feature_local _RECEIVE_SHADOWS_OFF
-            #pragma multi_compile_instancing
-            #pragma instancing_options renderinglayer
-            #pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
-            #pragma multi_compile_fog
-            #define ASE_FOG 1
-            #define ASE_SRP_VERSION 120111
 
-            #pragma multi_compile _ DOTS_INSTANCING_ON
+			
+
+			#pragma multi_compile_local_fragment _ALPHATEST_ON
+			#define _NORMAL_DROPOFF_TS 1
+			#pragma shader_feature_local _RECEIVE_SHADOWS_OFF
+			#pragma multi_compile_instancing
+			#pragma instancing_options renderinglayer
+			#pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
+			#pragma multi_compile_fog
+			#define ASE_FOG 1
+			#define ASE_VERSION 19701
+			#define ASE_SRP_VERSION 140007
+
+
+			
 
 			#pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
 			#pragma multi_compile_fragment _ _REFLECTION_PROBE_BLENDING
 			#pragma multi_compile_fragment _ _REFLECTION_PROBE_BOX_PROJECTION
+
+			
 			#pragma multi_compile_fragment _ _SHADOWS_SOFT
+           
+
+			
+
 			#pragma multi_compile_fragment _ _DBUFFER_MRT1 _DBUFFER_MRT2 _DBUFFER_MRT3
-			#pragma multi_compile_fragment _ _LIGHT_LAYERS
+			#pragma multi_compile_fragment _ _GBUFFER_NORMALS_OCT
 			#pragma multi_compile_fragment _ _RENDER_PASS_ENABLED
+      
+			
 
 			#pragma multi_compile _ LIGHTMAP_SHADOW_MIXING
+			#pragma multi_compile _ _MIXED_LIGHTING_SUBTRACTIVE
 			#pragma multi_compile _ SHADOWS_SHADOWMASK
 			#pragma multi_compile _ DIRLIGHTMAP_COMBINED
 			#pragma multi_compile _ LIGHTMAP_ON
 			#pragma multi_compile _ DYNAMICLIGHTMAP_ON
-			#pragma multi_compile_fragment _ _GBUFFER_NORMALS_OCT
+			#pragma multi_compile_fragment _ DEBUG_DISPLAY
 
 			#pragma vertex vert
 			#pragma fragment frag
 
+			#if defined(_SPECULAR_SETUP) && defined(_ASE_LIGHTING_SIMPLE)
+				#define _SPECULAR_COLOR 1
+			#endif
+
 			#define SHADERPASS SHADERPASS_GBUFFER
+
+			
+            #if ASE_SRP_VERSION >=140007
+			#include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl"
+			#endif
+		
+
+			
+			#if ASE_SRP_VERSION >=140007
+			#include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/RenderingLayers.hlsl"
+			#endif
+		
 
 			#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
 			#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Texture.hlsl"
@@ -2224,11 +2430,20 @@ Shader "/Vefects/SH_Vefects_Extra_Grid_01"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Input.hlsl"
 			#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/TextureStack.hlsl"
+
+			
+
+			
+
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Shadows.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ShaderGraphFunctions.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DBuffer.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/ShaderPass.hlsl"
 
+			#if defined(LOD_FADE_CROSSFADE)
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/LODCrossFade.hlsl"
+            #endif
+			
 			#if defined(UNITY_INSTANCING_ENABLED) && defined(_TERRAIN_INSTANCED_PERPIXEL_NORMAL)
 				#define ENABLE_TERRAIN_PERPIXEL_NORMAL
 			#endif
@@ -2479,8 +2694,8 @@ Shader "/Vefects/SH_Vefects_Extra_Grid_01"
 				UNITY_SETUP_INSTANCE_ID(IN);
 				UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(IN);
 
-				#ifdef LOD_FADE_CROSSFADE
-					LODDitheringTransition( IN.positionCS.xyz, unity_LODFade.x );
+				#if defined(LOD_FADE_CROSSFADE)
+					LODFadeCrossFade( IN.positionCS );
 				#endif
 
 				#if defined(ENABLE_TERRAIN_PERPIXEL_NORMAL)
@@ -2637,11 +2852,17 @@ Shader "/Vefects/SH_Vefects_Extra_Grid_01"
 			AlphaToMask Off
 
 			HLSLPROGRAM
-            #define _NORMAL_DROPOFF_TS 1
-            #define ASE_FOG 1
-            #define ASE_SRP_VERSION 120111
 
-            #pragma multi_compile _ DOTS_INSTANCING_ON
+			
+
+			#pragma multi_compile_local_fragment _ALPHATEST_ON
+			#define _NORMAL_DROPOFF_TS 1
+			#define ASE_FOG 1
+			#define ASE_VERSION 19701
+			#define ASE_SRP_VERSION 140007
+
+
+			
 
 			#pragma vertex vert
 			#pragma fragment frag
@@ -2662,7 +2883,19 @@ Shader "/Vefects/SH_Vefects_Extra_Grid_01"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Input.hlsl"
 			#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/TextureStack.hlsl"
+
+			
+
+			
+
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ShaderGraphFunctions.hlsl"
+
+			
+            #if ASE_SRP_VERSION >=140007
+			#include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl"
+			#endif
+		
+
 			#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/ShaderPass.hlsl"
 
 			
@@ -2879,11 +3112,17 @@ Shader "/Vefects/SH_Vefects_Extra_Grid_01"
 			AlphaToMask Off
 
 			HLSLPROGRAM
-            #define _NORMAL_DROPOFF_TS 1
-            #define ASE_FOG 1
-            #define ASE_SRP_VERSION 120111
 
-            #pragma multi_compile _ DOTS_INSTANCING_ON
+			
+
+			#pragma multi_compile_local_fragment _ALPHATEST_ON
+			#define _NORMAL_DROPOFF_TS 1
+			#define ASE_FOG 1
+			#define ASE_VERSION 19701
+			#define ASE_SRP_VERSION 140007
+
+
+			
 
 			#pragma vertex vert
 			#pragma fragment frag
@@ -2904,7 +3143,19 @@ Shader "/Vefects/SH_Vefects_Extra_Grid_01"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Input.hlsl"
 			#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/TextureStack.hlsl"
+
+			
+
+			
+
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ShaderGraphFunctions.hlsl"
+
+			
+            #if ASE_SRP_VERSION >=140007
+			#include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl"
+			#endif
+		
+
 			#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/ShaderPass.hlsl"
 
 			
@@ -3118,12 +3369,12 @@ Shader "/Vefects/SH_Vefects_Extra_Grid_01"
 	Fallback Off
 }
 /*ASEBEGIN
-Version=19603
-Node;AmplifyShaderEditor.SamplerNode;10;-768,0;Inherit;True;Property;_Texture;Texture;0;0;Create;True;0;0;0;False;0;False;-1;7e86780f8818d774781e18cdb159f2f7;7e86780f8818d774781e18cdb159f2f7;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;6;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4;FLOAT3;5
+Version=19701
+Node;AmplifyShaderEditor.SamplerNode;10;-768,0;Inherit;True;Property;_Texture;Texture;0;0;Create;True;0;0;0;False;0;False;-1;None;None;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;6;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4;FLOAT3;5
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;11;-384,0;Inherit;False;2;2;0;COLOR;0,0,0,0;False;1;FLOAT3;0,0,0;False;1;COLOR;0
 Node;AmplifyShaderEditor.ColorNode;22;-384,128;Inherit;False;Property;_Color;Color;1;0;Create;True;0;0;0;False;0;False;0.33,0.33,0.33,0;0,0,0,0;True;True;0;6;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4;FLOAT3;5
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;12;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;ExtraPrePass;0;0;ExtraPrePass;5;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;4;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;UniversalMaterialType=Lit;True;3;True;12;all;0;False;True;1;1;False;;0;False;;0;1;False;;0;False;;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;True;True;True;True;0;False;;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;0;False;False;0;;0;0;Standard;0;False;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;13;0,0;Float;False;True;-1;2;UnityEditor.ShaderGraphLitGUI;0;12;/Vefects/SH_Vefects_Extra_Grid_01;94348b07e5e8bab40bd6c8a1e3df54cd;True;Forward;0;1;Forward;21;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;4;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;UniversalMaterialType=Lit;True;3;True;12;all;0;False;True;1;1;False;;0;False;;1;1;False;;0;False;;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;1;LightMode=UniversalForward;False;False;0;;0;0;Standard;42;Lighting Model;0;0;Workflow;1;0;Surface;0;0;  Refraction Model;0;0;  Blend;0;0;Two Sided;1;0;Fragment Normal Space,InvertActionOnDeselection;0;0;Forward Only;0;0;Transmission;0;0;  Transmission Shadow;0.5,False,;0;Translucency;0;0;  Translucency Strength;1,False,;0;  Normal Distortion;0.5,False,;0;  Scattering;2,False,;0;  Direct;0.9,False,;0;  Ambient;0.1,False,;0;  Shadow;0.5,False,;0;Cast Shadows;1;0;  Use Shadow Threshold;0;0;Receive Shadows;1;0;Receive SSAO;1;0;GPU Instancing;1;0;LOD CrossFade;1;0;Built-in Fog;1;0;_FinalColorxAlpha;0;0;Meta Pass;1;0;Override Baked GI;0;0;Extra Pre Pass;0;0;Tessellation;0;0;  Phong;0;0;  Strength;0.5,False,;0;  Type;0;0;  Tess;16,False,;0;  Min;10,False,;0;  Max;25,False,;0;  Edge Length;16,False,;0;  Max Displacement;25,False,;0;Write Depth;0;0;  Early Z;0;0;Vertex Position,InvertActionOnDeselection;1;0;Debug Display;0;0;Clear Coat;0;0;0;10;False;True;True;True;True;True;True;True;True;True;False;;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;13;0,0;Float;False;True;-1;2;UnityEditor.ShaderGraphLitGUI;0;12;/Vefects/SH_Vefects_Extra_Grid_01;94348b07e5e8bab40bd6c8a1e3df54cd;True;Forward;0;1;Forward;21;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;4;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;UniversalMaterialType=Lit;True;3;True;12;all;0;False;True;1;1;False;;0;False;;1;1;False;;0;False;;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;1;LightMode=UniversalForward;False;False;0;;0;0;Standard;43;Lighting Model;0;0;Workflow;1;0;Surface;0;0;  Refraction Model;0;0;  Blend;0;0;Two Sided;1;0;Alpha Clipping;1;0;  Use Shadow Threshold;0;0;Fragment Normal Space,InvertActionOnDeselection;0;0;Forward Only;0;0;Transmission;0;0;  Transmission Shadow;0.5,False,;0;Translucency;0;0;  Translucency Strength;1,False,;0;  Normal Distortion;0.5,False,;0;  Scattering;2,False,;0;  Direct;0.9,False,;0;  Ambient;0.1,False,;0;  Shadow;0.5,False,;0;Cast Shadows;1;0;Receive Shadows;1;0;Receive SSAO;1;0;GPU Instancing;1;0;LOD CrossFade;1;0;Built-in Fog;1;0;_FinalColorxAlpha;0;0;Meta Pass;1;0;Override Baked GI;0;0;Extra Pre Pass;0;0;Tessellation;0;0;  Phong;0;0;  Strength;0.5,False,;0;  Type;0;0;  Tess;16,False,;0;  Min;10,False,;0;  Max;25,False,;0;  Edge Length;16,False,;0;  Max Displacement;25,False,;0;Write Depth;0;0;  Early Z;0;0;Vertex Position,InvertActionOnDeselection;1;0;Debug Display;0;0;Clear Coat;0;0;0;10;False;True;True;True;True;True;True;True;True;True;False;;False;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;14;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;ShadowCaster;0;2;ShadowCaster;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;4;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;UniversalMaterialType=Lit;True;3;True;12;all;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;False;False;True;False;False;False;False;0;False;;False;False;False;False;False;False;False;False;False;True;1;False;;True;3;False;;False;True;1;LightMode=ShadowCaster;False;False;0;;0;0;Standard;0;False;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;15;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;DepthOnly;0;3;DepthOnly;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;4;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;UniversalMaterialType=Lit;True;3;True;12;all;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;False;False;True;False;False;False;False;0;False;;False;False;False;False;False;False;False;False;False;True;1;False;;False;False;True;1;LightMode=DepthOnly;False;False;0;;0;0;Standard;0;False;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;16;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;Meta;0;4;Meta;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;4;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;UniversalMaterialType=Lit;True;3;True;12;all;0;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;2;False;;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;LightMode=Meta;False;False;0;;0;0;Standard;0;False;0
@@ -3136,4 +3387,4 @@ WireConnection;11;0;10;0
 WireConnection;11;1;22;5
 WireConnection;13;0;11;0
 ASEEND*/
-//CHKSM=B2B3A25670176D08CD86192560F3FA509A8FA070
+//CHKSM=61B92A0568AFCED6EC04ECD698B692D4DA767CC0

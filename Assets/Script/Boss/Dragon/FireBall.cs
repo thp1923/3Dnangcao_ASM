@@ -11,7 +11,9 @@ public class FireBall : MonoBehaviour
     {
         if (other.CompareTag(tagCompare))
         {
-            GameObject instance = GameObject.Instantiate(Explosion, gameObject.transform.position, Quaternion.identity);
+            GameObject instance = GameObject.Instantiate(Explosion, 
+                new Vector3(gameObject.transform.position.x, gameObject.transform.position.y - 0.5f, gameObject.transform.position.z), 
+                Quaternion.Euler(-90, 0, 0));
             Destroy(gameObject, 2f);
         }
     }

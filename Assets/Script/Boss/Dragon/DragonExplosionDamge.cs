@@ -8,11 +8,12 @@ public class DragonExplosionDamge : StatsAttack
     public float radius;
     public LayerMask attackMask;
 
+    public float timerDestroy;
     public float timer;
 
     private void Start()
     {
-        Destroy(gameObject, 4f);
+        Destroy(gameObject, timerDestroy);
         StartCoroutine(ExplosionDamge());
     }
 
