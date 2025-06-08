@@ -24,8 +24,8 @@ namespace StatsManager
         internal int defenseBonus;
         internal int stunResistanceBonus;
 
-        protected int DefenseMax = 2000;
-        protected int StunResistanceMax = 2000;
+        protected int DefenseMax = 2000; // Tối đa phòng thử đạt đc
+        protected int StunResistanceMax = 2000; // Tối đa kháng stun đạt đc
         protected int currentHP;
 
         protected virtual void Start()
