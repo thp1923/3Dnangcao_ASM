@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine.VFX;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class PlayerBuff : MonoBehaviour
 {
@@ -30,10 +31,12 @@ public class PlayerBuff : MonoBehaviour
     public int defBonus;
     public int stunDefBonus;
     public Material defMaterial;
-    public SkinnedMeshRenderer[] skin;
+    public GameObject targetRoot;
+    public List<SkinnedMeshRenderer> skinnedMeshes;
 
     private void Start()
     {
+        Collect();
         atp = GetComponent<AttackDamgePlayer>();
         ptd = GetComponent<PlayerTakeDamge>();
         animator = GetComponent<Animator>();
@@ -44,6 +47,17 @@ public class PlayerBuff : MonoBehaviour
             atkEf.Stop();
             atkEf.GetComponent<Light>().enabled = false;
         }
+    }
+
+    void Collect()
+    {
+        if (targetRoot == null)
+        {
+            return;
+        }
+
+        skinnedMeshes.Clear(); // Xoá dữ liệu cũ tránh lỗi
+        skinnedMeshes.AddRange(targetRoot.GetComponentsInChildren<SkinnedMeshRenderer>());
     }
 
     private void Update()
@@ -82,7 +96,7 @@ public class PlayerBuff : MonoBehaviour
             case ClassPlayer.Def:
                 ptd.stunResistanceBonus += stunDefBonus;
                 ptd.defenseBonus += defBonus;
-                foreach (var renderer in skin)
+                foreach (var renderer in skinnedMeshes)
                 {
                     // Kiểm tra nếu đã có thì không thêm nữa
                     if (System.Array.Exists(renderer.materials, mat => mat == defMaterial))
@@ -123,7 +137,7 @@ public class PlayerBuff : MonoBehaviour
             case ClassPlayer.Def:
                 ptd.stunResistanceBonus -= stunDefBonus;
                 ptd.defenseBonus -= defBonus;
-                foreach (var renderer in skin)
+                foreach (var renderer in skinnedMeshes)
                 {
                     Material[] mats = renderer.materials;
 
