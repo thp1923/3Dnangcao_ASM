@@ -24,9 +24,10 @@ public class LockMouse : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
 
-            //UnlockMove();
             if (Input.GetKeyDown(lockMouseKey))
             {
+                GetComponent<MoveManager>().CheckLockMove(true);
+                GetComponent<MoveManager>().CheckDrag(true);
                 CursorLocked = false;
             }
         }
@@ -34,9 +35,6 @@ public class LockMouse : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            //LockMove();
-            GetComponent<MoveManager>().CheckLockMove(true);
-            GetComponent<MoveManager>().CheckDrag(true);
 
             if (Input.GetKeyDown(lockMouseKey))
             {

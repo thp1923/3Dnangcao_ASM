@@ -94,7 +94,6 @@ public class PlayerAttackController : LockMouse
             {
                 inputRecceived = true;
                 canRecceiveInput = false;
-                GetComponent<PlayerAim>().ClosestEnemy();
             }
             else
             {
