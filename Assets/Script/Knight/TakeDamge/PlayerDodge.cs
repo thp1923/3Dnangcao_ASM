@@ -8,15 +8,12 @@ public class PlayerDodge : MonoBehaviour
     internal bool isDodging = false;
     private Vector3 dodgeDirection;
     private Rigidbody rb;
-
-    private vThirdPersonController controller; // Invector controller
+    private vThirdPersonController controller;
 
     [Header("Dodge Settings")]
     public float dodgeSpeed = 6f;
-
-    public Transform positionToSpawn;
-
     public KeyCode dodgeKey = KeyCode.Space;
+    public Transform positionToSpawn;
 
     [Header("Skinned Mesh Relashed")]
     private SkinnedMeshRenderer[] skinnedMeshRenderers;
@@ -29,11 +26,11 @@ public class PlayerDodge : MonoBehaviour
 
     [Header("Mesh Relashed")]
     public float meshRefreshRate = 0.1f;
-
     public float activeTime = 2f;
     public float meshDestroyDelay = 3f;
 
     private bool isActiveTrail;
+
     private void Start()
     {
         anim = GetComponent<Animator>();
@@ -43,24 +40,43 @@ public class PlayerDodge : MonoBehaviour
 
     private void Update()
     {
-        
+        if (!isDodging && Input.GetKeyDown(dodgeKey))
+        {
+            Vector3 input = controller.input;
+
+            if (controller.isStrafing && input.sqrMagnitude > 0.01f)
+            {
+                Vector2 inputDir = new Vector2(input.x, input.z);
+                Vector2 clampedInput = new Vector2(
+                    inputDir.x != 0 ? Mathf.Sign(inputDir.x) : 0,
+                    inputDir.y != 0 ? Mathf.Sign(inputDir.y) : 0
+                );
+
+                anim.SetFloat("DodgeX", clampedInput.x);
+                anim.SetFloat("DodgeY", clampedInput.y);
+            }
+            else
+            {
+                anim.SetFloat("DodgeX", 0f);
+                anim.SetFloat("DodgeY", 1f); // default forward
+            }
+
+            anim.SetTrigger("Dodge");
+        }
+        // Bắt đầu hiệu ứng trail nếu đang dodge
         if (isDodging && !isActiveTrail)
         {
             isActiveTrail = true;
             StartCoroutine(ActivateTrail(activeTime));
         }
-
-        if (!isDodging && Input.GetKeyDown(dodgeKey))
-        {
-            anim.SetTrigger("Dodge");
-        }
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         if (isDodging)
         {
-            MoveDuringDodge();
+            Vector3 move = dodgeDirection * dodgeSpeed * Time.fixedDeltaTime;
+            rb.MovePosition(rb.position + move);
         }
     }
 
@@ -68,69 +84,62 @@ public class PlayerDodge : MonoBehaviour
     {
         isDodging = true;
 
-        // Hướng cố định khi bắt đầu lăn
-        dodgeDirection = transform.forward.normalized;
+        if (controller.isStrafing)
+        {
+            dodgeDirection = controller.moveDirection.normalized;
+            if (dodgeDirection.sqrMagnitude < 0.01f)
+                dodgeDirection = transform.forward;
+        }
+        else
+        {
+            dodgeDirection = transform.forward;
+        }
 
-        // Khoá di chuyển và xoay của Invector
         controller.lockMovement = true;
         controller.lockRotation = true;
-        
 
-        // Reset lại velocity của Rigidbody
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
     }
 
-    void MoveDuringDodge()
-    {
-        Vector3 move = dodgeDirection * dodgeSpeed * Time.fixedDeltaTime;
-        rb.MovePosition(rb.position + move);
-    }
-
-
-    // Gọi ở cuối animation bằng Event
     public void EndDodge()
     {
         isDodging = false;
 
-        // Bật lại di chuyển và xoay
         controller.lockMovement = false;
         controller.lockRotation = false;
 
-        // Reset lại Rigidbody và velocity
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
     }
 
-
-
-    IEnumerator ActivateTrail(float timeActive)
+    private IEnumerator ActivateTrail(float timeActive)
     {
-        if (!isDodging && GetComponent<PlayerAttackController>().isAttacking) yield return null;
-        while(timeActive > 0)
+        var attackCtrl = GetComponent<PlayerAttackController>();
+        if (!isDodging || (attackCtrl != null && attackCtrl.isAttacking))
+            yield break;
+
+        while (timeActive > 0)
         {
             timeActive -= meshRefreshRate;
 
             if (skinnedMeshRenderers == null)
                 skinnedMeshRenderers = GetComponentsInChildren<SkinnedMeshRenderer>();
 
-            for(int i = 0; i<skinnedMeshRenderers.Length; i++)
+            foreach (var smr in skinnedMeshRenderers)
             {
-                GameObject gObj = new GameObject();
+                GameObject gObj = new GameObject("TrailMesh");
                 gObj.transform.SetLocalPositionAndRotation(positionToSpawn.position, positionToSpawn.rotation);
 
                 MeshRenderer mr = gObj.AddComponent<MeshRenderer>();
                 MeshFilter mf = gObj.AddComponent<MeshFilter>();
-
                 Mesh mesh = new Mesh();
-                skinnedMeshRenderers[i].BakeMesh(mesh);
 
+                smr.BakeMesh(mesh);
                 mf.mesh = mesh;
-
                 mr.material = mat;
 
                 StartCoroutine(AnimateMaterialFloat(mr.material, 0, shaderVarRate, shaderVarRefreshRate));
-
                 Destroy(gObj, meshDestroyDelay);
             }
 
@@ -140,11 +149,11 @@ public class PlayerDodge : MonoBehaviour
         isActiveTrail = false;
     }
 
-    IEnumerator AnimateMaterialFloat(Material mat, float goal, float rate, float refreshRate)
+    private IEnumerator AnimateMaterialFloat(Material mat, float goal, float rate, float refreshRate)
     {
         float valueToAnimate = mat.GetFloat(shaderVarRef);
 
-        while(valueToAnimate > goal)
+        while (valueToAnimate > goal)
         {
             valueToAnimate -= rate;
             mat.SetFloat(shaderVarRef, valueToAnimate);

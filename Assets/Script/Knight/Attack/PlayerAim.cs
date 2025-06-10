@@ -1,5 +1,4 @@
 ﻿using Invector.vCharacterController;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,14 +12,22 @@ public class PlayerAim : MonoBehaviour
     public Transform camTransLock;
     public float rotationSpeedCharacter = 5f;
     public float rotationSpeedCamera = 7f;
+    public float cameraMoveSpeed = 5f;
+    Animator animator;
 
     private List<GameObject> enemiesList = new List<GameObject>();
     private GameObject closestEnemy;
-    private bool lockOn;
+    private bool lockOn = false;
+    private bool transitioningFromLock = false;
     private vThirdPersonController tcp;
+
+    public GameObject lockIcon;
+    Transform child;
 
     void Start()
     {
+        lockIcon.SetActive(false);
+        animator = GetComponent<Animator>();
         tcp = GetComponent<vThirdPersonController>();
         GameObject[] enemiesInScene = GameObject.FindGameObjectsWithTag("Enemy");
         foreach (GameObject enemy in enemiesInScene)
@@ -42,11 +49,13 @@ public class PlayerAim : MonoBehaviour
                 if (lockOn)
                 {
                     closestEnemy = null;
-                    ClosestEnemy(); // lock vào mục tiêu gần nhất
+                    ClosestEnemy();
+                    transitioningFromLock = false;
                 }
                 else
                 {
                     closestEnemy = null;
+                    transitioningFromLock = true;
                 }
             }
 
@@ -56,20 +65,45 @@ public class PlayerAim : MonoBehaviour
 
                 if (horizontalMouse > 2f)
                 {
-                    SwitchTarget(true); // sang phải
+                    SwitchTarget(true);
                 }
                 else if (horizontalMouse < -2f)
                 {
-                    SwitchTarget(false); // sang trái
+                    SwitchTarget(false);
                 }
             }
         }
         else
         {
-            lockOn = false;
-            closestEnemy = null;
-            tcp.Strafe();
+            if (lockOn)
+            {
+                lockOn = false;
+                closestEnemy = null;
+                transitioningFromLock = true;
+            }
+            if (animator.GetBool("IsStrafing"))
+            {
+                tcp.Strafe(); // giữ cho nhân vật vẫn hoạt động bình thường khi không lock
+            }
         }
+        Icon();
+    }
+
+    void Icon()
+    {
+        if (!lockOn || closestEnemy == null)
+        {
+            lockIcon.SetActive(false);
+            return;
+        }
+        child = closestEnemy.transform.Find("LockPoint");
+        if (child == null)
+        {
+            lockIcon.SetActive(false);
+            return;
+        }
+        lockIcon.transform.position = child.position;
+        lockIcon.SetActive(true);
     }
 
     void LateUpdate()
@@ -79,19 +113,52 @@ public class PlayerAim : MonoBehaviour
             Vector3 directionToEnemy = (closestEnemy.transform.position - transform.position).normalized;
             directionToEnemy.y = 0;
 
+
             // Xoay nhân vật mượt
             Quaternion targetRotation = Quaternion.LookRotation(directionToEnemy);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeedCharacter * Time.deltaTime);
 
+            // Di chuyển camera đến vị trí lock mượt
+            cam.transform.position = Vector3.MoveTowards(
+                cam.transform.position,
+                camTransLock.position,
+                cameraMoveSpeed * Time.deltaTime
+            );
+
             // Xoay camera mượt
-            cam.transform.position = camTransLock.position;
             Quaternion camTargetRotation = Quaternion.LookRotation(directionToEnemy);
             cam.transform.rotation = Quaternion.Slerp(cam.transform.rotation, camTargetRotation, rotationSpeedCamera * Time.deltaTime);
 
             cam.GetComponent<vThirdPersonCamera>().target = null;
         }
+        else if (transitioningFromLock)
+        {
+            // Vị trí camera mặc định
+            Vector3 playerViewOffset = transform.position + new Vector3(0, 1.8f, -3f); // điều chỉnh theo góc mặc định
+            cam.transform.position = Vector3.MoveTowards(
+                cam.transform.position,
+                playerViewOffset,
+                cameraMoveSpeed * Time.deltaTime
+            );
+
+            // === Cập nhật: Xoay mượt camera để nhìn về phía nhân vật ===
+            Vector3 lookDirection = (transform.position + Vector3.up * 1.5f) - cam.transform.position;
+            Quaternion camTargetRotation = Quaternion.LookRotation(lookDirection.normalized);
+            cam.transform.rotation = Quaternion.Slerp(cam.transform.rotation, camTargetRotation, rotationSpeedCamera * Time.deltaTime);
+
+            if (Vector3.Distance(cam.transform.position, playerViewOffset) < 0.1f)
+            {
+                cam.GetComponent<vThirdPersonCamera>().target = transform;
+                transitioningFromLock = false;
+            }
+            else
+            {
+                cam.GetComponent<vThirdPersonCamera>().target = null;
+            }
+        }
         else
         {
+            // Trạng thái bình thường ban đầu
             cam.GetComponent<vThirdPersonCamera>().target = transform;
         }
     }
@@ -118,6 +185,7 @@ public class PlayerAim : MonoBehaviour
                 closestEnemy = enemy;
             }
         }
+        
     }
 
     private void SwitchTarget(bool right)
@@ -147,6 +215,7 @@ public class PlayerAim : MonoBehaviour
         {
             closestEnemy = bestTarget;
         }
+        
     }
 
     public void RemoveEnemy()
