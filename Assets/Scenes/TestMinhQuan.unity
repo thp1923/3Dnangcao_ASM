@@ -389,7 +389,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MaxHP: 70000
-  Defense: 3
+  Defense: 500
   StunResistance: 100000
   HpSlider: {fileID: 953938276}
   type: 0
@@ -2913,8 +2913,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.38818803, y: 0.73171, z: 0.58042127}
-  m_Center: {x: -0.036441047, y: 0.22299692, z: -0.007077598}
+  m_Size: {x: 0.55, y: 1.21, z: 0.94}
+  m_Center: {x: -0.03644094, y: 0.28497478, z: -0.007077606}
 --- !u!114 &428780123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2941,7 +2941,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MaxHP: 1000
-  Defense: 0
+  Defense: 500
   StunResistance: 10000
   HpSlider: {fileID: 910655893}
   type: 1
@@ -6986,6 +6986,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   staminaLost: 1
   timeLostStaminaRun: 0.2
+  sprint: 304
 --- !u!114 &994471750
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7740,7 +7741,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MaxHP: 1000
-  Defense: 0
+  Defense: 500
   StunResistance: 10000
   HpSlider: {fileID: 910655893}
   type: 1
@@ -8237,8 +8238,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.9768385, y: 0.5227031, z: 0.5682537}
-  m_Center: {x: -0.21502735, y: -0.0022529296, z: 0.010121626}
+  m_Size: {x: 0.97683847, y: 0.7063908, z: 0.72405857}
+  m_Center: {x: -0.21502686, y: -0.0940963, z: 0.017644318}
 --- !u!114 &1120230056
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8265,7 +8266,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MaxHP: 1000
-  Defense: 0
+  Defense: 500
   StunResistance: 10000
   HpSlider: {fileID: 910655893}
   type: 1
@@ -10218,6 +10219,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   staminaLost: 1
   timeLostStaminaRun: 0
+  sprint: 304
 --- !u!114 &1310050729
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14902,7 +14904,7 @@ PrefabInstance:
     - target: {fileID: 2838697689995617995, guid: 591077b27f50d3e4c80d7cf86b30c11d,
         type: 3}
       propertyPath: m_Materials.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2838697689995617995, guid: 591077b27f50d3e4c80d7cf86b30c11d,
         type: 3}
@@ -15054,6 +15056,21 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -0
       objectReference: {fileID: 0}
+    - target: {fileID: 4589320911179667847, guid: 591077b27f50d3e4c80d7cf86b30c11d,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.017
+      objectReference: {fileID: 0}
+    - target: {fileID: 4589320911179667847, guid: 591077b27f50d3e4c80d7cf86b30c11d,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.266
+      objectReference: {fileID: 0}
+    - target: {fileID: 4589320911179667847, guid: 591077b27f50d3e4c80d7cf86b30c11d,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.006
+      objectReference: {fileID: 0}
     - target: {fileID: 5768443442535568537, guid: 591077b27f50d3e4c80d7cf86b30c11d,
         type: 3}
       propertyPath: m_IsActive
@@ -15084,6 +15101,11 @@ PrefabInstance:
       propertyPath: audioSource
       value: 
       objectReference: {fileID: 1947456736}
+    - target: {fileID: 8642668807133764912, guid: 591077b27f50d3e4c80d7cf86b30c11d,
+        type: 3}
+      propertyPath: hitLayer.m_Bits
+      value: 64
+      objectReference: {fileID: 0}
     - target: {fileID: 8887182149420816291, guid: 591077b27f50d3e4c80d7cf86b30c11d,
         type: 3}
       propertyPath: m_Enabled
@@ -19153,7 +19175,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.38818806, y: 0.8556668, z: 0.58042127}
+  m_Size: {x: 0.55, y: 1.21, z: 0.94}
   m_Center: {x: -0.03644094, y: 0.28497478, z: -0.007077606}
 --- !u!114 &1739991747
 MonoBehaviour:
@@ -19181,7 +19203,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MaxHP: 1000
-  Defense: 0
+  Defense: 500
   StunResistance: 10000
   HpSlider: {fileID: 910655893}
   type: 1
@@ -21133,8 +21155,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.9768385, y: 0.43294263, z: 0.5682537}
-  m_Center: {x: -0.21502733, y: -0.047133192, z: 0.010121636}
+  m_Size: {x: 1.2837908, y: 0.43294442, z: 0.8148413}
+  m_Center: {x: -0.368504, y: -0.047133766, z: 0.026425611}
 --- !u!114 &2081164883
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21161,8 +21183,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MaxHP: 1000
-  Defense: 0
-  StunResistance: 1000
+  Defense: 500
+  StunResistance: 200000
   HpSlider: {fileID: 910655893}
   type: 1
   me: {fileID: 0}
