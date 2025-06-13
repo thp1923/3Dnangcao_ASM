@@ -284,7 +284,7 @@ Transform:
   m_GameObject: {fileID: 66423114}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 116.9, y: -0.41, z: 113.2}
+  m_LocalPosition: {x: 116.9, y: 0.14, z: 113.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -347,7 +347,7 @@ Transform:
   m_GameObject: {fileID: 466369985}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 92.1, y: -0.41, z: 113.2}
+  m_LocalPosition: {x: 92.1, y: 0.8, z: 113.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -483,7 +483,7 @@ Transform:
   m_GameObject: {fileID: 1129811213}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 149.7, y: -0.7, z: 165.9}
+  m_LocalPosition: {x: 149.7, y: 1.8, z: 165.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -955,6 +955,16 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 238779617346510997, guid: 4363792ba60c0f04694d96bb00f946e8,
         type: 3}
+      propertyPath: playerMask.m_Bits
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 238779617346510997, guid: 4363792ba60c0f04694d96bb00f946e8,
+        type: 3}
+      propertyPath: obstacleMask.m_Bits
+      value: 2048
+      objectReference: {fileID: 0}
+    - target: {fileID: 238779617346510997, guid: 4363792ba60c0f04694d96bb00f946e8,
+        type: 3}
       propertyPath: waypoints.Array.data[0]
       value: 
       objectReference: {fileID: 1129811214}
@@ -980,8 +990,33 @@ PrefabInstance:
       objectReference: {fileID: 9100000, guid: 7cdc51ffb41f7cd4ba6f2ac198cd7d8c, type: 2}
     - target: {fileID: 4645461678854306115, guid: 4363792ba60c0f04694d96bb00f946e8,
         type: 3}
+      propertyPath: m_UpdateMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4645461678854306115, guid: 4363792ba60c0f04694d96bb00f946e8,
+        type: 3}
+      propertyPath: m_CullingMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4645461678854306115, guid: 4363792ba60c0f04694d96bb00f946e8,
+        type: 3}
       propertyPath: m_WarningMessage
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4645461678854306115, guid: 4363792ba60c0f04694d96bb00f946e8,
+        type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4895275301775574690, guid: 4363792ba60c0f04694d96bb00f946e8,
+        type: 3}
+      propertyPath: m_Mass
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4895275301775574690, guid: 4363792ba60c0f04694d96bb00f946e8,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 116
       objectReference: {fileID: 0}
     - target: {fileID: 5409598371368649955, guid: 4363792ba60c0f04694d96bb00f946e8,
         type: 3}
@@ -991,7 +1026,7 @@ PrefabInstance:
     - target: {fileID: 5409598371368649955, guid: 4363792ba60c0f04694d96bb00f946e8,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.756
+      value: 0.09
       objectReference: {fileID: 0}
     - target: {fileID: 5409598371368649955, guid: 4363792ba60c0f04694d96bb00f946e8,
         type: 3}
