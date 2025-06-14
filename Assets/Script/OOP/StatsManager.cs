@@ -41,8 +41,8 @@ namespace StatsManager
         public virtual void TakeDamge(int damge, int stunDamge, int trueDamge)
         {
             int Damge = Mathf.FloorToInt(damge 
-                * (1 - Mathf.Clamp((Defense + defenseBonus), 0, DefenseMax)
-                * (1 - Mathf.Clamp((StunResistance + stunResistanceBonus), 0, StunResistanceMax) / StunResistanceMax)/ 2500));
+                * (1 - Mathf.Clamp(Defense + defenseBonus, 0, DefenseMax)
+                * (1 - Mathf.Clamp(StunResistance + stunResistanceBonus, 0, StunResistanceMax) / StunResistanceMax)/ 2500));
             Damge = Mathf.Max(Damge, 1); // luôn gây damge ít nhất là 1
             currentHP -= Damge + trueDamge;
             HpSlider.value = currentHP;
@@ -72,7 +72,7 @@ namespace StatsManager
             int damge = Mathf.FloorToInt((BaseATK + atkBonus) * (ATK[attackNumber]/100));
             if(Random.Range(0, 1f) <= critRate)
             {
-                atk = Mathf.FloorToInt(damge * (1f + critDamge));
+                atk = Mathf.FloorToInt(damge * (1f + (critDamge)/100));
             }
             else
             {
