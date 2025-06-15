@@ -27,7 +27,11 @@ public class EnemyTakeDamge : StatsAlive
         switch (type)
         {
             case TypeTakeDamge.Only:
-                base.TakeDamge(damge, stunDamge, trueDamge);    
+                base.TakeDamge(damge, stunDamge, trueDamge);  
+                if(stunDamge > StunResistance)
+                {
+                    aim.SetTrigger("Hit");
+                }
                 break;
             case TypeTakeDamge.Branch:
                 GetComponent<BrandHpEnemy>().TakeDam(damge, stunDamge, trueDamge);
@@ -45,7 +49,7 @@ public class EnemyTakeDamge : StatsAlive
 
     void Death()
     {
-        FindObjectOfType<PlayerAim>().RemoveEnemy();
+        FindObjectOfType<PlayerAim>().RemoveEnemy(gameObject);
         foreach (GameObject items in itemsDrop)
         {
             Instantiate(items, gameObject.transform.position + new Vector3(Random.Range(-1f, 1f), 1, Random.Range(-1f, 1f)), Quaternion.identity);

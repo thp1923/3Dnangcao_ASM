@@ -23,6 +23,7 @@ public class PlayerBuff : MonoBehaviour
     float _CD;
     [Header("--------Atk--------")]
     public int atkBonus;
+    public int stunDamgeBonus;
     public ParticleSystem[] attackEffect;
     public VisualEffect effect;
     public Color colorEffect;
@@ -86,6 +87,7 @@ public class PlayerBuff : MonoBehaviour
         {
             case ClassPlayer.Atk:
                 atp.atkBonus += atkBonus;
+                atp.stunDamgeBonus += stunDamgeBonus;
                 effect.SetVector4("Color", (Vector4)colorEffect);
                 foreach (var atkEf in attackEffect)
                 {
@@ -127,6 +129,7 @@ public class PlayerBuff : MonoBehaviour
         {
             case ClassPlayer.Atk:
                 atp.atkBonus -= atkBonus;
+                atp.stunDamgeBonus -= stunDamgeBonus;
                 effect.SetVector4("Color", (Vector4)currentColor);
                 foreach (var atkEf in attackEffect)
                 {

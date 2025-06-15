@@ -65,6 +65,7 @@ namespace StatsManager
         #endregion
 
         internal int atkBonus;
+        internal int stunDamgeBonus;
         protected int atk;
 
         public virtual void Attack(int attackNumber)
