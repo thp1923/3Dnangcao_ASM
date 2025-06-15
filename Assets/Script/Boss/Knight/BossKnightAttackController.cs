@@ -32,13 +32,18 @@ public class BossKnightAttackController : MonoBehaviour
     }
     private void OnEnable()
     {
+        // Đảm bảo các component được gán (vì OnEnable có thể chạy trước Start)
+        if (agent == null) agent = GetComponent<NavMeshAgent>();
+        if (animator == null) animator = GetComponent<Animator>();
+
         if (hasFired) return;
 
         Collider[] hits = Physics.OverlapSphere(transform.position, detectRadius, playerLayer);
         if (hits.Length > 0)
         {
             int index = GetRandomIndex();
-            animator.SetTrigger(triggers[index].triggerName);
+            if (triggers.Length > 0 && index < triggers.Length)
+                animator.SetTrigger(triggers[index].triggerName);
             hasFired = true;
         }
         else
@@ -98,10 +103,15 @@ public class BossKnightAttackController : MonoBehaviour
     {
         hasFired = false;
         hasUpdate = false;
+
+        if (agent == null) agent = GetComponent<NavMeshAgent>();
+        if (animator == null) animator = GetComponent<Animator>();
+
         agent.enabled = true;
         animator.SetBool("IsMoving", true);
-        GetComponent<BossKnightMoveAI>().enabled = true;
-        int index = GetRandomIndex();
-        animator.ResetTrigger(triggers[index].triggerName);
+
+        var moveAI = GetComponent<BossKnightMoveAI>();
+        if (moveAI != null)
+            moveAI.enabled = true;
     }
 }

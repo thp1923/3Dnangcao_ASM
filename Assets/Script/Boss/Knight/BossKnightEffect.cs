@@ -6,10 +6,13 @@ public class BossKnightEffect : MonoBehaviour
 {
     public ParticleSystem Fire;
     public Transform firePoint;
+
+    public GameObject FireExplosion;
     void Start()
     {
         Fire.Stop();
         Fire.GetComponentInChildren<Light>().enabled = false;
+        FireExplosion.SetActive(false);
     }
 
     // Update is called once per frame
@@ -31,5 +34,10 @@ public class BossKnightEffect : MonoBehaviour
         yield return new WaitForSeconds(4f);
         Fire.Stop();
         Fire.GetComponentInChildren<Light>().enabled = false;
+    }
+
+    public void ExplosionFire()
+    {
+        FireExplosion.SetActive(true);
     }
 }

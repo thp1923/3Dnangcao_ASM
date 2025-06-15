@@ -1,18 +1,29 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using StatsManager;
 
-public class AttackDamgeBossKnight : MonoBehaviour
+public class AttackDamgeBossKnight : StatsAttack
 {
-    // Start is called before the first frame update
-    void Start()
+    public Transform pointAttack;
+    public Vector3 attackRange;
+    public LayerMask attackMask;
+
+    public override void Attack(int attackNumber)
     {
-        
+        base.Attack(attackNumber);
+        Attack1(attackNumber);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Attack1(int attackNum)
     {
-        
+        Collider[] colInfo = Physics.OverlapBox(pointAttack.position, attackRange, Quaternion.identity, attackMask);
+        foreach (Collider player in colInfo)
+        {
+            player.GetComponent<PlayerTakeDamge>().TakeDamge(atk, (stunDamge[attackNum] + stunDamgeBonus), 0);
+        }
+    }
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireCube(pointAttack.position, attackRange);
     }
 }
