@@ -29,49 +29,81 @@ public class GameJoltManager : MonoBehaviour
 
     private void Awake()
     {
-        // Build mapping
         trophyMap = new Dictionary<TrophyType, int>();
-        foreach (var e in trophyEntries)
+        foreach (var entry in trophyEntries)
         {
-            trophyMap[e.type] = e.id;
+            trophyMap[entry.type] = entry.id;
         }
     }
 
     private void Start()
     {
-        // Auto sign-in
-        string u = PlayerPrefs.GetString(USERNAME_KEY, "");
-        string t = PlayerPrefs.GetString(TOKEN_KEY, "");
-        if (!string.IsNullOrEmpty(u) && !string.IsNullOrEmpty(t))
-        {
-            var user = new User(u, t);
-            user.SignIn(success => {
-                if (success)
-                {
-                    GameJoltAPI.Instance.CurrentUser = user;
-                    Debug.Log($"Signed in: {user.Name}");
-                }
-                else ShowSignInUI();
-            });
-        }
-        else ShowSignInUI();
+        TryAutoLogin();
     }
 
-    public void ShowSignInUI()
+    private void TryAutoLogin()
     {
-        GameJoltUI.Instance.ShowSignIn(
-            signInSuccess => {
+        string savedUsername = PlayerPrefs.GetString(USERNAME_KEY, "");
+        string savedToken = PlayerPrefs.GetString(TOKEN_KEY, "");
+
+        if (!string.IsNullOrEmpty(savedUsername) && !string.IsNullOrEmpty(savedToken))
+        {
+            var user = new User(savedUsername, savedToken);
+            user.SignIn(signInSuccess =>
+            {
                 if (signInSuccess)
                 {
-                    var cur = GameJoltAPI.Instance.CurrentUser;
-                    PlayerPrefs.SetString(USERNAME_KEY, cur.Name);
-                    PlayerPrefs.SetString(TOKEN_KEY, cur.Token);
-                    PlayerPrefs.Save();
-                    Debug.Log($"Signed in: {cur.Name}");
+                    GameJoltAPI.Instance.CurrentUser = user;
+                    Debug.Log("Auto-signed in to Game Jolt as: " + user.Name);
                 }
-                else Debug.LogWarning("Sign-in failed or canceled");
-            }
-        );
+                else
+                {
+#if UNITY_EDITOR
+                    Debug.Log("Auto login failed. Showing Game Jolt login UI (Editor only).");
+                    GameJolt.UI.GameJoltUI.Instance.ShowSignIn(result =>
+                    {
+                        if (result)
+                        {
+                            var current = GameJoltAPI.Instance.CurrentUser;
+                            PlayerPrefs.SetString(USERNAME_KEY, current.Name);
+                            PlayerPrefs.SetString(TOKEN_KEY, current.Token);
+                            PlayerPrefs.Save();
+                            Debug.Log("Manually signed in as: " + current.Name);
+                        }
+                        else
+                        {
+                            Debug.LogWarning("Manual login canceled or failed.");
+                        }
+                    });
+#else
+                Debug.Log("Auto login failed. Skipping Game Jolt login in build.");
+#endif
+                }
+            });
+        }
+        else
+        {
+#if UNITY_EDITOR
+            Debug.Log("No saved credentials. Showing login UI (Editor only).");
+            GameJolt.UI.GameJoltUI.Instance.ShowSignIn(result =>
+            {
+                if (result)
+                {
+                    var current = GameJoltAPI.Instance.CurrentUser;
+                    PlayerPrefs.SetString(USERNAME_KEY, current.Name);
+                    PlayerPrefs.SetString(TOKEN_KEY, current.Token);
+                    PlayerPrefs.Save();
+                    Debug.Log("Manually signed in as: " + current.Name);
+                }
+                else
+                {
+                    Debug.LogWarning("Manual login canceled or failed.");
+                }
+            });
+#else
+        Debug.Log("No credentials. Skipping Game Jolt login in build.");
+#endif
+        }
     }
     #region Trophies
     public void UnlockTrophy(TrophyType type)
@@ -83,7 +115,7 @@ public class GameJoltManager : MonoBehaviour
         }
         if (!trophyMap.TryGetValue(type, out var id))
         {
-            Debug.LogError($"No ID mapped for TrophyType.{type}");
+            Debug.LogError($"No Trophy ID for TrophyType.{type}");
             return;
         }
         // Use TryUnlock to prevent duplicate UI notifications
