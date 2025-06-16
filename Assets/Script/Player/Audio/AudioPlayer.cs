@@ -5,14 +5,33 @@ public class AudioPlayer : MonoBehaviour
 {
     public AudioSource source;
     public AudioClip[] clipStep;
+    public AudioSource attackSource;
+    public AudioClip[] attackClipNormal;
+    public AudioClip[] attackClipFire;
     Animator animator;
 
+    internal bool isBuff;
+
+    int pos;
     private void Start()
     {
         animator = GetComponent<Animator>();
     }
 
-    int pos;
+    public void AttackPlaySource(int index)
+    {
+        if (!isBuff)
+        {
+            if (attackClipNormal == null) return;
+            attackSource.PlayOneShot(attackClipNormal[index]);
+        }
+        else
+        {
+            if (attackClipFire == null) return;
+            attackSource.PlayOneShot(attackClipFire[index]);
+        }
+    }
+
     public void playSourceWalk()
     {
         if (animator.GetFloat("InputMagnitude") < 0.5f || GetComponent<PlayerTakeDamge>().noTakeDamge) return;

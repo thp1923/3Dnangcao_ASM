@@ -47,7 +47,6 @@ public class BossKnightMoveAI : MonoBehaviour
 
         if (!playerInRange)
         {
-            agent.isStopped = true;
             animator.SetBool("IsMoving", false);
             animator.SetFloat("InputX", 0f, 0.1f, Time.deltaTime);
             animator.SetFloat("InputY", 0f, 0.1f, Time.deltaTime);

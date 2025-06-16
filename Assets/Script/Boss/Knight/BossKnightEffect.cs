@@ -6,6 +6,8 @@ public class BossKnightEffect : MonoBehaviour
 {
     public ParticleSystem Fire;
     public Transform firePoint;
+    public AudioSource source;
+    public AudioClip clip;
 
     public GameObject FireExplosion;
     void Start()
@@ -26,6 +28,7 @@ public class BossKnightEffect : MonoBehaviour
         Fire.gameObject.transform.position = new Vector3(firePoint.position.x, Fire.gameObject.transform.position.y, firePoint.position.z);
         Fire.Play();
         Fire.GetComponentInChildren<Light>().enabled = true;
+        source.PlayOneShot(clip);
         StartCoroutine(FireOff());
     }
 
