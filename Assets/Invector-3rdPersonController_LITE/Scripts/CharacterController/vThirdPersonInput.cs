@@ -124,7 +124,8 @@ namespace Invector.vCharacterController
 
         protected virtual void SprintInput()
         {
-            if (GetComponent<PlayerAttackController>().isAttacking)
+            if (GetComponent<PlayerAttackController>().isAttacking
+                && GetComponent<Stamina>().stamina < GetComponent<MoveManager>().staminaLost)
             {
                 cc.Sprint(false);
                 return;
