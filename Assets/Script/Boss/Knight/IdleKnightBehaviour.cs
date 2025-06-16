@@ -20,7 +20,6 @@ public class IdleKnightBehaviour : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.GetComponent<DragonRotation>().enabled = false;
-        animator.GetComponent<BossKnightAttackController>().enabled = false;
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

@@ -1842,8 +1842,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 3527097831678865367}
   - {fileID: 7332624686768733133}
+  - {fileID: 3527097831678865367}
   m_Father: {fileID: 34600950878455596}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
@@ -4614,6 +4614,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: b75441463f306a84da6efbcb98e48a9e, type: 3}
   - {fileID: 8300000, guid: bef7bae22ec8dbd4fba3d61d63c0d2a1, type: 3}
   - {fileID: 8300000, guid: c0805ffee5bd213488098602cc60bb51, type: 3}
+  attackSource: {fileID: 0}
+  attackClipNormal: []
+  attackClipFire: []
 --- !u!114 &7562600727680785909
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4708,6 +4711,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   classPlayer: 1
+  buffSource: {fileID: 0}
+  fireLoop: {fileID: 0}
   BuffKey: 101
   CD: 20
   atkBonus: 150
@@ -4719,11 +4724,13 @@ MonoBehaviour:
   - {fileID: 4440662246653215716}
   effect: {fileID: 1121074024957714817}
   colorEffect: {r: 1, g: 0.39090377, b: 0, a: 1}
+  atkClip: {fileID: 0}
   defBonus: 200
   stunDefBonus: 100
   defMaterial: {fileID: 2100000, guid: fff43cc35cec84641a5ca5f3d099b90a, type: 2}
   targetRoot: {fileID: 3320078568984383761}
   skinnedMeshes: []
+  defClip: {fileID: 0}
 --- !u!1 &4821394724298926731
 GameObject:
   m_ObjectHideFlags: 0
@@ -5179,8 +5186,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 924592707475147260}
   - {fileID: 761231461188969789}
+  - {fileID: 924592707475147260}
   m_Father: {fileID: 34600950878455596}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}

@@ -1,5 +1,7 @@
 using StatsManager;
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class EnemyTakeDamge : StatsAlive
@@ -7,6 +9,7 @@ public class EnemyTakeDamge : StatsAlive
     Animator aim;
     Audio audioE;
     public GameObject me;
+    public TextMeshProUGUI damPopUp;
     [Header("---------Items Drop-----------")]
     public List<GameObject> itemsDrop;
     // Start is called before the first frame update
@@ -28,6 +31,8 @@ public class EnemyTakeDamge : StatsAlive
         {
             case TypeTakeDamge.Only:
                 base.TakeDamge(damge, stunDamge, trueDamge);  
+                damPopUp.text = DamPopUp.ToString();
+                StartCoroutine(DamgePopUp());
                 if(stunDamge > StunResistance)
                 {
                     aim.SetTrigger("Hit");
@@ -45,7 +50,11 @@ public class EnemyTakeDamge : StatsAlive
         }
     }
 
-
+    IEnumerator DamgePopUp()
+    {
+        yield return new WaitForSeconds(0.5f);
+        damPopUp.text = null;
+    }
 
     void Death()
     {

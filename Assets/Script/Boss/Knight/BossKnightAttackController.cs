@@ -18,22 +18,17 @@ public class BossKnightAttackController : MonoBehaviour
     public WeightedTrigger[] triggers;
 
     private bool hasFired = false;
-    private bool hasUpdate = false;
 
-    private NavMeshAgent agent;
     private Animator animator;
 
     // Start is called before the first frame update
     void Start()
     {
-        agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         this.enabled = false;
     }
     private void OnEnable()
     {
-        // Đảm bảo các component được gán (vì OnEnable có thể chạy trước Start)
-        if (agent == null) agent = GetComponent<NavMeshAgent>();
         if (animator == null) animator = GetComponent<Animator>();
 
         if (hasFired) return;
@@ -46,31 +41,11 @@ public class BossKnightAttackController : MonoBehaviour
                 animator.SetTrigger(triggers[index].triggerName);
             hasFired = true;
         }
-        else
-        {
-            StartCoroutine(CheckAttack());
-        }
-    }
-
-    private void Update()
-    {
-        if (hasFired && !hasUpdate)
-        {
-            hasUpdate = true;
-            StartCoroutine(CheckAttack());
-        }
     }
 
     private void OnDisable()
     {
         ResetTrigger();
-    }
-
-    IEnumerator CheckAttack()
-    {
-        yield return new WaitForSeconds(3f);
-        GetComponent<BossKnightAttackController>().enabled = false;
-
     }
 
     private void OnDrawGizmosSelected()
@@ -102,16 +77,5 @@ public class BossKnightAttackController : MonoBehaviour
     public void ResetTrigger()
     {
         hasFired = false;
-        hasUpdate = false;
-
-        if (agent == null) agent = GetComponent<NavMeshAgent>();
-        if (animator == null) animator = GetComponent<Animator>();
-
-        agent.enabled = true;
-        animator.SetBool("IsMoving", true);
-
-        var moveAI = GetComponent<BossKnightMoveAI>();
-        if (moveAI != null)
-            moveAI.enabled = true;
     }
 }

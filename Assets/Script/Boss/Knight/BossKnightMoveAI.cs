@@ -32,17 +32,20 @@ public class BossKnightMoveAI : MonoBehaviour
         agent.updateRotation = false; // tự xoay bằng code
     }
 
+    private void OnEnable()
+    {
+        agent.enabled = true;
+    }
+
     private void OnDisable()
     {
         agent.enabled = false;
         playerInRange = false;
-        animator.SetBool("IsMoving", false);
-        GetComponent<BossKnightAttackController>().enabled = true;
     }
 
     void Update()
     {
-        
+
         DetectPlayer();
 
         if (!playerInRange)
@@ -73,13 +76,14 @@ public class BossKnightMoveAI : MonoBehaviour
 
     void DetectPlayer()
     {
-        Collider[] Range = Physics.OverlapSphere(transform.position, attackRange, playerLayer);
-        if(Range.Length > 0)
-        {
-            GetComponent<BossKnightMoveAI>().enabled = false;
-        }
         Collider[] hits = Physics.OverlapSphere(transform.position, detectRadius, playerLayer);
         playerInRange = hits.Length > 0;
+        Collider[] Range = Physics.OverlapSphere(transform.position, attackRange, playerLayer);
+        if (Range.Length > 0)
+        {
+            GetComponent<BossKnightAttackController>().enabled = true;
+            playerInRange = false;
+        }
     }
 
     void StrafeAroundPlayer()
@@ -100,7 +104,7 @@ public class BossKnightMoveAI : MonoBehaviour
 
     void ChasePlayer()
     {
-        if(!GetComponent<BossKnightMoveAI>().enabled) return;
+        if (!GetComponent<BossKnightMoveAI>().enabled) return;
         agent.SetDestination(player.position);
     }
 

@@ -34,7 +34,7 @@ public class AudioPlayer : MonoBehaviour
 
     public void playSourceWalk()
     {
-        if (animator.GetFloat("InputMagnitude") < 0.5f || GetComponent<PlayerTakeDamge>().noTakeDamge) return;
+        if (GetComponent<PlayerTakeDamge>().noTakeDamge) return;
         if (clipStep.Length == 0) return; // Kiểm tra danh sách có clip không
 
         source.PlayOneShot(clipStep[pos]); // Phát clip hiện tại
