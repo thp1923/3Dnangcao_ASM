@@ -105,6 +105,7 @@ public class InventorySlot : MonoBehaviour,
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+
         Debug.Log("[OnBeginDrag] Click vào slot: " + gameObject.name);
 
         if (currentItem != null)
@@ -113,6 +114,7 @@ public class InventorySlot : MonoBehaviour,
             if (icon.sprite == null)
             {
                 Debug.LogError("[OnBeginDrag] ICON.SPRITE = NULL");
+
             }
             else
             {
@@ -121,13 +123,17 @@ public class InventorySlot : MonoBehaviour,
         }
         else
         {
+
             Debug.LogWarning("[OnBeginDrag] currentItem = null!");
+
         }
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
+
         Debug.Log("[OnEndDrag] Thả kéo");
+
         DragItem.Instance?.Hide();
     }
 
@@ -269,7 +275,9 @@ public class InventorySlot : MonoBehaviour,
     }
     public void ClearSlot(bool destroySlot = false)
     {
+
         Debug.Log("[ClearSlot] Xoá item: " + (currentItem != null ? currentItem.itemName : "null"));
+
         currentItem = null;
         stackCount = 0;
         icon.sprite = null;

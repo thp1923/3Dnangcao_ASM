@@ -20,7 +20,9 @@ public class InventoryManager : MonoBehaviour
     {
         if (PlayFabClientAPI.IsClientLoggedIn())
         {
+
             //LoadInventory();
+
         }
         foreach (Item item in testItems)
         {
@@ -28,6 +30,7 @@ public class InventoryManager : MonoBehaviour
             InventorySlot slot = slotGO.GetComponentInChildren<InventorySlot>(); // hoặc GetComponent nếu script ở gốc
             slot.AddItem(item);
         }
+
         foreach (var slot in equipmentSlots)
         {
             if (slot.IsEmpty())
@@ -37,6 +40,7 @@ public class InventoryManager : MonoBehaviour
         }
         MergeAllStackableItems();
         //SaveInventory();
+
     }
     public void TryMoveItem(InventorySlot fromSlot)
     {
@@ -74,7 +78,9 @@ public class InventoryManager : MonoBehaviour
                     fromSlot.ClearSlot(); // Equipment slot: chỉ clear item
                 }
             }
+
             //SaveInventory();
+
             return;
         }
     }
@@ -85,7 +91,9 @@ public class InventoryManager : MonoBehaviour
         GameObject slotGO = Instantiate(bagSlotPrefab, contentPanel);
         InventorySlot newSlot = slotGO.GetComponent<InventorySlot>();
         newSlot.AddItem(item, amount);
+
         //SaveInventory();
+
     }
 
 
@@ -108,7 +116,9 @@ public class InventoryManager : MonoBehaviour
 
         fromSlot.ClearSlot();
         Debug.Log($"[Unequip] {item.itemName} → tạo lại trong Bag");
+
         //SaveInventory();
+
     }
 
     public void TryAddToInventory(Item item)
@@ -121,7 +131,9 @@ public class InventoryManager : MonoBehaviour
             {
                 slot.AddItem(item, 1);
                 MergeAllStackableItems();
+
                 //SaveInventory();
+
                 return;
             }
         }
@@ -132,7 +144,9 @@ public class InventoryManager : MonoBehaviour
         newSlot.AddItem(item);
 
         MergeAllStackableItems();
+
         //SaveInventory();
+
     }
 
     public void MergeAllStackableItems()
@@ -164,9 +178,11 @@ public class InventoryManager : MonoBehaviour
                 }
             }
         }
+
         //SaveInventory();
     }
     /*
+
     /////////////////////////////////////Lưu Trên PlayFab///////////////////////////////////
     public void SaveInventory()
     {
@@ -280,5 +296,7 @@ public class InventoryManager : MonoBehaviour
         {
             Debug.LogError("[LoadInventory] ❌ Thất bại: " + error.ErrorMessage);
         });
+
     }*/
+
 }

@@ -21,8 +21,10 @@ public class Item : ScriptableObject
     public EquidmentSlotType allowedSlot;
     public GameObject prefab;
     public bool isUsable;
+
     [Header("3D Model Prefab")]
     public GameObject modelPrefab;  // prefab để spawn mô hình vũ khí/giáp
+
     public virtual void Use()
     {
         Debug.Log("Used " + itemName);
@@ -43,3 +45,5 @@ public class HealthPotion : Item
         // Gọi PlayerHealth.Instance.Heal(healAmount) chẳng hạn
     }
 }
+
+
