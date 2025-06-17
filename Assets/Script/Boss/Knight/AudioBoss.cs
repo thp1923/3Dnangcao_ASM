@@ -8,6 +8,7 @@ public class AudioBoss : MonoBehaviour
     public AudioClip[] clipStep;
     public AudioSource attackSource;
     public AudioClip[] attackClipFire;
+    public AudioClip deathClip;
     Animator animator;
 
 
@@ -21,6 +22,11 @@ public class AudioBoss : MonoBehaviour
     {
         if (attackClipFire == null) return;
         attackSource.PlayOneShot(attackClipFire[index]);
+    }
+
+    public void DeathPlaySource()
+    {
+        attackSource.PlayOneShot(deathClip);
     }
 
     public void playSourceWalk()

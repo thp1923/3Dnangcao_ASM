@@ -61,6 +61,7 @@ public class MeleeWeapon : MonoBehaviour
             switch(hit.transform.tag)
             {
                 case "Player":
+                    if(FindAnyObjectByType<PlayerDodge>().isDodging) return;
                     Hit(0, hit);
                     break;
                 case "Enemy":

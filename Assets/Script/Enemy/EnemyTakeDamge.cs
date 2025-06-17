@@ -7,7 +7,6 @@ using UnityEngine;
 public class EnemyTakeDamge : StatsAlive
 {
     Animator aim;
-    Audio audioE;
     public GameObject me;
     public TextMeshProUGUI damPopUp;
     [Header("---------Items Drop-----------")]
