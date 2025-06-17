@@ -34,6 +34,7 @@ public class BossKnightMoveAI : MonoBehaviour
 
     private void OnEnable()
     {
+        if(agent == null) agent = GetComponent<NavMeshAgent>();
         agent.enabled = true;
     }
 
