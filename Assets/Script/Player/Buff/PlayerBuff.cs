@@ -15,6 +15,8 @@ public class PlayerBuff : MonoBehaviour
     AttackDamgePlayer atp;
     PlayerTakeDamge ptd;
     Animator animator;
+    public AudioSource buffSource;
+    public AudioSource fireLoop;
 
     public KeyCode BuffKey = KeyCode.E;
 
@@ -23,9 +25,11 @@ public class PlayerBuff : MonoBehaviour
     float _CD;
     [Header("--------Atk--------")]
     public int atkBonus;
+    public int stunDamgeBonus;
     public ParticleSystem[] attackEffect;
     public VisualEffect effect;
     public Color colorEffect;
+    public AudioClip atkClip;
     private Color currentColor;
     [Header("--------Def--------")]
     public int defBonus;
@@ -33,6 +37,7 @@ public class PlayerBuff : MonoBehaviour
     public Material defMaterial;
     public GameObject targetRoot;
     public List<SkinnedMeshRenderer> skinnedMeshes;
+    public AudioClip defClip;
 
     private void Start()
     {
@@ -86,6 +91,10 @@ public class PlayerBuff : MonoBehaviour
         {
             case ClassPlayer.Atk:
                 atp.atkBonus += atkBonus;
+                atp.stunDamgeBonus += stunDamgeBonus;
+                GetComponent<AudioPlayer>().isBuff = true;
+                buffSource.PlayOneShot(atkClip);
+                fireLoop.Play();
                 effect.SetVector4("Color", (Vector4)colorEffect);
                 foreach (var atkEf in attackEffect)
                 {
@@ -96,6 +105,7 @@ public class PlayerBuff : MonoBehaviour
             case ClassPlayer.Def:
                 ptd.stunResistanceBonus += stunDefBonus;
                 ptd.defenseBonus += defBonus;
+                buffSource.PlayOneShot(defClip);
                 foreach (var renderer in skinnedMeshes)
                 {
                     // Kiểm tra nếu đã có thì không thêm nữa
@@ -127,6 +137,10 @@ public class PlayerBuff : MonoBehaviour
         {
             case ClassPlayer.Atk:
                 atp.atkBonus -= atkBonus;
+                atp.stunDamgeBonus -= stunDamgeBonus;
+                GetComponent<AudioPlayer>().isBuff = false;
+                buffSource.PlayOneShot(atkClip);
+                fireLoop.Stop();
                 effect.SetVector4("Color", (Vector4)currentColor);
                 foreach (var atkEf in attackEffect)
                 {

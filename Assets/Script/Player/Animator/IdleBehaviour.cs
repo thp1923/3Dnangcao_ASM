@@ -24,7 +24,7 @@ public class IdleBehaviour : StateMachineBehaviour
         }
         if (PlayerAttackController.Instance.inputRecceived && !animator.GetComponent<PlayerDodge>().isDodging)
         {
-            if (Input.GetKey(KeyCode.LeftShift))
+            if (Input.GetKey(KeyCode.LeftShift) || animator.GetBool("IsSprinting") == true)
             {
                 animator.SetTrigger("AttackRun");
                 PlayerAttackController.Instance.InputManager();

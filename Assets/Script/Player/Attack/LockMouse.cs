@@ -6,16 +6,18 @@ public class LockMouse : MonoBehaviour
 {
     public static bool CursorLocked = true;
     [SerializeField] protected KeyCode lockMouseKey = KeyCode.LeftAlt;
+
+    [SerializeField] protected GameObject inventory;
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
-        
+        inventory.SetActive(false);
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
-        
+        UpdateCursorLock();
     }
     public void UpdateCursorLock()
     {
@@ -29,6 +31,7 @@ public class LockMouse : MonoBehaviour
                 GetComponent<MoveManager>().CheckLockMove(true);
                 GetComponent<MoveManager>().CheckDrag(true);
                 CursorLocked = false;
+                inventory.SetActive(true);
             }
         }
         else
@@ -41,6 +44,7 @@ public class LockMouse : MonoBehaviour
                 GetComponent<MoveManager>().CheckLockMove(false);
                 GetComponent<MoveManager>().CheckDrag(false);
                 CursorLocked = true;
+                inventory.SetActive(false);
             }
         }
     }
