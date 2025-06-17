@@ -1,4 +1,4 @@
-using GameJolt.API;
+ï»¿using GameJolt.API;
 using GameJolt.API.Objects;
 using GameJolt.UI;
 using System.Collections.Generic;
@@ -58,7 +58,7 @@ public class GameJoltManager : MonoBehaviour
 
         if (!string.IsNullOrEmpty(usernameArg) && !string.IsNullOrEmpty(tokenArg))
         {
-            Debug.Log("Launched from Game Jolt App — auto-signing in...");
+            Debug.Log("Launched from Game Jolt App â€” auto-signing in...");
             var user = new User(usernameArg, tokenArg);
             user.SignIn(signInSuccess =>
             {
@@ -108,23 +108,27 @@ public class GameJoltManager : MonoBehaviour
             Debug.LogWarning("Cannot unlock, user not signed in.");
             return;
         }
+
         if (!trophyMap.TryGetValue(type, out var id))
         {
             Debug.LogError($"No Trophy ID for TrophyType.{type}");
             return;
         }
-        // Use TryUnlock to prevent duplicate UI notifications
-        GameJolt.API.Trophies.TryUnlock(id, result => {
+
+        Debug.Log($"Attempting to unlock trophy '{type}' with ID {id}");
+
+        GameJolt.API.Trophies.TryUnlock(id, result =>
+        {
             switch (result)
             {
                 case TryUnlockResult.Unlocked:
-                    Debug.Log($"Unlocked {type} (ID {id})!");
+                    Debug.Log($"Unlocked trophy '{type}' (ID {id})!");
                     break;
                 case TryUnlockResult.AlreadyUnlocked:
-                    Debug.Log($"{type} already unlocked.");
+                    Debug.Log($"Trophy '{type}' already unlocked.");
                     break;
-                default:
-                    Debug.LogError($"Failed to unlock {type}.");
+                case TryUnlockResult:
+                    Debug.LogError($"Unlock failed: Unknown error from Game Jolt for trophy '{type}' (ID {id})");
                     break;
             }
         });
@@ -135,15 +139,20 @@ public class GameJoltManager : MonoBehaviour
         if (GameJoltAPI.Instance.HasSignedInUser)
             GameJoltUI.Instance.ShowTrophies();
         else
-            Debug.LogWarning("User not signed in — can't show trophies.");
+            Debug.LogWarning("User not signed in â€” can't show trophies.");
     }
     #endregion
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.K))
         {
-            Debug.Log("K key pressed — testing trophy unlock...");
+            Debug.Log("K key pressed â€” testing trophy unlock...");
             UnlockTrophy(TrophyType.TestingTrophy);
+        }
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            Debug.Log("ðŸ§ª Login state: " + (GameJoltAPI.Instance.HasSignedInUser ?
+                $"Signed in as {GameJoltAPI.Instance.CurrentUser.Name}" : "Not signed in"));
         }
     }
 }
