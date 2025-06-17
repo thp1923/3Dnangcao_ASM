@@ -56,11 +56,12 @@ public class MeleeWeapon : MonoBehaviour
         {
             current_wallType = hit.transform.tag;
 
-            if (current_wallType == "Untagged") current_wallType = "Concrete";
+            if (current_wallType == "Player") current_wallType = "Concrete";
 
             switch(hit.transform.tag)
             {
-                case "Concrete":
+                case "Player":
+                    if(FindAnyObjectByType<PlayerDodge>().isDodging) return;
                     Hit(0, hit);
                     break;
                 case "Enemy":

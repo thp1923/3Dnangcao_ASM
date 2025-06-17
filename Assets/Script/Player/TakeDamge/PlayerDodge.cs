@@ -16,6 +16,11 @@ public class PlayerDodge : MonoBehaviour
     public Transform positionToSpawn;
     public int staminaLost = 30;
 
+    private float holdTime = 0f;
+    public float holdThreshold = 0.3f;
+    private bool isHolding = false;
+    private bool holdActionTriggered = false;
+
     [Header("Skinned Mesh Relashed")]
     private SkinnedMeshRenderer[] skinnedMeshRenderers;
 
@@ -32,8 +37,12 @@ public class PlayerDodge : MonoBehaviour
 
     private bool isActiveTrail;
 
+    private PlayerAttackController attackCtrl;
+
+
     private void Start()
     {
+        attackCtrl = GetComponent<PlayerAttackController>();
         anim = GetComponent<Animator>();
         controller = GetComponent<vThirdPersonController>();
         rb = GetComponent<Rigidbody>();
@@ -41,29 +50,57 @@ public class PlayerDodge : MonoBehaviour
 
     private void Update()
     {
-        if (!isDodging && Input.GetKeyDown(dodgeKey) && GetComponent<Stamina>().stamina >= staminaLost)
+        // Bắt đầu nhấn
+        if (Input.GetKeyDown(dodgeKey))
         {
-            Vector3 input = controller.input;
+            holdTime = 0f;
+            isHolding = true;
+            holdActionTriggered = false;
+        }
 
-            if (controller.isStrafing && input.sqrMagnitude > 0.01f)
+        // Đang giữ
+        if (isHolding && Input.GetKey(dodgeKey))
+        {
+            holdTime += Time.deltaTime;
+
+            if (holdTime >= holdThreshold && !holdActionTriggered)
             {
-                Vector2 inputDir = new Vector2(input.x, input.z);
-                Vector2 clampedInput = new Vector2(
-                    inputDir.x != 0 ? Mathf.Sign(inputDir.x) : 0,
-                    inputDir.y != 0 ? Mathf.Sign(inputDir.y) : 0
-                );
-
-                anim.SetFloat("DodgeX", clampedInput.x);
-                anim.SetFloat("DodgeY", clampedInput.y);
+                holdActionTriggered = true;
+                return; // 👉 gọi ngay khi vừa qua ngưỡng giữ
             }
-            else
+        }
+        if (Input.GetKeyUp(dodgeKey))
+        {
+            if (!holdActionTriggered)
             {
-                anim.SetFloat("DodgeX", 0f);
-                anim.SetFloat("DodgeY", 1f); // default forward
+                if (!isDodging && GetComponent<Stamina>().stamina >= staminaLost && !attackCtrl.isAttacking)
+                {
+                    Vector3 input = controller.input;
+
+                    if (controller.isStrafing && input.sqrMagnitude > 0.01f)
+                    {
+                        Vector2 inputDir = new Vector2(input.x, input.z);
+                        Vector2 clampedInput = new Vector2(
+                            inputDir.x != 0 ? Mathf.Sign(inputDir.x) : 0,
+                            inputDir.y != 0 ? Mathf.Sign(inputDir.y) : 0
+                        );
+
+                        anim.SetFloat("DodgeX", clampedInput.x);
+                        anim.SetFloat("DodgeY", clampedInput.y);
+                    }
+                    else
+                    {
+                        anim.SetFloat("DodgeX", 0f);
+                        anim.SetFloat("DodgeY", 1f); // default forward
+                    }
+
+                    anim.SetTrigger("Dodge");
+                    GetComponent<Stamina>().TakeStamina(staminaLost);
+                }
             }
 
-            anim.SetTrigger("Dodge");
-            GetComponent<Stamina>().TakeStamina(staminaLost);
+            isHolding = false;
+            holdActionTriggered = false;
         }
         // Bắt đầu hiệu ứng trail nếu đang dodge
         if (isDodging && !isActiveTrail)
@@ -117,8 +154,7 @@ public class PlayerDodge : MonoBehaviour
 
     private IEnumerator ActivateTrail(float timeActive)
     {
-        var attackCtrl = GetComponent<PlayerAttackController>();
-        if (!isDodging || (attackCtrl != null && attackCtrl.isAttacking))
+        if (!isDodging)
             yield break;
 
         while (timeActive > 0)
