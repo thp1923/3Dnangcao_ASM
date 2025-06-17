@@ -31,20 +31,20 @@ public class DragItem : MonoBehaviour
 {
     if (sprite == null)
     {
-        Debug.LogError("[DragItem] Sprite truyền vào bị null!");
+        //Debug.LogError("[DragItem] Sprite truyền vào bị null!");
         return;
     }
 
     icon.sprite = sprite;
     icon.enabled = true;
     gameObject.SetActive(true);
-    Debug.Log("[DragItem] Hiện icon kéo");
+    //Debug.Log("[DragItem] Hiện icon kéo");
 }
 
 
     public void Hide()
     {
         gameObject.SetActive(false);
-        Debug.Log("[DragItem] Ẩn icon kéo");
+        //Debug.Log("[DragItem] Ẩn icon kéo");
     }
 }
