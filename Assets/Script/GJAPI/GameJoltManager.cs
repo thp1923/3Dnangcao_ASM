@@ -8,7 +8,7 @@ public enum TrophyType
 {
     StartNewGame,
     TestingTrophy
-    // Extend this list
+
 }
 
 [System.Serializable]
@@ -43,66 +43,61 @@ public class GameJoltManager : MonoBehaviour
 
     private void TryAutoLogin()
     {
-        string savedUsername = PlayerPrefs.GetString(USERNAME_KEY, "");
-        string savedToken = PlayerPrefs.GetString(TOKEN_KEY, "");
+        string[] args = System.Environment.GetCommandLineArgs();
+        string usernameArg = "";
+        string tokenArg = "";
 
-        if (!string.IsNullOrEmpty(savedUsername) && !string.IsNullOrEmpty(savedToken))
+        foreach (var arg in args)
         {
-            var user = new User(savedUsername, savedToken);
+            if (arg.StartsWith("-gjapi_username="))
+                usernameArg = arg.Substring("-gjapi_username=".Length);
+
+            if (arg.StartsWith("-gjapi_token="))
+                tokenArg = arg.Substring("-gjapi_token=".Length);
+        }
+
+        if (!string.IsNullOrEmpty(usernameArg) && !string.IsNullOrEmpty(tokenArg))
+        {
+            Debug.Log("Launched from Game Jolt App — auto-signing in...");
+            var user = new User(usernameArg, tokenArg);
             user.SignIn(signInSuccess =>
             {
                 if (signInSuccess)
                 {
                     GameJoltAPI.Instance.CurrentUser = user;
-                    Debug.Log("Auto-signed in to Game Jolt as: " + user.Name);
+                    Debug.Log("Signed in via Game Jolt Client as: " + user.Name);
                 }
                 else
                 {
-#if UNITY_EDITOR
-                    Debug.Log("Auto login failed. Showing Game Jolt login UI (Editor only).");
-                    GameJolt.UI.GameJoltUI.Instance.ShowSignIn(result =>
-                    {
-                        if (result)
-                        {
-                            var current = GameJoltAPI.Instance.CurrentUser;
-                            PlayerPrefs.SetString(USERNAME_KEY, current.Name);
-                            PlayerPrefs.SetString(TOKEN_KEY, current.Token);
-                            PlayerPrefs.Save();
-                            Debug.Log("Manually signed in as: " + current.Name);
-                        }
-                        else
-                        {
-                            Debug.LogWarning("Manual login canceled or failed.");
-                        }
-                    });
-#else
-                Debug.Log("Auto login failed. Skipping Game Jolt login in build.");
-#endif
+                    Debug.LogWarning("Game Jolt app login failed.");
+                }
+            });
+            return;
+        }
+
+        string savedUsername = PlayerPrefs.GetString(USERNAME_KEY, "");
+        string savedToken = PlayerPrefs.GetString(TOKEN_KEY, "");
+
+        if (!string.IsNullOrEmpty(savedUsername) && !string.IsNullOrEmpty(savedToken))
+        {
+            Debug.Log("Using saved PlayerPrefs credentials...");
+            var user = new User(savedUsername, savedToken);
+            user.SignIn(success =>
+            {
+                if (success)
+                {
+                    GameJoltAPI.Instance.CurrentUser = user;
+                    Debug.Log("Auto-signed in with saved credentials: " + user.Name);
+                }
+                else
+                {
+                    Debug.LogWarning("Saved credential login failed.");
                 }
             });
         }
         else
         {
-#if UNITY_EDITOR
-            Debug.Log("No saved credentials. Showing login UI (Editor only).");
-            GameJolt.UI.GameJoltUI.Instance.ShowSignIn(result =>
-            {
-                if (result)
-                {
-                    var current = GameJoltAPI.Instance.CurrentUser;
-                    PlayerPrefs.SetString(USERNAME_KEY, current.Name);
-                    PlayerPrefs.SetString(TOKEN_KEY, current.Token);
-                    PlayerPrefs.Save();
-                    Debug.Log("Manually signed in as: " + current.Name);
-                }
-                else
-                {
-                    Debug.LogWarning("Manual login canceled or failed.");
-                }
-            });
-#else
-        Debug.Log("No credentials. Skipping Game Jolt login in build.");
-#endif
+            Debug.Log("No saved credentials found, user not signed in.");
         }
     }
     #region Trophies
