@@ -1,14 +1,12 @@
 using StatsManager;
-using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
 public class EnemyTakeDamge : StatsAlive
 {
     Animator aim;
+    Audio audioE;
     public GameObject me;
-    public TextMeshProUGUI damPopUp;
     [Header("---------Items Drop-----------")]
     public List<GameObject> itemsDrop;
     // Start is called before the first frame update
@@ -29,13 +27,7 @@ public class EnemyTakeDamge : StatsAlive
         switch (type)
         {
             case TypeTakeDamge.Only:
-                base.TakeDamge(damge, stunDamge, trueDamge);  
-                damPopUp.text = DamPopUp.ToString();
-                StartCoroutine(DamgePopUp());
-                if(stunDamge > StunResistance)
-                {
-                    aim.SetTrigger("Hit");
-                }
+                base.TakeDamge(damge, stunDamge, trueDamge);    
                 break;
             case TypeTakeDamge.Branch:
                 GetComponent<BrandHpEnemy>().TakeDam(damge, stunDamge, trueDamge);
@@ -49,15 +41,11 @@ public class EnemyTakeDamge : StatsAlive
         }
     }
 
-    IEnumerator DamgePopUp()
-    {
-        yield return new WaitForSeconds(0.5f);
-        damPopUp.text = null;
-    }
+
 
     void Death()
     {
-        FindObjectOfType<PlayerAim>().RemoveEnemy(gameObject);
+        FindObjectOfType<PlayerAim>().RemoveEnemy();
         foreach (GameObject items in itemsDrop)
         {
             Instantiate(items, gameObject.transform.position + new Vector3(Random.Range(-1f, 1f), 1, Random.Range(-1f, 1f)), Quaternion.identity);

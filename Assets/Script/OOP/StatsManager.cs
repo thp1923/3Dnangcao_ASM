@@ -28,8 +28,6 @@ namespace StatsManager
         protected int StunResistanceMax = 2000; // Tối đa kháng stun đạt đc
         protected int currentHP;
 
-        protected int DamPopUp;
-
         protected virtual void Start()
         {
             currentHP = MaxHP;
@@ -48,7 +46,6 @@ namespace StatsManager
             Damge = Mathf.Max(Damge, 1); // luôn gây damge ít nhất là 1
             currentHP -= Damge + trueDamge;
             HpSlider.value = currentHP;
-            DamPopUp = Damge + trueDamge;
             //if(stunDamge > StunResistance)
             //{
             //    // sẽ chạy stun tùy theo mức độ
@@ -68,7 +65,6 @@ namespace StatsManager
         #endregion
 
         internal int atkBonus;
-        internal int stunDamgeBonus;
         protected int atk;
 
         public virtual void Attack(int attackNumber)
