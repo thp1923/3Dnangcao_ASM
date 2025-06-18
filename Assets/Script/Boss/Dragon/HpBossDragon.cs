@@ -2,13 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using StatsManager;
-using TMPro;
 
 public class HpBossDragon : StatsAlive
 {
     Animator aim;
     public GameObject me;
-    public TextMeshProUGUI damPopUp;
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -19,9 +17,7 @@ public class HpBossDragon : StatsAlive
     public override void TakeDamge(int damge, int stunDamge, int trueDamge)
     {
         base.TakeDamge(damge, stunDamge, trueDamge);
-        damPopUp.text = DamPopUp.ToString();
-        StartCoroutine(DamgePopUp());
-        if (currentHP <= MaxHP / 2)
+        if(currentHP <= MaxHP / 2)
         {
             GetComponent<DragonAttackEffect>().TransPhase();
         }
@@ -29,12 +25,6 @@ public class HpBossDragon : StatsAlive
         {
             aim.SetBool("IsDeath", true);
         }
-    }
-
-    IEnumerator DamgePopUp()
-    {
-        yield return new WaitForSeconds(0.5f);
-        damPopUp.text = null;
     }
 
     public void Death()
