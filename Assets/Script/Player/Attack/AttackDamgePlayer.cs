@@ -21,7 +21,7 @@ public class AttackDamgePlayer : StatsAttack
         Collider[] colInfo = Physics.OverlapBox(pointAttack2.position, attackRange, Quaternion.identity, attackMask);
         foreach (Collider enemy in colInfo)
         {
-            enemy.GetComponent<EnemyTakeDamge>().TakeDamge(atk, stunDamge[attackNum], 0);
+            enemy.GetComponent<EnemyTakeDamge>().TakeDamge(atk, (stunDamge[attackNum]+stunDamgeBonus), 0);
         }
     }
     private void OnDrawGizmosSelected()

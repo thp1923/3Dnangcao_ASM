@@ -218,11 +218,11 @@ public class PlayerAim : MonoBehaviour
         
     }
 
-    public void RemoveEnemy()
+    public void RemoveEnemy(GameObject enemy)
     {
-        if (closestEnemy != null)
+        if (enemy != null)
         {
-            enemiesList.Remove(closestEnemy);
+            enemiesList.Remove(enemy);
         }
     }
 }

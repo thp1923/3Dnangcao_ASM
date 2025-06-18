@@ -54,8 +54,9 @@ public class PlayerAttackController : LockMouse
     }
     
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         rb = GetComponent<Rigidbody>();
         canRecceiveInput = true;
         canClick = true;
@@ -63,10 +64,10 @@ public class PlayerAttackController : LockMouse
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
+        base.Update();
         AttackCombo();
-        UpdateCursorLock();
         playerAim.SetBool("IsAttacking", isAttacking);
         //LockMove();
     }
