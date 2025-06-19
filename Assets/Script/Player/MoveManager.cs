@@ -9,8 +9,6 @@ public class MoveManager : MonoBehaviour
     public int staminaLost = 3;
     public float timeLostStaminaRun;
     float _timeLostStaminaRun;
-
-    public KeyCode sprint = KeyCode.LeftShift;
     // Start is called before the first frame update
     void Start()
     {
