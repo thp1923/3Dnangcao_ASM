@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using StatsManager;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class HpBossDragon : StatsAlive
 {
@@ -25,7 +26,7 @@ public class HpBossDragon : StatsAlive
         {
             GetComponent<DragonAttackEffect>().TransPhase();
         }
-        if(currentHP <= 0)
+        if (currentHP <= 0)
         {
             aim.SetBool("IsDeath", true);
         }
@@ -39,7 +40,7 @@ public class HpBossDragon : StatsAlive
 
     public void Death()
     {
-        if(me != null)
+        if (me != null)
             Destroy(me);
     }
 }

@@ -7,7 +7,7 @@ public class ChangeSceneGame : MonoBehaviour
 {
     public void LoadGameScene()
     {
-        SceneLoader.Instance.LoadScene(1); // Change 1 to your game scene index
+        SceneLoaderr.Instance.LoadScene(1); // Change 1 to your game scene index
     }
 }
 public class ChangeScene : MonoBehaviour
