@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -79,7 +79,22 @@ public class MeleeWeapon : MonoBehaviour
         {
             PlayerAttackController.Instance.SwordContract();
             audioSource.PlayOneShot(audioClips[particleType]);
-            Instantiate(particleEffects[Random.Range(0, 5)], hit.point, Quaternion.LookRotation(hit.normal));
+
+            // dùng máu dạng decal của VolumetricBloodFX
+            GameObject prefab = particleEffects[Random.Range(0, particleEffects.Length)];
+            Vector3 offsetPos = hit.point + hit.normal * 0.01f;
+            Quaternion rot = Quaternion.LookRotation(-hit.normal);
+
+            GameObject blood = Instantiate(prefab, offsetPos, rot);
+
+            var settings = blood.GetComponent<BFX_BloodSettings>();
+            if (settings != null)
+            {
+                settings.LightIntensityMultiplier = 1;
+                settings.AnimationSpeed = 1;
+                settings.FreezeDecalDisappearance = true;
+            }
+
             hitCount--;
             recoverTime = max_recoverTime;
         }
