@@ -6,9 +6,7 @@ using UnityEngine.AI;
 public class RunStateBossWolf : StateMachineBehaviour
 {
     public float playerDistance;
-    public float attackRange;
-    public float heavyAttackRange;
-    public float skillAttackRange;
+    public float playerDistance2;
     public float speed;
     NavMeshAgent agent;
     Transform player;
@@ -34,12 +32,8 @@ public class RunStateBossWolf : StateMachineBehaviour
         }
         agent.SetDestination(player.position);
         float distance = Vector3.Distance(player.position, animator.transform.position);
-        if (distance <= skillAttackRange && animator.GetComponent<BossWolf>().Mp2 >= 100)
-            animator.SetTrigger("Attack3");
-        else if (distance <= heavyAttackRange && distance >= 5 && animator.GetComponent<BossWolf>().Mp1 >= 50)
-            animator.SetTrigger("Attack2");
-        else if (distance <= attackRange)
-            animator.SetTrigger("Attack1");
+        if(distance < playerDistance2)
+            animator.SetBool("IsWalking", true);
         if (distance > playerDistance)
             animator.SetBool("IsRunning", false);
 

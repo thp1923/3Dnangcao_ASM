@@ -1,0 +1,128 @@
+using Invector.vCharacterController;
+using System.Collections;
+using UnityEngine;
+
+public class PlayerAttackController : LockMouse
+{
+    [Header("Main")]
+    public static PlayerAttackController Instance;
+    public vThirdPersonController tcp;
+
+    Animator playerAim;
+    Rigidbody rb;
+
+    [Header("Attack")]
+    [SerializeField]
+    private GameObject sword;
+
+    public int staminaLost = 25;
+    internal bool isAttacking;
+
+    [SerializeField] private KeyCode attackKey = KeyCode.Mouse0;
+
+    public bool canRecceiveInput;
+    public bool inputRecceived;
+
+    public bool canClick;
+
+    bool swordContract;
+
+    [SerializeField] Vector2 contract_speed_time = new Vector2(0.1f, 0.1f);
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+    
+    public void SwordContract()
+    {
+        if (!swordContract) StartCoroutine("SpeedRegain"); else return;
+    }
+
+    private IEnumerator SpeedRegain()
+    {
+        swordContract = true;
+        playerAim.speed = contract_speed_time.x;
+        yield return new WaitForSeconds(contract_speed_time.y);
+        playerAim.speed = 1;
+        swordContract = false;
+    }
+
+    public void ResetAttack()
+    {
+        isAttacking = false;
+    }
+    
+    // Start is called before the first frame update
+    protected override void Start()
+    {
+        base.Start();
+        rb = GetComponent<Rigidbody>();
+        canRecceiveInput = true;
+        canClick = true;
+        playerAim = GetComponent<Animator>();
+    }
+
+    // Update is called once per frame
+    protected override void Update()
+    {
+        base.Update();
+        AttackCombo();
+        playerAim.SetBool("IsAttacking", isAttacking);
+        //LockMove();
+    }
+
+
+    public void InputManager()
+    {
+        if (!canRecceiveInput)
+        {
+            canRecceiveInput = true;
+        }
+        else
+        {
+            canRecceiveInput = false;
+        }
+    }
+
+
+    public void AttackCombo()
+    {
+        if (Input.GetKeyDown(attackKey) && playerAim.GetBool("IsGrounded") 
+            && CursorLocked && !GetComponent<PlayerTakeDamge>().isBlock 
+            && canClick && GetComponent<Stamina>().stamina >= staminaLost)
+        {
+
+            if (canRecceiveInput)
+            {
+                inputRecceived = true;
+                canRecceiveInput = false;
+            }
+            else
+            {
+                return;
+            }
+        }
+    }
+
+    
+    
+
+    //public void LockMove()
+    //{
+    //    if (isAttacking || isUntil || !CursorLocked || GetComponent<PlayerTakeDamge>().isStun)
+    //    {
+    //        tcp.lockMovement = true;
+    //        tcp.lockRotation = true;
+    //        playerAim.SetFloat("InputMagnitude", -1f);
+    //    }
+    //    else
+    //        UnlockMove();
+    //}
+    //public void UnlockMove()
+    //{
+    //    tcp.lockMovement = false;
+    //    tcp.lockRotation = false;
+    //}
+    
+}

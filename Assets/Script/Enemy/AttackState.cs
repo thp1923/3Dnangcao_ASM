@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -8,12 +6,14 @@ public class AttackState : StateMachineBehaviour
     public float attackRange;
     NavMeshAgent agent;
     Transform player;
+    bool isCheck;
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         agent = animator.GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
         agent.enabled = false;
+        isCheck = false;
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -26,13 +26,24 @@ public class AttackState : StateMachineBehaviour
         // Get the player's position and set the y-coordinate to zero.
         Vector3 playerPosition = new Vector3(player.transform.position.x, 0, player.transform.position.z);
 
-        // Make the animator's transform look at the player's position.
-        animator.transform.LookAt(playerPosition);
         float distance = Vector3.Distance(player.position, animator.transform.position);
         if (distance <= attackRange)
             animator.SetBool("IsRunning", false);
         else
-            animator.SetBool("IsRunning", true);
+        {
+            if (isCheck) return;
+            float random = UnityEngine.Random.Range(-1f, 1f);
+            if(random > 0)
+            {
+                animator.SetBool("IsRunning", true); 
+                isCheck = true;
+            }
+            else
+            {
+                animator.SetBool("IsRunning", false);
+                isCheck = true;
+            }
+        }
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state

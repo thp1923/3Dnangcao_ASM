@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -8,6 +8,8 @@ public class Attack1StateBossWolf : StateMachineBehaviour
     public float attackRange;
     NavMeshAgent agent;
     Transform player;
+
+    public float speedMultiplier = 1.5f;
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
@@ -17,7 +19,7 @@ public class Attack1StateBossWolf : StateMachineBehaviour
         animator.GetComponent<BossWolf>().Mp1 -= 50;
         animator.GetComponent<BossWolf>().Mp2 += 50;
         if(Vector3.Distance(player.position, animator.transform.position) <= 7.24f) return;
-        animator.GetComponent<Wolf>().Attack1();
+        //animator.GetComponent<Wolf>().Attack1();
 
     }
 
@@ -32,7 +34,6 @@ public class Attack1StateBossWolf : StateMachineBehaviour
         Vector3 playerPosition = new Vector3(player.transform.position.x, 0, player.transform.position.z);
 
         // Make the animator's transform look at the player's position.
-        animator.transform.LookAt(playerPosition);
         float distance = Vector3.Distance(player.position, animator.transform.position);
         if (distance <= attackRange)
             animator.SetBool("IsRunning", false);
@@ -44,14 +45,24 @@ public class Attack1StateBossWolf : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.ResetTrigger("Attack1");
-        animator.GetComponent<Wolf>().ResetCp();
+        //animator.GetComponent<Wolf>().ResetCp();
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()
-    //override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //    // Implement code that processes and affects root motion
-    //}
+    override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        // Lấy root motion hiện tại từ Animator
+        Vector3 rootMotion = animator.deltaPosition;
+
+        // Tăng tốc root motion lên (hoặc tùy chỉnh nó)
+        Vector3 modifiedMotion = rootMotion * speedMultiplier;
+
+        // Di chuyển nhân vật theo root motion đã chỉnh sửa
+        animator.transform.position += modifiedMotion;
+
+        // Nếu muốn giữ hướng quay (rotation) thì thêm dòng sau:
+        animator.transform.rotation *= animator.deltaRotation;
+    }
 
     // OnStateIK is called right after Animator.OnAnimatorIK()
     //override public void OnStateIK(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
