@@ -4,7 +4,7 @@ using UnityEngine.Video;
 public class CutsceneLoader : MonoBehaviour
 {
     public VideoPlayer videoPlayer;
-    public int nextSceneIndex = 1;
+    public int nextSceneIndex = 3;
 
     void Start()
     {
@@ -17,13 +17,6 @@ public class CutsceneLoader : MonoBehaviour
 
     void OnVideoEnd(VideoPlayer vp)
     {
-        if (SceneLoaderr.Instance != null)
-        {
-            SceneLoaderr.Instance.LoadScene(nextSceneIndex);
-        }
-        else
-        {
-            Debug.LogError("SceneLoader instance is not available. Cannot load next scene.");
-        }
+        UnityEngine.SceneManagement.SceneManager.LoadScene(nextSceneIndex);
     }
 }
