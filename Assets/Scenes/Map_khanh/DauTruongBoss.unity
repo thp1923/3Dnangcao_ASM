@@ -451,12 +451,17 @@ PrefabInstance:
     - target: {fileID: 4484443872963361023, guid: cf64cb0b2c14839408e03b12f66c7b9d,
         type: 3}
       propertyPath: MaxHP
-      value: 45000
+      value: 50000
       objectReference: {fileID: 0}
     - target: {fileID: 4484443872963361023, guid: cf64cb0b2c14839408e03b12f66c7b9d,
         type: 3}
       propertyPath: Defense
-      value: 500
+      value: 400
+      objectReference: {fileID: 0}
+    - target: {fileID: 4484443872963361023, guid: cf64cb0b2c14839408e03b12f66c7b9d,
+        type: 3}
+      propertyPath: StunResistance
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 5586810819371021158, guid: cf64cb0b2c14839408e03b12f66c7b9d,
         type: 3}
@@ -684,17 +689,32 @@ PrefabInstance:
     - target: {fileID: 5420247551407524310, guid: 9de8daa368502f044b7a73384ecc7af0,
         type: 3}
       propertyPath: MaxHP
-      value: 7000
+      value: 5000
       objectReference: {fileID: 0}
     - target: {fileID: 5420247551407524310, guid: 9de8daa368502f044b7a73384ecc7af0,
         type: 3}
       propertyPath: Defense
-      value: 300
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 5420247551407524310, guid: 9de8daa368502f044b7a73384ecc7af0,
+        type: 3}
+      propertyPath: StunResistance
+      value: 120
       objectReference: {fileID: 0}
     - target: {fileID: 6346376692199414755, guid: 9de8daa368502f044b7a73384ecc7af0,
         type: 3}
       propertyPath: BaseATK
-      value: 400
+      value: 250
+      objectReference: {fileID: 0}
+    - target: {fileID: 6346376692199414755, guid: 9de8daa368502f044b7a73384ecc7af0,
+        type: 3}
+      propertyPath: critRate
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6346376692199414755, guid: 9de8daa368502f044b7a73384ecc7af0,
+        type: 3}
+      propertyPath: critDamge
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 6800949200673574037, guid: 9de8daa368502f044b7a73384ecc7af0,
         type: 3}
@@ -1149,8 +1169,8 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 1
+  m_Color: {r: 0.5471698, g: 0.53507143, b: 0.508455, a: 1}
+  m_Intensity: 1.75
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
