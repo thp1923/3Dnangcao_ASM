@@ -1,7 +1,6 @@
 ﻿using Invector.vCharacterController;
 using StatsManager;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -15,6 +14,7 @@ public class PlayerTakeDamge : StatsAlive
     internal bool noTakeDamge;
     [SerializeField] private KeyCode blockKey = KeyCode.Mouse1;
     public int staminaLost = 35;
+    public Animator CanvaDied;
 
     [Header("---------Knock Back----------")]
     public float[] knockbackForce;
@@ -46,8 +46,8 @@ public class PlayerTakeDamge : StatsAlive
     void Update()
     {
         Block();
-        if(Input.GetKeyDown(KeyCode.J)) // Test take damge
-            TakeDamge( 10000 ,stunDamgeTest, 0);
+        //if(Input.GetKeyDown(KeyCode.J)) // Test take damge
+        //    TakeDamge( 10000 ,stunDamgeTest, 0);
         Heath();
     }
     
@@ -171,6 +171,7 @@ public class PlayerTakeDamge : StatsAlive
     {
         if (PlayerAim == null) return;
         PlayerAim.SetBool("IsDeath", true);
+        CanvaDied.SetBool("IsDeath", true);
         PlayerAim.SetFloat("InputMagnitude", -1f);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
