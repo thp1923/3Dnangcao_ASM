@@ -1,18 +1,26 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 public class SceneTransitionManager : MonoBehaviour
 {
     public static SceneTransitionManager Instance;
 
+    [Header("Audio Settings")]
+    public AudioMixer audioMixer;
+    public string exposedMusicParam = "MusicVolume";
+    public float musicFadeDuration = 0.5f;
+    public float musicVolumeMin = -80f;
+    public float musicVolumeMax = 0f;
+
     [Header("Transition Canvas (should be disabled by default)")]
     public Canvas transitionCanvas;
 
     [Header("UI Elements")]
-    public Image fadeImage;              // Fullscreen black image
-    public Image loadingSpinner;         // Spinner image with optional Animator
-    public Image logoImage;              // Logo to fade in/out
+    public Image fadeImage;
+    public Image loadingSpinner;
+    public Image logoImage;
 
     [Header("Fade Settings")]
     public float fadeDuration = 0.5f;
@@ -48,6 +56,7 @@ public class SceneTransitionManager : MonoBehaviour
             spinnerAnimator.enabled = false;
     }
 
+    #region Scene Transition
     public void FadeToScene(string sceneName)
     {
         if (!isFading)
@@ -58,32 +67,28 @@ public class SceneTransitionManager : MonoBehaviour
     {
         isFading = true;
 
-        // Show the canvas
         if (transitionCanvas != null)
             transitionCanvas.gameObject.SetActive(true);
 
         fadeImage.gameObject.SetActive(true);
-        loadingSpinner.enabled = true;
         logoImage.enabled = true;
-
+        loadingSpinner.enabled = true;
         if (spinnerAnimator != null)
             spinnerAnimator.enabled = true;
 
-        // Fade logo in while fading to black
-        yield return StartCoroutine(Fade(1f, fadeImage));
-        yield return StartCoroutine(Fade(1f, logoImage));
+        // Fade out music and pause game
+        StartCoroutine(FadeAudio(musicVolumeMin));
+        SetGamePaused(true);
 
-        // Begin async loading
+        yield return StartCoroutine(FadeMultiple(1f));
+
         AsyncOperation loadOp = SceneManager.LoadSceneAsync(sceneName);
         loadOp.allowSceneActivation = false;
 
         while (loadOp.progress < 0.9f)
             yield return null;
 
-        // Scene is ready — activate it
         loadOp.allowSceneActivation = true;
-
-        // Scene will finish loading in background
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
@@ -97,14 +102,15 @@ public class SceneTransitionManager : MonoBehaviour
     {
         yield return null;
 
-        // Fade both black and logo out
-        yield return StartCoroutine(Fade(0f, fadeImage));
-        yield return StartCoroutine(Fade(0f, logoImage));
+        // Fade music back in and resume game
+        StartCoroutine(FadeAudio(musicVolumeMax));
+        SetGamePaused(false);
+
+        yield return StartCoroutine(FadeMultiple(0f));
 
         fadeImage.gameObject.SetActive(false);
         logoImage.enabled = false;
         loadingSpinner.enabled = false;
-
         if (spinnerAnimator != null)
             spinnerAnimator.enabled = false;
 
@@ -114,24 +120,63 @@ public class SceneTransitionManager : MonoBehaviour
         isFading = false;
     }
 
-    private IEnumerator Fade(float targetAlpha, Image image)
+    private IEnumerator FadeMultiple(float targetAlpha)
     {
-        Color col = image.color;
-        float startAlpha = col.a;
-        float duration = (image == logoImage) ? logoFadeDuration : fadeDuration;
         float time = 0f;
+
+        Color fadeStart = fadeImage.color;
+        Color logoStart = logoImage.color;
+
+        float fadeFrom = fadeStart.a;
+        float logoFrom = logoStart.a;
+
+        float duration = Mathf.Max(fadeDuration, logoFadeDuration);
 
         while (time < duration)
         {
             time += Time.unscaledDeltaTime;
-            float alpha = Mathf.Lerp(startAlpha, targetAlpha, time / duration);
-            col.a = alpha;
-            image.color = col;
+            float t = time / duration;
+
+            float fadeAlpha = Mathf.Lerp(fadeFrom, targetAlpha, t);
+            float logoAlpha = Mathf.Lerp(logoFrom, targetAlpha, t);
+
+            SetAlpha(fadeImage, fadeAlpha);
+            SetAlpha(logoImage, logoAlpha);
+
             yield return null;
         }
 
-        col.a = targetAlpha;
-        image.color = col;
+        SetAlpha(fadeImage, targetAlpha);
+        SetAlpha(logoImage, targetAlpha);
+    }
+    #endregion
+
+    #region Audio Fading
+    private IEnumerator FadeAudio(float targetVolume)
+    {
+        if (audioMixer == null || string.IsNullOrEmpty(exposedMusicParam))
+            yield break;
+
+        audioMixer.GetFloat(exposedMusicParam, out float currentVolume);
+
+        float time = 0f;
+        while (time < musicFadeDuration)
+        {
+            time += Time.unscaledDeltaTime;
+            float t = time / musicFadeDuration;
+            float newVolume = Mathf.Lerp(currentVolume, targetVolume, t);
+            audioMixer.SetFloat(exposedMusicParam, newVolume);
+            yield return null;
+        }
+
+        audioMixer.SetFloat(exposedMusicParam, targetVolume);
+    }
+    #endregion
+
+    private void SetGamePaused(bool paused)
+    {
+        Time.timeScale = paused ? 0f : 1f;
+        AudioListener.pause = paused;
     }
 
     private void SetAlpha(Image image, float alpha)
