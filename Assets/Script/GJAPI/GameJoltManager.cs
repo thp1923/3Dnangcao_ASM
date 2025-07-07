@@ -7,7 +7,10 @@ using UnityEngine;
 public enum TrophyType
 {
     StartNewGame,
-    TestingTrophy
+    TestingTrophy,
+    SecretTrophy,
+    BossDefeatedTrophy,
+    CollectAllTrophy
 
 }
 
@@ -154,5 +157,27 @@ public class GameJoltManager : MonoBehaviour
             Debug.Log("🧪 Login state: " + (GameJoltAPI.Instance.HasSignedInUser ?
                 $"Signed in as {GameJoltAPI.Instance.CurrentUser.Name}" : "Not signed in"));
         }
+
+        // --- Added: Press I to open GameJolt login UI in Editor ---
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            Debug.Log("Opening Game Jolt Login UI...");
+            GameJoltUI.Instance.ShowSignIn();
+            StartCoroutine(CheckAndStoreCredentials());
+        }
+    }
+
+    private System.Collections.IEnumerator CheckAndStoreCredentials()
+    {
+        // Wait until the user is signed in
+        while (!GameJoltAPI.Instance.HasSignedInUser)
+        {
+            yield return null;
+        }
+        // Save credentials for future auto-login
+        PlayerPrefs.SetString(USERNAME_KEY, GameJoltAPI.Instance.CurrentUser.Name);
+        PlayerPrefs.SetString(TOKEN_KEY, GameJoltAPI.Instance.CurrentUser.Token);
+        PlayerPrefs.Save();
+        Debug.Log("Game Jolt credentials saved for Editor auto-login.");
     }
 }
