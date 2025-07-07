@@ -1,52 +1,91 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.Localization.Plugins.XLIFF.V20;
+﻿using System.Collections;
 using UnityEngine;
 
 public class BarukEffect : MonoBehaviour
 {
-    public GameObject[] fireHowls;
+    public ParticleSystem[] fireHowls;
+    public ParticleSystem firePound;
 
-    public GameObject firePound;
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        foreach (GameObject fireHowl in fireHowls)
+        if (firePound != null)
         {
-            fireHowl.SetActive(false);
+            firePound.Stop();
+            Light poundLight = firePound.GetComponentInChildren<Light>();
+            if (poundLight != null) poundLight.enabled = false;
         }
-        firePound.SetActive(false);
+
+        if (fireHowls != null)
+        {
+            foreach (var fireHowl in fireHowls)
+            {
+                if (fireHowl != null)
+                {
+                    fireHowl.Stop();
+                    Light light = fireHowl.GetComponent<Light>();
+                    if (light != null) light.enabled = false;
+                }
+                else
+                {
+                    Debug.LogWarning("Một phần tử trong fireHowls bị null.");
+                }
+            }
+        }
     }
+
 
     public void Howl(int index)
     {
-        if(index == 0)
+        foreach (var fireHowl in fireHowls)
         {
-            foreach (GameObject fireHowl in fireHowls)
+            if (fireHowl != null)
             {
-                fireHowl.SetActive(false);
-            }
-        }
-        else
-        {
-            foreach (GameObject fireHowl in fireHowls)
-            {
-                fireHowl.SetActive(true);
+                Light light = fireHowl.GetComponent<Light>();
+                if (index == 0)
+                {
+                    fireHowl.Stop();
+                    if (light != null) light.enabled = false;
+                }
+                else
+                {
+                    fireHowl.Play();
+                    if (light != null) light.enabled = true;
+                }
             }
         }
     }
 
     public void Pound()
     {
-        firePound.SetActive(true);
-        firePound.transform.position = new Vector3(gameObject.transform.position.x, firePound.transform.position.y, gameObject.transform.position.z);
-        StartCoroutine(EndFire());
+        if (firePound != null)
+        {
+            firePound.Play();
+            Light poundLight = firePound.GetComponentInChildren<Light>();
+            if (poundLight != null) poundLight.enabled = true;
+
+            firePound.transform.position = new Vector3(
+                transform.position.x,
+                firePound.transform.position.y,
+                transform.position.z
+            );
+
+            StartCoroutine(EndFire());
+        }
+        else
+        {
+            Debug.LogWarning("firePound is null in Pound().");
+        }
     }
 
-    IEnumerator EndFire()
+    private IEnumerator EndFire()
     {
         yield return new WaitForSecondsRealtime(3f);
-        firePound.SetActive(false);
+
+        if (firePound != null)
+        {
+            firePound.Stop();
+            Light poundLight = firePound.GetComponentInChildren<Light>();
+            if (poundLight != null) poundLight.enabled = false;
+        }
     }
 }
