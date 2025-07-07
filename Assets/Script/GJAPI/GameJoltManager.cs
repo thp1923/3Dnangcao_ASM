@@ -61,18 +61,18 @@ public class GameJoltManager : MonoBehaviour
 
         if (!string.IsNullOrEmpty(usernameArg) && !string.IsNullOrEmpty(tokenArg))
         {
-            Debug.Log("Launched from Game Jolt App — auto-signing in...");
+            //Debug.Log("Launched from Game Jolt App — auto-signing in...");
             var user = new User(usernameArg, tokenArg);
             user.SignIn(signInSuccess =>
             {
                 if (signInSuccess)
                 {
                     GameJoltAPI.Instance.CurrentUser = user;
-                    Debug.Log("Signed in via Game Jolt Client as: " + user.Name);
+                    //Debug.Log("Signed in via Game Jolt Client as: " + user.Name);
                 }
                 else
                 {
-                    Debug.LogWarning("Game Jolt app login failed.");
+                    //Debug.LogWarning("Game Jolt app login failed.");
                 }
             });
             return;
@@ -83,24 +83,24 @@ public class GameJoltManager : MonoBehaviour
 
         if (!string.IsNullOrEmpty(savedUsername) && !string.IsNullOrEmpty(savedToken))
         {
-            Debug.Log("Using saved PlayerPrefs credentials...");
+            //Debug.Log("Using saved PlayerPrefs credentials...");
             var user = new User(savedUsername, savedToken);
             user.SignIn(success =>
             {
                 if (success)
                 {
                     GameJoltAPI.Instance.CurrentUser = user;
-                    Debug.Log("Auto-signed in with saved credentials: " + user.Name);
+                    //Debug.Log("Auto-signed in with saved credentials: " + user.Name);
                 }
                 else
                 {
-                    Debug.LogWarning("Saved credential login failed.");
+                    //Debug.LogWarning("Saved credential login failed.");
                 }
             });
         }
         else
         {
-            Debug.Log("No saved credentials found, user not signed in.");
+            //Debug.Log("No saved credentials found, user not signed in.");
         }
     }
     #region Trophies
@@ -108,30 +108,30 @@ public class GameJoltManager : MonoBehaviour
     {
         if (!GameJoltAPI.Instance.HasSignedInUser)
         {
-            Debug.LogWarning("Cannot unlock, user not signed in.");
+            //Debug.LogWarning("Cannot unlock, user not signed in.");
             return;
         }
 
         if (!trophyMap.TryGetValue(type, out var id))
         {
-            Debug.LogError($"No Trophy ID for TrophyType.{type}");
+            //Debug.LogError($"No Trophy ID for TrophyType.{type}");
             return;
         }
 
-        Debug.Log($"Attempting to unlock trophy '{type}' with ID {id}");
+        //Debug.Log($"Attempting to unlock trophy '{type}' with ID {id}");
 
         GameJolt.API.Trophies.TryUnlock(id, result =>
         {
             switch (result)
             {
                 case TryUnlockResult.Unlocked:
-                    Debug.Log($"Unlocked trophy '{type}' (ID {id})!");
+                    //Debug.Log($"Unlocked trophy '{type}' (ID {id})!");
                     break;
                 case TryUnlockResult.AlreadyUnlocked:
-                    Debug.Log($"Trophy '{type}' already unlocked.");
+                    //Debug.Log($"Trophy '{type}' already unlocked.");
                     break;
                 case TryUnlockResult:
-                    Debug.LogError($"Unlock failed: Unknown error from Game Jolt for trophy '{type}' (ID {id})");
+                    //Debug.LogError($"Unlock failed: Unknown error from Game Jolt for trophy '{type}' (ID {id})");
                     break;
             }
         });
@@ -142,26 +142,28 @@ public class GameJoltManager : MonoBehaviour
         if (GameJoltAPI.Instance.HasSignedInUser)
             GameJoltUI.Instance.ShowTrophies();
         else
-            Debug.LogWarning("User not signed in — can't show trophies.");
+        {
+            //Debug.LogWarning("User not signed in — can't show trophies.");
+        }
     }
     #endregion
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.K))
         {
-            Debug.Log("K key pressed — testing trophy unlock...");
+            //Debug.Log("K key pressed — testing trophy unlock...");
             UnlockTrophy(TrophyType.TestingTrophy);
         }
         if (Input.GetKeyDown(KeyCode.L))
         {
-            Debug.Log("🧪 Login state: " + (GameJoltAPI.Instance.HasSignedInUser ?
-                $"Signed in as {GameJoltAPI.Instance.CurrentUser.Name}" : "Not signed in"));
+            //Debug.Log("Login state: " + (GameJoltAPI.Instance.HasSignedInUser ?
+                //$"Signed in as {GameJoltAPI.Instance.CurrentUser.Name}" : "Not signed in"));
         }
 
         // --- Added: Press I to open GameJolt login UI in Editor ---
-        if (Input.GetKeyDown(KeyCode.I))
+        if (Input.GetKeyDown(KeyCode.F10))
         {
-            Debug.Log("Opening Game Jolt Login UI...");
+            //Debug.Log("Opening Game Jolt Login UI...");
             GameJoltUI.Instance.ShowSignIn();
             StartCoroutine(CheckAndStoreCredentials());
         }
@@ -178,6 +180,6 @@ public class GameJoltManager : MonoBehaviour
         PlayerPrefs.SetString(USERNAME_KEY, GameJoltAPI.Instance.CurrentUser.Name);
         PlayerPrefs.SetString(TOKEN_KEY, GameJoltAPI.Instance.CurrentUser.Token);
         PlayerPrefs.Save();
-        Debug.Log("Game Jolt credentials saved for Editor auto-login.");
+        //Debug.Log("Game Jolt credentials saved for Editor auto-login.");
     }
 }
