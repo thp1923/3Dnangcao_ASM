@@ -6,6 +6,11 @@ using UnityEngine;
 
 public class EnemyTakeDamge : StatsAlive
 {
+    public LayerMask playerMask;
+    public float rangeShow = 70f;
+    public GameObject HP_Bar;
+    bool isShow;
+
     Animator aim;
     public GameObject me;
     public TextMeshProUGUI damPopUp;
@@ -21,7 +26,29 @@ public class EnemyTakeDamge : StatsAlive
     // Update is called once per frame
     void Update()
     {
-        
+        ShowAndHide();
+        if(HP_Bar == null) return;
+        if(isShow) HP_Bar.SetActive(true);
+        else HP_Bar.SetActive(false);
+    }
+
+    void ShowAndHide()
+    {
+        Collider[] playerIn = Physics.OverlapSphere(gameObject.transform.position, rangeShow, playerMask);
+        if(playerIn.Length > 0 )
+        {
+            isShow = true;
+        }
+        else
+        {
+            isShow = false;
+        }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireSphere(gameObject.transform.position, rangeShow);
     }
 
     public override void TakeDamge(int damge, int stunDamge, int trueDamge)
