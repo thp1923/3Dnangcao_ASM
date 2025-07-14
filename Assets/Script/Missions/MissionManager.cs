@@ -10,6 +10,7 @@ public class MissionManager : MonoBehaviour
 
     private void Awake()
     {
+        Debug.Log("MissionManager Awake called");
         instance = this;
     }
     public void AddMission(Mission mission)

@@ -4,15 +4,20 @@ using UnityEngine;
 
 public class MainMissionTrigger : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public Mission mainMission;
+    private bool isTriggered = false;
+    void OnTriggerEnter(Collider other)
     {
-        
-    }
+        if (!isTriggered && other.CompareTag("Player"))
+        {
+            if (MissionManager.instance == null)
+                Debug.LogError("MissionManager.Instance is null!");
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+            if (mainMission == null)
+                Debug.LogError("mainMission is not assigned!");
+
+            MissionManager.instance.TriggerMainStoryMission(mainMission);
+            isTriggered = true;
+        }
     }
 }
