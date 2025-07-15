@@ -19,7 +19,7 @@ public class PlayerInteractionKey : MonoBehaviour
                 if (door != null && door.isLocked && hasKey)
                 {
                     door.UnlockDoor();
-                    Debug.Log("Door unlocked!");
+                    //Debug.Log("Door unlocked!");
                 }
             }
         }
@@ -31,7 +31,7 @@ public class PlayerInteractionKey : MonoBehaviour
         {
             hasKey = true;
             Destroy(other.gameObject);
-            Debug.Log("Key collected!");
+            //Debug.Log("Key collected!");
         }
     }
 }

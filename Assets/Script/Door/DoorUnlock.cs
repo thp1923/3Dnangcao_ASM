@@ -36,7 +36,7 @@ public class DoorUnlock : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("No material found on door renderer.");
+            //Debug.LogWarning("No material found on door renderer.");
             Destroy(gameObject, 1f); 
         }
     }
