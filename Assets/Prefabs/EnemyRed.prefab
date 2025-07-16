@@ -1137,7 +1137,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 610684132607544599}
   - {fileID: 8128282747979906805}
   - {fileID: 1154646501614076232}
   m_Father: {fileID: 0}
@@ -1170,12 +1169,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6909789280212206475}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1360292666349605099}
+  m_Father: {fileID: 8128282747979906805}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!2083052967 &5841399077279139249
 VisualEffect:
@@ -3599,6 +3598,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: a5008124216652c44a0c5bb09b548f90,
         type: 3}
       insertIndex: 0
+      addedObject: {fileID: 610684132607544599}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: a5008124216652c44a0c5bb09b548f90,
+        type: 3}
+      insertIndex: 1
       addedObject: {fileID: 3580578570362382219}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: a5008124216652c44a0c5bb09b548f90,
         type: 3}
@@ -3795,6 +3798,11 @@ MonoBehaviour:
   StunResistance: 80
   HpSlider: {fileID: 8805072190833313018}
   type: 0
+  playerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  rangeShow: 70
+  HP_Bar: {fileID: 0}
   me: {fileID: 6828081505396481519}
   damPopUp: {fileID: 1521589357981441010}
   itemsDrop: []
