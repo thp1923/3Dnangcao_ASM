@@ -31,11 +31,11 @@ public class AudioBoss : MonoBehaviour
 
     public void playSourceWalk()
     {
-        if (clipStep.Length == 0) return; // Ki?m tra danh sách có clip không
+        if (clipStep.Length == 0) return;
 
-        source.PlayOneShot(clipStep[pos]); // Phát clip hi?n t?i
+        source.PlayOneShot(clipStep[pos]);
 
-        pos++; // T?ng ch? m?c lên
+        pos++;
         if (pos >= clipStep.Length) pos = 0;
     }
 }
