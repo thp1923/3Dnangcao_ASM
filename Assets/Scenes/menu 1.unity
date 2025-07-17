@@ -3358,7 +3358,7 @@ MonoBehaviour:
   fullscreenToggle: {fileID: 1692319864}
   brightnessSlider: {fileID: 47836865}
   gammaSlider: {fileID: 561044011}
-  globalVolume: {fileID: 0}
+  globalVolume: {fileID: 141038646}
 --- !u!1 &252290586
 GameObject:
   m_ObjectHideFlags: 0
@@ -9464,7 +9464,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &637603967
 RectTransform:
   m_ObjectHideFlags: 0
@@ -14778,7 +14778,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trophiesWindow: {fileID: 1167410316}
-  errorText: {fileID: 1363574257}
+  errorPanel: {fileID: 1604710441}
+  errorPanelText: {fileID: 1363574257}
 --- !u!4 &975081564
 Transform:
   m_ObjectHideFlags: 0
@@ -19017,7 +19018,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 975081563}
         m_TargetAssemblyTypeName: AchievementList, Assembly-CSharp
         m_MethodName: ShowAchievements
         m_Mode: 1
@@ -25047,12 +25048,12 @@ GameObject:
   - component: {fileID: 1604710444}
   - component: {fileID: 1604710443}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: ErrorPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1604710442
 RectTransform:
   m_ObjectHideFlags: 0
@@ -29562,7 +29563,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 637603966}
+      - m_Target: {fileID: 1604710441}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6

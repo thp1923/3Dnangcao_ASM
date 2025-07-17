@@ -7,13 +7,15 @@ public class AchievementList : MonoBehaviour
     [Header("Game Jolt Trophies Window")]
     public TrophiesWindow trophiesWindow;
 
-    [Header("Error Display")]
-    public TMP_Text errorText;
+    [Header("Error Display Panel")]
+    public GameObject errorPanel;      
+    public TMP_Text errorPanelText;    
+
     public void ShowAchievements()
     {
         if (!GameJoltAPI.Instance.HasSignedInUser)
         {
-            ShowError("Unable to connect to Game Jolt. Please check your internet connection.\nIf this message keeps appearing, please reinstall the game or wait for a new update. Sorry for the inconvenience.");
+            ShowErrorPanel("Unable to connect to Game Jolt. Please check your internet connection.\nIf this message keeps appearing, please reinstall the game or wait for a new update. Sorry for the inconvenience.");
             return;
         }
 
@@ -24,30 +26,26 @@ public class AchievementList : MonoBehaviour
             {
                 if (!success)
                 {
-                    ShowError("Failed to load achievements.");
+                    ShowErrorPanel("User has not logged in Gamejolt account.");
                 }
             });
         }
-        else
-        {
-            ShowError("TrophiesWindow is not assigned.");
-        }
     }
 
-    private void ShowError(string message)
+    private void ShowErrorPanel(string message)
     {
-        if (errorText == null) return;
+        if (errorPanelText != null)
+            errorPanelText.text = message;
+        if (errorPanel != null)
+            errorPanel.SetActive(true);
 
-        errorText.text = message;
-        errorText.gameObject.SetActive(true);
-
-        CancelInvoke(nameof(HideError));
-        Invoke(nameof(HideError), 6f);
+        CancelInvoke(nameof(HideErrorPanel));
+        Invoke(nameof(HideErrorPanel), 6f);
     }
 
-    private void HideError()
+    private void HideErrorPanel()
     {
-        if (errorText != null)
-            errorText.gameObject.SetActive(false);
+        if (errorPanel != null)
+            errorPanel.SetActive(false);
     }
 }
