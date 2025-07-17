@@ -37,6 +37,7 @@ public class DragonAttackEffect : MonoBehaviour
 
     private void Start()
     {
+        FireBall.SetActive(false);
         dragonClaw.Stop();
         dragonClaw.GetComponentInChildren<Light>().enabled = false;
         isTrans = false;
@@ -57,7 +58,8 @@ public class DragonAttackEffect : MonoBehaviour
 
     public void FlyBreath()
     {
-        Instantiate(FireBall, fireBallPoint.transform.position, Quaternion.identity);
+        FireBall.transform.position = fireBallPoint.transform.position;
+        FireBall.SetActive(true);
         sourceSFX.PlayOneShot(fireBallClip);
     }
 

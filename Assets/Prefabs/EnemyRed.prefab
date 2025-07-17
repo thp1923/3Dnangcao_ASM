@@ -163,7 +163,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -517,7 +517,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -650,7 +650,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!114 &5586895050988649322
 MonoBehaviour:
@@ -792,7 +792,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -1153,7 +1153,6 @@ GameObject:
   - component: {fileID: 5841399077279139249}
   - component: {fileID: 4942170726226235751}
   - component: {fileID: 7730362432392690296}
-  - component: {fileID: 4312376073569933957}
   m_Layer: 0
   m_Name: VFX_CharacterDissolve2
   m_TagString: Untagged
@@ -1282,24 +1281,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ExecuteInEditor: 1
-  m_Bindings:
-  - {fileID: 4312376073569933957}
+  m_Bindings: []
   m_VisualEffect: {fileID: 5841399077279139249}
---- !u!114 &4312376073569933957
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6909789280212206475}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fdfea1f838247c40921a07afedde962, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Property:
-    m_Name: Transform
-  Target: {fileID: 4367687709666926177}
 --- !u!1 &7325085645542469556
 GameObject:
   m_ObjectHideFlags: 0
@@ -3800,9 +3783,9 @@ MonoBehaviour:
   type: 0
   playerMask:
     serializedVersion: 2
-    m_Bits: 0
-  rangeShow: 70
-  HP_Bar: {fileID: 0}
+    m_Bits: 8
+  rangeShow: 50
+  HP_Bar: {fileID: 5235128873512775131}
   me: {fileID: 6828081505396481519}
   damPopUp: {fileID: 1521589357981441010}
   itemsDrop: []

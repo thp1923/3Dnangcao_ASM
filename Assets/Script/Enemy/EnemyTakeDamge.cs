@@ -10,6 +10,7 @@ public class EnemyTakeDamge : StatsAlive
     public float rangeShow = 70f;
     public GameObject HP_Bar;
     bool isShow;
+    bool isDeath;
 
     Animator aim;
     public GameObject me;
@@ -53,6 +54,7 @@ public class EnemyTakeDamge : StatsAlive
 
     public override void TakeDamge(int damge, int stunDamge, int trueDamge)
     {
+        if (isDeath) return;
         switch (type)
         {
             case TypeTakeDamge.Only:
@@ -73,6 +75,7 @@ public class EnemyTakeDamge : StatsAlive
         if(currentHP <= 0)
         {
             aim.SetBool("IsDeath", true);
+            isDeath = true;
         }
     }
 

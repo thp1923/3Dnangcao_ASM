@@ -13,7 +13,7 @@ public class DragonExplosionDamge : StatsAttack
 
     private void Start()
     {
-        Destroy(gameObject, timerDestroy);
+        StartCoroutine(Hide());
         StartCoroutine(ExplosionDamge());
     }
 
@@ -25,6 +25,12 @@ public class DragonExplosionDamge : StatsAttack
         {
             player.GetComponent<PlayerTakeDamge>().TakeDamge(atk, stunDamge[0], trueDamge);
         }
+    }
+
+    IEnumerator Hide()
+    {
+        yield return new WaitForSeconds(timerDestroy);
+        gameObject.SetActive(false);
     }
 
     private void OnDrawGizmosSelected()
