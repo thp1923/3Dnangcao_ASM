@@ -28,9 +28,9 @@ public class LockMouse : MonoBehaviour
 
             if (Input.GetKeyDown(lockMouseKey))
             {
+                CursorLocked = false;
                 GetComponent<MoveManager>().CheckLockMove(true);
                 GetComponent<MoveManager>().CheckDrag(true);
-                CursorLocked = false;
                 inventory.SetActive(true);
             }
         }
@@ -41,9 +41,9 @@ public class LockMouse : MonoBehaviour
 
             if (Input.GetKeyDown(lockMouseKey))
             {
+                CursorLocked = true;
                 GetComponent<MoveManager>().CheckLockMove(false);
                 GetComponent<MoveManager>().CheckDrag(false);
-                CursorLocked = true;
                 inventory.SetActive(false);
             }
         }
