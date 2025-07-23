@@ -7,7 +7,6 @@ public class PlayerInteractionKey : MonoBehaviour
 {
     public bool hasKey = false;
     public float interactDistance = 2f;
-    private DoorUnlock currentDoor;
     private DoorUnlock nearbyDoor;
 
 
@@ -50,7 +49,7 @@ public class PlayerInteractionKey : MonoBehaviour
             //Debug.Log("Key collected!");
             if (other.GetComponent<DoorUnlock>() != null)
             {
-                currentDoor = null;
+                nearbyDoor = null;
                 UIDoorMes.instance.HideMessage();
             }
         }
