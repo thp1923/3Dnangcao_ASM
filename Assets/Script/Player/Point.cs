@@ -22,6 +22,7 @@ public class Point : MonoBehaviour
         if(point != upStats.Point)
         {
             point = upStats.Point;
+            pointText.text = point.ToString();
         }
     }
 }
