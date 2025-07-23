@@ -62,6 +62,14 @@ public class UpgradeStats : MonoBehaviour
         else
             DontDestroyOnLoad(gameObject);
         IsHide = true;
+        LevelText.text = "Level " + Level;
+        PointText.text = "Point: " + Point;
+        PointLostText.text = "Need Point: " + Point_Lost;
+        if(Level > 0)
+        {
+            Point_Lost = Mathf.FloorToInt(10 * Mathf.Pow(Level, 1.05f));
+            PointLostText.text = "Need Point: " + Point_Lost;
+        }
     }
 
     private void OnEnable()
