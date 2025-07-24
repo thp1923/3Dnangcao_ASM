@@ -63,6 +63,7 @@ public class PlayerInteractionKey : MonoBehaviour
         else if (other.GetComponent<DoorUnlock>() != null)
         {
             nearbyDoor = other.GetComponent<DoorUnlock>();
+            Debug.Log("Player entered door trigger.");
             if (nearbyDoor.isLocked)
             {
                 if (hasKey)
