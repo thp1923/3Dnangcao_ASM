@@ -123,6 +123,57 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &304193141
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 304193142}
+  - component: {fileID: 304193143}
+  m_Layer: 0
+  m_Name: Cutscene
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &304193142
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 304193141}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 106.30824, y: -2.5554607, z: 55.752857}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!320 &304193143
+PlayableDirector:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 304193141}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_PlayableAsset: {fileID: 11400000, guid: 063d85bb1dcaea249bbc3b2202b61b28, type: 2}
+  m_InitialState: 1
+  m_WrapMode: 2
+  m_DirectorUpdateMode: 1
+  m_InitialTime: 0
+  m_SceneBindings:
+  - key: {fileID: -7620958040002028300, guid: 063d85bb1dcaea249bbc3b2202b61b28, type: 2}
+    value: {fileID: 736291369}
+  m_ExposedReferences:
+    m_References: []
 --- !u!1 &511380476
 GameObject:
   m_ObjectHideFlags: 0
@@ -240,7 +291,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -446,6 +497,12 @@ PrefabInstance:
 --- !u!4 &736291368 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 412832, guid: 817bb79c7c90c5346a9f1c046bb8ef2e,
+    type: 3}
+  m_PrefabInstance: {fileID: 736291367}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &736291369 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 134690, guid: 817bb79c7c90c5346a9f1c046bb8ef2e,
     type: 3}
   m_PrefabInstance: {fileID: 736291367}
   m_PrefabAsset: {fileID: 0}
@@ -985,3 +1042,4 @@ SceneRoots:
   - {fileID: 866951481}
   - {fileID: 1626706532}
   - {fileID: 511380478}
+  - {fileID: 304193142}
