@@ -6,9 +6,17 @@ using UnityEngine;
 
 public class EnemyTakeDamge : StatsAlive
 {
+    public LayerMask playerMask;
+    public float rangeShow = 70f;
+    public GameObject HP_Bar;
+    bool isShow;
+    bool isDeath;
+
     Animator aim;
     public GameObject me;
     public TextMeshProUGUI damPopUp;
+
+    public int Point;
     [Header("---------Items Drop-----------")]
     public List<GameObject> itemsDrop;
     // Start is called before the first frame update
@@ -21,11 +29,34 @@ public class EnemyTakeDamge : StatsAlive
     // Update is called once per frame
     void Update()
     {
-        
+        ShowAndHide();
+        if(HP_Bar == null) return;
+        if(isShow) HP_Bar.SetActive(true);
+        else HP_Bar.SetActive(false);
+    }
+
+    void ShowAndHide()
+    {
+        Collider[] playerIn = Physics.OverlapSphere(gameObject.transform.position, rangeShow, playerMask);
+        if(playerIn.Length > 0 )
+        {
+            isShow = true;
+        }
+        else
+        {
+            isShow = false;
+        }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireSphere(gameObject.transform.position, rangeShow);
     }
 
     public override void TakeDamge(int damge, int stunDamge, int trueDamge)
     {
+        if (isDeath) return;
         switch (type)
         {
             case TypeTakeDamge.Only:
@@ -46,6 +77,7 @@ public class EnemyTakeDamge : StatsAlive
         if(currentHP <= 0)
         {
             aim.SetBool("IsDeath", true);
+            isDeath = true;
         }
     }
 
@@ -62,6 +94,7 @@ public class EnemyTakeDamge : StatsAlive
         {
             Instantiate(items, gameObject.transform.position + new Vector3(Random.Range(-1f, 1f), 1, Random.Range(-1f, 1f)), Quaternion.identity);
         }
+        FindObjectOfType<UpgradeStats>().AddPoint(Point);
         if(me != null)
             Destroy(me);
     }

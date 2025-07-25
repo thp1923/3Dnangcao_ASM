@@ -11,10 +11,15 @@ public class FireBall : MonoBehaviour
     {
         if (other.CompareTag(tagCompare))
         {
-            GameObject instance = GameObject.Instantiate(Explosion, 
-                new Vector3(gameObject.transform.position.x, gameObject.transform.position.y - 0.5f, gameObject.transform.position.z), 
-                Quaternion.Euler(-90, 0, 0));
-            Destroy(gameObject, 2f);
+            Explosion.transform.position = new Vector3(gameObject.transform.position.x, Explosion.transform.position.y, gameObject.transform.position.z);
+            Explosion.SetActive(true);
+            StartCoroutine(Hide());
         }
+    }
+
+    IEnumerator Hide()
+    {
+        yield return new WaitForSeconds(2f);
+        gameObject.SetActive(false);
     }
 }

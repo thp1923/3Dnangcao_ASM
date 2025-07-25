@@ -5,6 +5,8 @@ using TMPro;
 using System.Collections;
 using System.Text;
 using System;
+using PlayFab;
+using PlayFab.ClientModels;
 
 public class AuthUIManager : MonoBehaviour
 {
@@ -131,6 +133,11 @@ public class AuthUIManager : MonoBehaviour
     public void OnResetPasswordClicked() => StartCoroutine(ResetPassword());
     public void OnChangePasswordClicked() => StartCoroutine(ChangePassword()); // New hook
 
+    void Start()
+    {
+         PlayFabSettings.staticSettings.TitleId = "1F464D";
+    }
+
     IEnumerator Login()
     {
         ShowLoading();
@@ -176,6 +183,8 @@ public class AuthUIManager : MonoBehaviour
                 PlayerPrefs.Save();
                 StartCoroutine(ShowTemporaryMessage(textStatus_login, "Đăng nhập thành công."));
                 ShowMainMenu();
+
+                LoginToPlayFab(data.username);
             }
             HideLoading();
         }
@@ -505,6 +514,51 @@ public class AuthUIManager : MonoBehaviour
             return "Định dạng phản hồi không hợp lệ.";
         }
     }
+
+    void LoginToPlayFab(string customId)
+    {
+        var request = new LoginWithCustomIDRequest
+        {
+            CustomId = customId,
+            CreateAccount = true
+        };
+
+        PlayFabClientAPI.LoginWithCustomID(request,
+            result =>
+            {
+                Debug.Log($"✅ PlayFab login thành công! PlayFabId: {result.PlayFabId}");
+                PlayerPrefs.SetString("PlayFabId", result.PlayFabId);
+                PlayerPrefs.SetString("PlayFabSessionTicket", result.SessionTicket);
+                PlayerPrefs.Save();
+            },
+            error =>
+            {
+                Debug.LogError($"❌ PlayFab login thất bại: {error.GenerateErrorReport()}");
+            });
+    }
+
+    public void OnLogoutClicked()
+    {
+        ShowLoading();
+
+        // Xoá session PlayFab
+        PlayFabClientAPI.ForgetAllCredentials();
+
+        // Xoá PlayerPrefs
+        PlayerPrefs.DeleteKey("jwt_token");
+        PlayerPrefs.DeleteKey("user_role");
+        PlayerPrefs.DeleteKey("PlayFabId");
+        PlayerPrefs.DeleteKey("PlayFabSessionTicket");
+        PlayerPrefs.DeleteKey("pending_email");
+        PlayerPrefs.DeleteKey("reset_email");
+        PlayerPrefs.Save();
+
+        Debug.Log("✅ Đăng xuất thành công.");
+
+        ShowLoginPanel();
+        HideLoading();
+    }
+
 
     [System.Serializable] public class LoginData { public string username; public string Password; public bool CreateAccount; }
     [System.Serializable] public class AuthResponse { public string token; public string username; public string role; }

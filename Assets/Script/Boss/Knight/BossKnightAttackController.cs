@@ -31,6 +31,8 @@ public class BossKnightAttackController : MonoBehaviour
     {
         if (animator == null) animator = GetComponent<Animator>();
 
+        animator.applyRootMotion = true;
+
         if (hasFired) return;
 
         Collider[] hits = Physics.OverlapSphere(transform.position, detectRadius, playerLayer);
