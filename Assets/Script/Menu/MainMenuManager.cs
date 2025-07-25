@@ -58,7 +58,7 @@ public class MainMenuManager : MonoBehaviour
         GameAutoSaveManager.Instance.souls = 0;
         GameAutoSaveManager.Instance.playTime = 0;
 
-        SceneManager.LoadScene("Map");
+        SceneManager.LoadScene("CutsceneOpeningFinal");
     }
 
 

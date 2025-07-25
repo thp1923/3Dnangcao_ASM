@@ -17,6 +17,7 @@ public class HpBossDragon : StatsAlive
     bool isShow;
     bool isDeath;
     // Start is called before the first frame update
+    public int Point;
     protected override void Start()
     {
         base.Start();
@@ -75,6 +76,7 @@ public class HpBossDragon : StatsAlive
 
     public void Death()
     {
+        FindObjectOfType<UpgradeStats>().AddPoint(Point);
         if (me != null)
             Destroy(me);
     }

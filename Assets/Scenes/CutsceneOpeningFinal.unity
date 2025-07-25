@@ -4825,6 +4825,8 @@ PlayableDirector:
     value: {fileID: 1876630169}
   - key: {fileID: -2017585091516705920, guid: c42c30dcb5242864b9ee14db80ea6865, type: 2}
     value: {fileID: 1265861026}
+  - key: {fileID: 8260997378304953102, guid: c42c30dcb5242864b9ee14db80ea6865, type: 2}
+    value: {fileID: 965950443}
   m_ExposedReferences:
     m_References:
     - 3212221580028684eb88b6640da00bd4: {fileID: 1746776396}
@@ -9187,7 +9189,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 20.5
+  field of view: 43.8
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -9213,8 +9215,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 835974217}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.012744263, y: 0.0015070253, z: -0.00022015438, w: 0.9999176}
-  m_LocalPosition: {x: 146.3138, y: 6.582665, z: 51.49787}
+  m_LocalRotation: {x: 0.004291218, y: 0.71680975, z: -0.004623063, w: 0.6972403}
+  m_LocalPosition: {x: 2792.9968, y: 1.4074278, z: 156.72105}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10975,6 +10977,82 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 954695572}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &965950440
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 965950442}
+  - component: {fileID: 965950441}
+  - component: {fileID: 965950443}
+  m_Layer: 0
+  m_Name: TransitionProxy
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &965950441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 965950440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f56cfff1d1ec0a54692ebd213ae1be51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nextSceneName: Map
+--- !u!4 &965950442
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 965950440}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 987.0574, y: 608.8108, z: 254.7766}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &965950443
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 965950440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Events:
+    m_Signals:
+    - {fileID: 11400000, guid: f9bdb46427a654c4cab52e64e5844fff, type: 2}
+    m_Events:
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 965950441}
+          m_TargetAssemblyTypeName: SceneTransitionProxy, Assembly-CSharp
+          m_MethodName: triggerTransition
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1001 &977379764
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20940,3 +21018,4 @@ SceneRoots:
   - {fileID: 802934067}
   - {fileID: 1271608964}
   - {fileID: 228566984}
+  - {fileID: 965950442}
