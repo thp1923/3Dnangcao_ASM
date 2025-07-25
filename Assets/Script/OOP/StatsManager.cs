@@ -54,6 +54,13 @@ namespace StatsManager
             //    // sẽ chạy stun tùy theo mức độ
             //}
         }
+
+        public virtual void UpgradeAlive(int HP_Upgrade, int Def_Upgrade)
+        {
+            MaxHP = HP_Upgrade;
+            HpSlider.maxValue = HP_Upgrade;
+            Defense = Def_Upgrade;
+        }
     }
 
     public class StatsAttack : MonoBehaviour
@@ -83,6 +90,13 @@ namespace StatsManager
                 atk = damge;
             }
         }
+
+        public virtual void UpgradeAttack(int BaseATK_Upgrade, float critRate_Upgrade, float critDamge_Upgrade)
+        {
+            BaseATK = BaseATK_Upgrade;
+            critRate = critRate_Upgrade;
+            critDamge = critDamge_Upgrade;
+        }
     }
 
     public class StatsStamina : MonoBehaviour
@@ -102,6 +116,12 @@ namespace StatsManager
             stamina = StaminaMax;
             staminaBar.maxValue = StaminaMax;
             staminaBar.value = stamina;
+        }
+
+        public virtual void UpgradeStamina(int StaminaMax_Upgrade)
+        {
+            StaminaMax = StaminaMax_Upgrade;
+            staminaBar.maxValue = StaminaMax_Upgrade;
         }
 
         public virtual void TakeStamina(int staminaLost)

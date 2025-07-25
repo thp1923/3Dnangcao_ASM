@@ -170,12 +170,12 @@ public class PlayerTakeDamge : StatsAlive
     public void Death()
     {
         if (PlayerAim == null) return;
+        isDeath = true;
         PlayerAim.SetBool("IsDeath", true);
         CanvaDied.SetBool("IsDeath", true);
         PlayerAim.SetFloat("InputMagnitude", -1f);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        isDeath = true;
         GetComponent<vThirdPersonInput>().enabled = false;
         GetComponent<vThirdPersonController>().enabled = false;
         GetComponent<PlayerAttackController>().enabled = false;
