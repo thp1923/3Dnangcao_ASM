@@ -76,14 +76,16 @@ namespace StatsManager
 
         internal int atkBonus;
         internal int stunDamgeBonus;
+        internal float critRateBonus;
+        internal float critDamgeBonus;
         protected int atk;
 
         public virtual void Attack(int attackNumber)
         {
             int damge = Mathf.FloorToInt((BaseATK + atkBonus) * (ATK[attackNumber]/100));
-            if(Random.Range(0, 1f) <= critRate)
+            if(Random.Range(0, 1f) <= (critRate+critRateBonus))
             {
-                atk = Mathf.FloorToInt(damge * (1f + (critDamge)/100));
+                atk = Mathf.FloorToInt(damge * (1f + (critDamge+critDamgeBonus)/100));
             }
             else
             {

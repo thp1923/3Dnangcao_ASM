@@ -23,7 +23,7 @@ public class PlayerTakeDamge : StatsAlive
 
     [Header("-------------Heath----------")]
     [SerializeField] private KeyCode heathKey = KeyCode.R;
-    public int heath;
+    int heath;
     public int heathCount;
     protected int _heathCount;
 
@@ -65,6 +65,7 @@ public class PlayerTakeDamge : StatsAlive
     
     public void HeathHp()
     {
+        heath = (int)(MaxHP * 0.3f);
         currentHP += heath;
         if (currentHP >= MaxHP)
         {
