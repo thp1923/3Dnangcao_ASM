@@ -99,7 +99,7 @@ public class InventoryManager : MonoBehaviour
 
     bool IsEquipment(ItemType type)
     {
-        return type == ItemType.Equipment || type == ItemType.Weapon || type == ItemType.Armor;
+        return type == ItemType.Equipment;
     }
     void Awake()
     {

@@ -4,23 +4,30 @@ using System.Collections.Generic;
 using PlayFab.EconomyModels;
 using UnityEngine;
 
-public enum ItemType { Consumable, Equipment, Quest, Material, Weapon,Armor}
+public enum ItemType { Consumable, Equipment}
 public enum Rarity { Common, Uncommon, Rare, Epic, Legendary, Mythical }
-public enum EquidmentSlotType {Head, Chest, Leg, Weapon, Shield, Ring}
+public enum EquidmentSlotType {BaseSkill, Weapon, SpecialSkill, Ring, AttackGem, DefenceGem}
+
+public enum ConsumableType { Health, Point}
 
 [CreateAssetMenu(menuName = "InventoryThaiAnh/Item")]
 public class Item : ScriptableObject
 {
     public int ItemID;
-    public string itemName;
-    public Sprite icon;
     public ItemType itemType;
     public Rarity rarity;
+    public EquidmentSlotType allowedSlot;
+    public ConsumableType consumableType;
+    public string itemName;
+    public Sprite icon;
     public int maxStack = 1;
     public int value; // giá tiền
-    public EquidmentSlotType allowedSlot;
     public GameObject prefab;
     public bool isUsable;
+
+    
+    public int addHeath;
+    public int addPoint;
 
     [Header("3D Model Prefab")]
     public GameObject modelPrefab;  // prefab để spawn mô hình vũ khí/giáp

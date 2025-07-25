@@ -22,8 +22,7 @@ public class InventorySlot : MonoBehaviour,
     public void AddItem(Item newItem, int amount = 1)
     {
         // Nếu là Equipment slot hoặc item không stack → luôn gán mới
-        if (isEquipmentSlot || newItem.itemType == ItemType.Equipment ||
-            newItem.itemType == ItemType.Weapon || newItem.itemType == ItemType.Armor)
+        if (isEquipmentSlot || newItem.itemType == ItemType.Equipment)
         {
             currentItem = newItem;
             stackCount = 1;
@@ -65,8 +64,7 @@ public class InventorySlot : MonoBehaviour,
 
     public bool CanStack(Item item)
     {
-        if (isEquipmentSlot || item.itemType == ItemType.Equipment ||
-         item.itemType == ItemType.Weapon || item.itemType == ItemType.Armor)
+        if (isEquipmentSlot || item.itemType == ItemType.Equipment)
             return false;
 
         return currentItem != null &&
@@ -271,7 +269,7 @@ public class InventorySlot : MonoBehaviour,
 
     private bool IsEquipment(ItemType type)
     {
-        return type == ItemType.Equipment || type == ItemType.Weapon || type == ItemType.Armor;
+        return type == ItemType.Equipment;
     }
     public void ClearSlot(bool destroySlot = false)
     {

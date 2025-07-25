@@ -25,7 +25,7 @@ public class PlayerTakeDamge : StatsAlive
     [SerializeField] private KeyCode heathKey = KeyCode.R;
     public int heath;
     public int heathCount;
-    int _heathCount;
+    protected int _heathCount;
 
     [Header("Test")]
     public int stunDamgeTest;
