@@ -223,7 +223,7 @@ public class InventorySlot : MonoBehaviour,
                 //{
                 //    ClearSlot();
                 //}
-                InventoryManager.Instance.CreateBagSlot(currentItem);
+                //InventoryManager.Instance.CreateBagSlot(currentItem);
                 //switch (currentItem.allowedSlot)
                 //{
                 //    case EquidmentSlotType.Weapon:
@@ -247,7 +247,7 @@ public class InventorySlot : MonoBehaviour,
                 //    default:
                 //        break;
                 //}
-                ClearSlot();
+                InventoryManager.Instance.UnequipItem(this);
                 return;
             }
 

@@ -89,10 +89,24 @@ public class InventoryManager : MonoBehaviour
 
     public void CreateBagSlot(Item item, int amount = 1)
     {
+        // ⚠ Trước khi tạo mới → thử stack vào slot đã có
+        foreach (Transform child in contentPanel)
+        {
+            var slot = child.GetComponentInChildren<InventorySlot>();
+            if (slot != null && slot.CanStack(item))
+            {
+                slot.AddItem(item, amount);
+                MergeAllStackableItems(); // Gộp gọn lại
+                return; // ✅ Đã stack thành công → không tạo mới
+            }
+        }
+
+        // ❌ Không stack được → tạo slot mới
         GameObject slotGO = Instantiate(bagSlotPrefab, contentPanel);
         InventorySlot newSlot = slotGO.GetComponent<InventorySlot>();
         newSlot.AddItem(item, amount);
 
+        MergeAllStackableItems(); // Gộp sau khi tạo mới
         //SaveInventory();
 
     }
@@ -111,9 +125,8 @@ public class InventoryManager : MonoBehaviour
         Item item = fromSlot.GetItem();
         if (item == null) return;
 
-        GameObject newSlotGO = Instantiate(itemSlotPrefab, contentPanel);
-        InventorySlot newSlot = newSlotGO.GetComponentInChildren<InventorySlot>();
-        newSlot.AddItem(item);
+        // ⚠ gọi CreateBagSlot → đã có stack logic
+        CreateBagSlot(item, fromSlot.GetStackCount());
 
         fromSlot.ClearSlot();
         Debug.Log("Tháo" + item.itemName);
