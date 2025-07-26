@@ -219,34 +219,35 @@ public class InventorySlot : MonoBehaviour,
         {
             if (isEquipmentSlot)
             {
-                if(currentItem == null)
-                {
-                    ClearSlot();
-                }
+                //if(currentItem == null)
+                //{
+                //    ClearSlot();
+                //}
                 InventoryManager.Instance.CreateBagSlot(currentItem);
-                switch (currentItem.allowedSlot)
-                {
-                    case EquidmentSlotType.Weapon:
-                        Debug.Log("Weapon: "+ currentItem.name);
-                        break;
-                    case EquidmentSlotType.Ring:
-                        Debug.Log("Ring: " + currentItem.name);
-                        break;
-                    case EquidmentSlotType.AttackGem:
-                        Debug.Log("AttackGem: " + currentItem.name);
-                        break;
-                    case EquidmentSlotType.DefenceGem:
-                        Debug.Log("DefenceGem: " + currentItem.name);
-                        break;
-                    case EquidmentSlotType.BaseSkill:
-                        Debug.Log("BaseSkill: " + currentItem.name);
-                        break;
-                    case EquidmentSlotType.SpecialSkill:
-                        Debug.Log("SpeacialSkill: " + currentItem.name);
-                        break;
-                    default:
-                        break;
-                }
+                //switch (currentItem.allowedSlot)
+                //{
+                //    case EquidmentSlotType.Weapon:
+                //        Debug.Log("Weapon: "+ currentItem.name);
+                //        break;
+                //    case EquidmentSlotType.Ring:
+                //        Debug.Log("Ring: " + currentItem.name);
+                //        break;
+                //    case EquidmentSlotType.AttackGem:
+                //        Debug.Log("AttackGem: " + currentItem.name);
+                //        break;
+                //    case EquidmentSlotType.DefenceGem:
+                //        Debug.Log("DefenceGem: " + currentItem.name);
+                //        break;
+                //    case EquidmentSlotType.BaseSkill:
+                //        Debug.Log("BaseSkill: " + currentItem.name);
+                //        break;
+                //    case EquidmentSlotType.SpecialSkill:
+                //        Debug.Log("SpeacialSkill: " + currentItem.name);
+                //        break;
+                //    default:
+                //        break;
+                //}
+                ClearSlot();
                 return;
             }
 
@@ -300,31 +301,31 @@ public class InventorySlot : MonoBehaviour,
     public void ClearSlot(bool destroySlot = false)
     {
 
-        Debug.Log("[ClearSlot] Xoá item: " + (currentItem != null ? currentItem.itemName : "null"));
+        //Debug.Log("[ClearSlot] Xoá item: " + (currentItem != null ? currentItem.itemName : "null"));
 
-        switch (currentItem.allowedSlot)
-        {
-            case EquidmentSlotType.Weapon:
-                Debug.Log("Xoa Weapon: " + currentItem.name);
-                break;
-            case EquidmentSlotType.Ring:
-                Debug.Log("Xoa Ring: " + currentItem.name);
-                break;
-            case EquidmentSlotType.AttackGem:
-                Debug.Log("Xoa AttackGem: " + currentItem.name);
-                break;
-            case EquidmentSlotType.DefenceGem:
-                Debug.Log("Xoa DefenceGem: " + currentItem.name);
-                break;
-            case EquidmentSlotType.BaseSkill:
-                Debug.Log("Xoa BaseGem: " + currentItem.name);
-                break;
-            case EquidmentSlotType.SpecialSkill:
-                Debug.Log("Xoa SpeacialSkill: " + currentItem.name);
-                break;
-            default:
-                break;
-        }
+        //switch (currentItem.allowedSlot)
+        //{
+        //    case EquidmentSlotType.Weapon:
+        //        Debug.Log("Xoa Weapon: " + currentItem.name);
+        //        break;
+        //    case EquidmentSlotType.Ring:
+        //        Debug.Log("Xoa Ring: " + currentItem.name);
+        //        break;
+        //    case EquidmentSlotType.AttackGem:
+        //        Debug.Log("Xoa AttackGem: " + currentItem.name);
+        //        break;
+        //    case EquidmentSlotType.DefenceGem:
+        //        Debug.Log("Xoa DefenceGem: " + currentItem.name);
+        //        break;
+        //    case EquidmentSlotType.BaseSkill:
+        //        Debug.Log("Xoa BaseGem: " + currentItem.name);
+        //        break;
+        //    case EquidmentSlotType.SpecialSkill:
+        //        Debug.Log("Xoa SpeacialSkill: " + currentItem.name);
+        //        break;
+        //    default:
+        //        break;
+        //}
 
         currentItem = null;
         stackCount = 0;

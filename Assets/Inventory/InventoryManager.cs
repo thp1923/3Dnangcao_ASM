@@ -47,6 +47,7 @@ public class InventoryManager : MonoBehaviour
         Item item = fromSlot.GetItem();
         if (item == null) return;
         if (!IsEquipment(item.itemType)) return;
+        Debug.Log("Thay" +  item.itemName);
 
         foreach (var slot in equipmentSlots)
         {
@@ -65,13 +66,13 @@ public class InventoryManager : MonoBehaviour
             {
                 slot.AddItem(item, fromSlot.GetStackCount());
 
-                Debug.Log($"[TryMoveItem] fromSlot: {fromSlot.name}, isEquipmentSlot: {fromSlot.isEquipmentSlot}");
+                //Debug.Log($"[TryMoveItem] fromSlot: {fromSlot.name}, isEquipmentSlot: {fromSlot.isEquipmentSlot}");
 
                 // ✅ Đây là điểm cần chắc chắn destroy slot nếu từ túi
                 if (!fromSlot.isEquipmentSlot)
                 {
                     fromSlot.ClearSlot(true); // Destroy gameObject
-                    Debug.Log("[Destroy] Đã huỷ slot túi sau khi trang bị");
+                    //Debug.Log("[Destroy] Đã huỷ slot túi sau khi trang bị");
                 }
                 else
                 {
@@ -115,7 +116,8 @@ public class InventoryManager : MonoBehaviour
         newSlot.AddItem(item);
 
         fromSlot.ClearSlot();
-        Debug.Log($"[Unequip] {item.itemName} → tạo lại trong Bag");
+        Debug.Log("Tháo" + item.itemName);
+        //Debug.Log($"[Unequip] {item.itemName} → tạo lại trong Bag");
 
         //SaveInventory();
 
