@@ -8,6 +8,7 @@ public enum ItemType { Consumable, Equipment}
 public enum Rarity { Common, Uncommon, Rare, Epic, Legendary, Mythical }
 public enum EquidmentSlotType {BaseSkill, Weapon, SpecialSkill, Ring, AttackGem, DefenceGem}
 
+public enum SkillType { FireSword, BodySkill, GreenFire, DragonFire}
 public enum ConsumableType { Health, Point}
 
 [CreateAssetMenu(menuName = "InventoryThaiAnh/Item")]
@@ -18,6 +19,7 @@ public class Item : ScriptableObject
     public Rarity rarity;
     public EquidmentSlotType allowedSlot;
     public ConsumableType consumableType;
+    public SkillType skillType;
     public string itemName;
     public Sprite icon;
     public int maxStack = 1;
@@ -25,9 +27,32 @@ public class Item : ScriptableObject
     public GameObject prefab;
     public bool isUsable;
 
-    
+    #region Consumable
     public int addHeath;
     public int addPoint;
+    #endregion
+
+    #region Weapon
+    public float damgeBonus;
+    #endregion
+
+    #region Ring
+    public float critRateBonus;
+    public float critDamBonus;
+    #endregion
+
+    #region AttackGem
+    public float damgeBonusGem;
+    #endregion
+
+    #region DefenceGem
+    public int defBonusGem;
+    #endregion
+
+    #region Skill
+    public float damgeBonusSkill;
+    public float defBonusSkill;
+    #endregion
 
     [Header("3D Model Prefab")]
     public GameObject modelPrefab;  // prefab để spawn mô hình vũ khí/giáp

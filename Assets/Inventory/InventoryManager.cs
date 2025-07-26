@@ -5,6 +5,7 @@ using PlayFab.ClientModels;
 
 public class InventoryManager : MonoBehaviour
 {
+    public GameObject Player;
     public GameObject bagSlotPrefab;  // Dùng để tạo item trong túi
     public GameObject equipmentSlotPrefab; // Dùng để tạo giao diện Equipment nếu cần
 
@@ -48,6 +49,32 @@ public class InventoryManager : MonoBehaviour
         if (item == null) return;
         if (!IsEquipment(item.itemType)) return;
         Debug.Log("Thay" +  item.itemName);
+        var atk = Player.GetComponent<AttackDamgePlayer>();
+        var def = Player.GetComponent<PlayerTakeDamge>();
+
+        switch (item.allowedSlot)
+        {
+            case EquidmentSlotType.Weapon:
+                int weaponBonus = (int)(atk.BaseATK * (item.damgeBonus / 100f));
+                atk.atkBonus = weaponBonus;
+                break;
+            case EquidmentSlotType.Ring:
+                atk.critRateBonus = item.critRateBonus;
+                atk.critDamgeBonus = item.critDamBonus;
+                break;
+            case EquidmentSlotType.AttackGem:
+                atk.damgeAttack = item.damgeBonusGem;
+                break;
+            case EquidmentSlotType.DefenceGem:
+                def.defenseBonus = item.defBonusGem;
+                break;
+            case EquidmentSlotType.BaseSkill:
+                break;
+            case EquidmentSlotType.SpecialSkill:
+                break;
+            default:
+                break;
+        }
 
         foreach (var slot in equipmentSlots)
         {
@@ -127,7 +154,31 @@ public class InventoryManager : MonoBehaviour
 
         // ⚠ gọi CreateBagSlot → đã có stack logic
         CreateBagSlot(item, fromSlot.GetStackCount());
+        var atk = Player.GetComponent<AttackDamgePlayer>();
+        var def = Player.GetComponent<PlayerTakeDamge>();
 
+        switch (item.allowedSlot)
+        {
+            case EquidmentSlotType.Weapon:
+                atk.atkBonus = 0;
+                break;
+            case EquidmentSlotType.Ring:
+                atk.critRateBonus = 0;
+                atk.critDamgeBonus = 0;
+                break;
+            case EquidmentSlotType.AttackGem:
+                atk.damgeAttack = 0;
+                break;
+            case EquidmentSlotType.DefenceGem:
+                def.defenseBonus = 0;
+                break;
+            case EquidmentSlotType.BaseSkill:
+                break;
+            case EquidmentSlotType.SpecialSkill:
+                break;
+            default:
+                break;
+        }
         fromSlot.ClearSlot();
         Debug.Log("Tháo" + item.itemName);
         //Debug.Log($"[Unequip] {item.itemName} → tạo lại trong Bag");

@@ -22,6 +22,8 @@ namespace StatsManager
         #endregion
 
         internal int defenseBonus;
+        internal int defenseBonusSkill;
+        internal float damgeTake;
         internal int stunResistanceBonus;
 
         protected int DefenseMax = 2000; // Tối đa phòng thử đạt đc
@@ -42,9 +44,10 @@ namespace StatsManager
 
         public virtual void TakeDamge(int damge, int stunDamge, int trueDamge)
         {
-            int Damge = Mathf.FloorToInt(damge 
-                * (1 - Mathf.Clamp(Defense + defenseBonus, 0, DefenseMax)
-                * (1 - Mathf.Clamp(StunResistance + stunResistanceBonus, 0, StunResistanceMax) / StunResistanceMax)/ 2500));
+            int Damge = Mathf.FloorToInt((damge 
+                * (1 - Mathf.Clamp(Defense + defenseBonus + defenseBonusSkill, 0, DefenseMax)
+                * (1 - Mathf.Clamp(StunResistance + stunResistanceBonus, 0, StunResistanceMax) / StunResistanceMax)/ 2500)) 
+                * ((100f - Mathf.Clamp(damgeTake, 0, 100))/100));
             Damge = Mathf.Max(Damge, 1); // luôn gây damge ít nhất là 1
             currentHP -= Damge + trueDamge;
             HpSlider.value = currentHP;
@@ -75,6 +78,8 @@ namespace StatsManager
         #endregion
 
         internal int atkBonus;
+        internal float damgeAttack;
+        internal int atkBonusSkill;
         internal int stunDamgeBonus;
         internal float critRateBonus;
         internal float critDamgeBonus;
@@ -82,7 +87,7 @@ namespace StatsManager
 
         public virtual void Attack(int attackNumber)
         {
-            int damge = Mathf.FloorToInt((BaseATK + atkBonus) * (ATK[attackNumber]/100));
+            int damge = Mathf.FloorToInt(((BaseATK + atkBonus + atkBonusSkill) * (ATK[attackNumber]/100)) * (damgeAttack/100f));
             if(Random.Range(0, 1f) <= (critRate+critRateBonus))
             {
                 atk = Mathf.FloorToInt(damge * (1f + (critDamge+critDamgeBonus)/100));

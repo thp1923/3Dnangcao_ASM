@@ -10,6 +10,8 @@ public class PlayerBuff : MonoBehaviour
         Atk, Def
     }
 
+    internal bool canBuff;
+
     public ClassPlayer classPlayer;
 
     AttackDamgePlayer atp;
@@ -24,7 +26,7 @@ public class PlayerBuff : MonoBehaviour
     public float CD;
     float _CD;
     [Header("--------Atk--------")]
-    public int atkBonus;
+    public float atkBonus;
     public int stunDamgeBonus;
     public ParticleSystem[] attackEffect;
     public VisualEffect effect;
@@ -32,12 +34,15 @@ public class PlayerBuff : MonoBehaviour
     public AudioClip atkClip;
     private Color currentColor;
     [Header("--------Def--------")]
-    public int defBonus;
+    public float defBonus;
     public int stunDefBonus;
     public Material defMaterial;
     public GameObject targetRoot;
     public List<SkinnedMeshRenderer> skinnedMeshes;
     public AudioClip defClip;
+
+    int aBonus;
+    int dBonus;
 
     private void Start()
     {
@@ -68,7 +73,7 @@ public class PlayerBuff : MonoBehaviour
     private void Update()
     {
         _CD -= Time.deltaTime;
-        if (Input.GetKeyDown(BuffKey) && _CD <= 0)
+        if (Input.GetKeyDown(BuffKey) && _CD <= 0 && canBuff)
         {
             _CD = CD;
             switch (classPlayer)
@@ -90,8 +95,9 @@ public class PlayerBuff : MonoBehaviour
         switch (classPlayer)
         {
             case ClassPlayer.Atk:
-                atp.atkBonus += atkBonus;
-                atp.stunDamgeBonus += stunDamgeBonus;
+                aBonus = (int)(atp.BaseATK * (atkBonus / 100f));
+                atp.atkBonusSkill = aBonus;
+                atp.stunDamgeBonus = stunDamgeBonus;
                 GetComponent<AudioPlayer>().isBuff = true;
                 buffSource.PlayOneShot(atkClip);
                 fireLoop.Play();
@@ -103,8 +109,9 @@ public class PlayerBuff : MonoBehaviour
                 }
                 break;
             case ClassPlayer.Def:
-                ptd.stunResistanceBonus += stunDefBonus;
-                ptd.defenseBonus += defBonus;
+                dBonus = (int)(ptd.Defense * (defBonus / 100f));
+                ptd.stunResistanceBonus = stunDefBonus;
+                ptd.defenseBonusSkill = dBonus;
                 buffSource.PlayOneShot(defClip);
                 foreach (var renderer in skinnedMeshes)
                 {
@@ -136,8 +143,8 @@ public class PlayerBuff : MonoBehaviour
         switch (classPlayer)
         {
             case ClassPlayer.Atk:
-                atp.atkBonus -= atkBonus;
-                atp.stunDamgeBonus -= stunDamgeBonus;
+                atp.atkBonusSkill = 0;
+                atp.stunDamgeBonus = 0;
                 GetComponent<AudioPlayer>().isBuff = false;
                 buffSource.PlayOneShot(atkClip);
                 fireLoop.Stop();
@@ -149,8 +156,8 @@ public class PlayerBuff : MonoBehaviour
                 }
                 break;
             case ClassPlayer.Def:
-                ptd.stunResistanceBonus -= stunDefBonus;
-                ptd.defenseBonus -= defBonus;
+                ptd.stunResistanceBonus -= 0;
+                ptd.defenseBonus -= 0;
                 foreach (var renderer in skinnedMeshes)
                 {
                     Material[] mats = renderer.materials;

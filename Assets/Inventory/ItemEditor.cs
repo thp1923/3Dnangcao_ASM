@@ -24,6 +24,32 @@ public class ItemEditor : Editor
         {
             case ItemType.Equipment:
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("allowedSlot"));
+                switch (script.allowedSlot)
+                {
+                    case EquidmentSlotType.AttackGem:
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("damgeBonusGem"));
+                        break;
+                    case EquidmentSlotType.DefenceGem:
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("defBonusGem"));
+                        break;
+                    case EquidmentSlotType.Ring:
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("critRateBonus"));
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("critDamBonus"));
+                        break;
+                    case EquidmentSlotType.Weapon:
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("damgeBonus"));
+                        break;
+                    case EquidmentSlotType.BaseSkill:
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("skillType"));
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("damgeBonusSkill"));
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("defBonusSkill"));
+                        break;
+                    case EquidmentSlotType.SpecialSkill:
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("skillType"));
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("damgeBonusSkill"));
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("defBonusSkill"));
+                        break;
+                }
                 break;
 
             case ItemType.Consumable:
