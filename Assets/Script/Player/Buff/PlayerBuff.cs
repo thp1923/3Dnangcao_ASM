@@ -5,14 +5,14 @@ using System.Collections.Generic;
 
 public class PlayerBuff : MonoBehaviour
 {
-    public enum ClassPlayer
+    public enum BuffType
     {
-        Atk, Def
+        Atk = 0, Def = 1
     }
 
     internal bool canBuff;
 
-    public ClassPlayer classPlayer;
+    public BuffType buffTypePlayer;
 
     AttackDamgePlayer atp;
     PlayerTakeDamge ptd;
@@ -44,9 +44,12 @@ public class PlayerBuff : MonoBehaviour
     int aBonus;
     int dBonus;
 
+    protected int buffTypeId; // Lưu loại buff
+
     private void Start()
     {
         Collect();
+        buffTypePlayer = (BuffType)buffTypeId;
         atp = GetComponent<AttackDamgePlayer>();
         ptd = GetComponent<PlayerTakeDamge>();
         animator = GetComponent<Animator>();
@@ -76,12 +79,13 @@ public class PlayerBuff : MonoBehaviour
         if (Input.GetKeyDown(BuffKey) && _CD <= 0 && canBuff)
         {
             _CD = CD;
-            switch (classPlayer)
+            buffTypeId = (int)(buffTypePlayer);
+            switch (buffTypePlayer)
             {
-                case ClassPlayer.Atk:
+                case BuffType.Atk:
                     animator.SetTrigger("BuffATK");
                     break;
-                case ClassPlayer.Def:
+                case BuffType.Def:
                     animator.SetTrigger("BuffDEF");
                     break;
                 default:
@@ -92,9 +96,9 @@ public class PlayerBuff : MonoBehaviour
 
     public void Buff()
     {
-        switch (classPlayer)
+        switch (buffTypePlayer)
         {
-            case ClassPlayer.Atk:
+            case BuffType.Atk:
                 aBonus = (int)(atp.BaseATK * (atkBonus / 100f));
                 atp.atkBonusSkill = aBonus;
                 atp.stunDamgeBonus = stunDamgeBonus;
@@ -108,7 +112,7 @@ public class PlayerBuff : MonoBehaviour
                     atkEf.GetComponent<Light>().enabled = true;
                 }
                 break;
-            case ClassPlayer.Def:
+            case BuffType.Def:
                 dBonus = (int)(ptd.Defense * (defBonus / 100f));
                 ptd.stunResistanceBonus = stunDefBonus;
                 ptd.defenseBonusSkill = dBonus;
@@ -140,9 +144,9 @@ public class PlayerBuff : MonoBehaviour
     IEnumerator EndBuff()
     {
         yield return new WaitForSeconds(CD/3);
-        switch (classPlayer)
+        switch (buffTypePlayer)
         {
-            case ClassPlayer.Atk:
+            case BuffType.Atk:
                 atp.atkBonusSkill = 0;
                 atp.stunDamgeBonus = 0;
                 GetComponent<AudioPlayer>().isBuff = false;
@@ -155,7 +159,7 @@ public class PlayerBuff : MonoBehaviour
                     atkEf.GetComponent<Light>().enabled = false;
                 }
                 break;
-            case ClassPlayer.Def:
+            case BuffType.Def:
                 ptd.stunResistanceBonus -= 0;
                 ptd.defenseBonus -= 0;
                 foreach (var renderer in skinnedMeshes)

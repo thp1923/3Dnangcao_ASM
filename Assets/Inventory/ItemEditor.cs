@@ -17,6 +17,7 @@ public class ItemEditor : Editor
         EditorGUILayout.PropertyField(serializedObject.FindProperty("icon"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("prefab"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("rarity"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("description"));
 
 
         // Hiển thị các biến tùy theo loại attack
@@ -38,16 +39,17 @@ public class ItemEditor : Editor
                         break;
                     case EquidmentSlotType.Weapon:
                         EditorGUILayout.PropertyField(serializedObject.FindProperty("damgeBonus"));
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("SwordId"));
                         break;
                     case EquidmentSlotType.BaseSkill:
-                        EditorGUILayout.PropertyField(serializedObject.FindProperty("skillType"));
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("skillBaseType"));
                         EditorGUILayout.PropertyField(serializedObject.FindProperty("damgeBonusSkill"));
                         EditorGUILayout.PropertyField(serializedObject.FindProperty("defBonusSkill"));
                         break;
                     case EquidmentSlotType.SpecialSkill:
-                        EditorGUILayout.PropertyField(serializedObject.FindProperty("skillType"));
-                        EditorGUILayout.PropertyField(serializedObject.FindProperty("damgeBonusSkill"));
-                        EditorGUILayout.PropertyField(serializedObject.FindProperty("defBonusSkill"));
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("skillSpecialType"));
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("skillDamge"));
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("damgeTakeNerf"));
                         break;
                 }
                 break;

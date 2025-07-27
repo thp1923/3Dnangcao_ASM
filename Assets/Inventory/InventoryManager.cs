@@ -48,15 +48,18 @@ public class InventoryManager : MonoBehaviour
         Item item = fromSlot.GetItem();
         if (item == null) return;
         if (!IsEquipment(item.itemType)) return;
-        Debug.Log("Thay" +  item.itemName);
+        //Debug.Log("Thay" +  item.itemName);
         var atk = Player.GetComponent<AttackDamgePlayer>();
         var def = Player.GetComponent<PlayerTakeDamge>();
+        var weapon = Player.GetComponent<WeaponEquip>();
+        var baseSkill = Player.GetComponent<PlayerBuff>();
 
         switch (item.allowedSlot)
         {
             case EquidmentSlotType.Weapon:
                 int weaponBonus = (int)(atk.BaseATK * (item.damgeBonus / 100f));
                 atk.atkBonus = weaponBonus;
+                weapon.SwordSwich(item.SwordId);
                 break;
             case EquidmentSlotType.Ring:
                 atk.critRateBonus = item.critRateBonus;
@@ -69,6 +72,20 @@ public class InventoryManager : MonoBehaviour
                 def.defenseBonus = item.defBonusGem;
                 break;
             case EquidmentSlotType.BaseSkill:
+                baseSkill.canBuff = true;
+                switch (item.skillBaseType)
+                {
+                    case BaseSkillType.AttackBuff:
+                        baseSkill.buffTypePlayer = PlayerBuff.BuffType.Atk;
+                        baseSkill.atkBonus = item.damgeBonusSkill;
+                        break;
+                    case BaseSkillType.DefenseBuff:
+                        baseSkill.buffTypePlayer = PlayerBuff.BuffType.Def;
+                        baseSkill.defBonus = item.defBonusSkill;
+                        break;
+                    default:
+                        break;
+                }
                 break;
             case EquidmentSlotType.SpecialSkill:
                 break;
@@ -156,11 +173,14 @@ public class InventoryManager : MonoBehaviour
         CreateBagSlot(item, fromSlot.GetStackCount());
         var atk = Player.GetComponent<AttackDamgePlayer>();
         var def = Player.GetComponent<PlayerTakeDamge>();
+        var weapon = Player.GetComponent<WeaponEquip>();
+        var baseSkill = Player.GetComponent<PlayerBuff>();
 
         switch (item.allowedSlot)
         {
             case EquidmentSlotType.Weapon:
                 atk.atkBonus = 0;
+                weapon.SwordSwich(0);
                 break;
             case EquidmentSlotType.Ring:
                 atk.critRateBonus = 0;
@@ -173,6 +193,7 @@ public class InventoryManager : MonoBehaviour
                 def.defenseBonus = 0;
                 break;
             case EquidmentSlotType.BaseSkill:
+                baseSkill.canBuff = false;
                 break;
             case EquidmentSlotType.SpecialSkill:
                 break;
@@ -180,7 +201,7 @@ public class InventoryManager : MonoBehaviour
                 break;
         }
         fromSlot.ClearSlot();
-        Debug.Log("Tháo" + item.itemName);
+        //Debug.Log("Tháo" + item.itemName);
         //Debug.Log($"[Unequip] {item.itemName} → tạo lại trong Bag");
 
         //SaveInventory();

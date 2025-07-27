@@ -4,21 +4,25 @@ using UnityEngine;
 
 public class WeaponEquip : MonoBehaviour
 {
-    public GameObject Sword;
+    public GameObject[] SwordMesh;
+    protected int weaponId;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
-    public void SwordSwich(MeshFilter sword_Mesh)
+    public void SwordSwich(int WeaponId)
     {
-        if (sword_Mesh != null && Sword != null)
+        weaponId = WeaponId;
+
+        for (int i = 0; i < SwordMesh.Length; i++)
         {
-            MeshFilter currentMeshFilter = Sword.GetComponent<MeshFilter>();
-            if (currentMeshFilter != null)
+            if (SwordMesh[i] != null)
             {
-                currentMeshFilter.mesh = sword_Mesh.sharedMesh; // hoặc .mesh nếu bạn muốn clone
+                // Chỉ bật mesh có index trùng với weaponId, tắt những cái khác
+                SwordMesh[i].SetActive(i == weaponId);
             }
         }
     }

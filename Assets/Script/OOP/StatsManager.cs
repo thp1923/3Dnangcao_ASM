@@ -87,7 +87,7 @@ namespace StatsManager
 
         public virtual void Attack(int attackNumber)
         {
-            int damge = Mathf.FloorToInt(((BaseATK + atkBonus + atkBonusSkill) * (ATK[attackNumber]/100)) * (damgeAttack/100f));
+            int damge = Mathf.FloorToInt(((BaseATK + atkBonus + atkBonusSkill) * (ATK[attackNumber]/100)) * ((100 + damgeAttack)/100f));
             if(Random.Range(0, 1f) <= (critRate+critRateBonus))
             {
                 atk = Mathf.FloorToInt(damge * (1f + (critDamge+critDamgeBonus)/100));
