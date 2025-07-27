@@ -27,9 +27,6 @@ public class PlayerTakeDamge : StatsAlive
     public int heathCount;
     protected int _heathCount;
 
-    [Header("Test")]
-    public int stunDamgeTest;
-
     [Header("-------------Shake----------")]
     public float[] duration; // Time shake
     public float[] magnitude; // Shake level
@@ -46,8 +43,6 @@ public class PlayerTakeDamge : StatsAlive
     void Update()
     {
         Block();
-        //if(Input.GetKeyDown(KeyCode.J)) // Test take damge
-        //    TakeDamge( 10000 ,stunDamgeTest, 0);
         Heath();
     }
     
