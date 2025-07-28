@@ -14,11 +14,14 @@ public class ItemPickUp : MonoBehaviour
     private Transform viewportContent;
 
     [Header("Danh sách item được nhặt")]
-    public Item[] items;
+    public List<Item> items;
+
+    InventoryManager inventoryManager;
 
     void Start()
     {
         // Tìm Content (ScrollView/Viewport/Content) gán tag "ItemView"
+        inventoryManager = InventoryManager.Instance;
         GameObject contentObj = GameObject.FindWithTag("ItemView");
         if (contentObj != null)
             viewportContent = contentObj.transform;
@@ -65,6 +68,8 @@ public class ItemPickUp : MonoBehaviour
             TextMeshProUGUI text = go.GetComponentInChildren<TextMeshProUGUI>();
             if (text != null)
                 text.text = item.itemName;
+            if(item != null)
+                inventoryManager.TryAddToInventory(item);
         }
 
         // Xoá object sau khi nhặt

@@ -1,4 +1,4 @@
-using StatsManager;
+﻿using StatsManager;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -18,7 +18,10 @@ public class EnemyTakeDamge : StatsAlive
 
     public int Point;
     [Header("---------Items Drop-----------")]
-    public List<GameObject> itemsDrop;
+    public GameObject drop;
+    public List<Item> itemsDrop;
+
+    public float[] dropRate;
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -90,9 +93,29 @@ public class EnemyTakeDamge : StatsAlive
     void Death()
     {
         FindObjectOfType<PlayerAim>().RemoveEnemy(gameObject);
-        foreach (GameObject items in itemsDrop)
+        // Danh sách tạm cho các item được chọn ngẫu nhiên
+        List<Item> droppedItems = new List<Item>();
+
+        for (int i = 0; i < itemsDrop.Count; i++)
         {
-            Instantiate(items, gameObject.transform.position + new Vector3(Random.Range(-1f, 1f), 1, Random.Range(-1f, 1f)), Quaternion.identity);
+            if (i >= dropRate.Length) break; // an toàn: tránh lỗi vượt mảng
+
+            if (Random.Range(0f, 1f) <= dropRate[i])
+            {
+                droppedItems.Add(itemsDrop[i]);
+            }
+        }
+
+        // Nếu có item được chọn, mới instantiate drop
+        if (droppedItems.Count > 0)
+        {
+            GameObject go = Instantiate(drop,new Vector3(transform.position.x, transform.position.y + 0.75f, transform.position.z), Quaternion.identity);
+            var itemPickup = go.GetComponent<ItemPickUp>();
+
+            if (itemPickup != null)
+            {
+                itemPickup.items.AddRange(droppedItems);
+            }
         }
         FindObjectOfType<UpgradeStats>().AddPoint(Point);
         if(me != null)
