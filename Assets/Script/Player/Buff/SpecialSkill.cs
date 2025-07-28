@@ -6,7 +6,7 @@ public class SpecialSkill : MonoBehaviour
 {
     AttackDamgePlayer atkPlayer;
     PlayerTakeDamge ptdPlayer;
-    internal bool canBuff;
+    internal bool canSkill;
     public enum SpecialSkillTpye
     {
         GreenFire = 0, DragonFire = 1
@@ -31,9 +31,9 @@ public class SpecialSkill : MonoBehaviour
     [Header("-----Green Fire-----")]
     public ParticleSystem[] fireEffect;
 
-    protected int skillDamge;
+    internal float skillDamge;
 
-    protected float damgeTakeNerf;
+    internal float damgeTakeNerf;
 
     public float rangeGreenFire;
 
@@ -48,9 +48,9 @@ public class SpecialSkill : MonoBehaviour
 
     public Transform[] firePoints;
 
-    protected int skillFireDragonDamge;
+    internal float skillFireDragonDamge;
 
-    protected float damgeBonus;
+    internal float damgeBonus;
 
     public float rangeDragonFire;
 
@@ -94,11 +94,12 @@ public class SpecialSkill : MonoBehaviour
     {
         SpecialSkillController();
         GreenFireDamge();
+        DragonFireDamge();
     }
     public void SpecialSkillController()
     {
         _CD -= Time.deltaTime;
-        if (Input.GetKeyDown(SpecialSkillKey) && _CD <= 0 /*&& canBuff*/)
+        if (Input.GetKeyDown(SpecialSkillKey) && _CD <= 0 && canSkill)
         {
             _CD = CD;
             animator.SetTrigger("Skill");

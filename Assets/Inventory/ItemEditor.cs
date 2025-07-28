@@ -43,13 +43,15 @@ public class ItemEditor : Editor
                         break;
                     case EquidmentSlotType.BaseSkill:
                         EditorGUILayout.PropertyField(serializedObject.FindProperty("skillBaseType"));
-                        EditorGUILayout.PropertyField(serializedObject.FindProperty("damgeBonusSkill"));
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("skillDamge"));
                         EditorGUILayout.PropertyField(serializedObject.FindProperty("defBonusSkill"));
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("damgeBonusSkill"));
                         break;
                     case EquidmentSlotType.SpecialSkill:
                         EditorGUILayout.PropertyField(serializedObject.FindProperty("skillSpecialType"));
                         EditorGUILayout.PropertyField(serializedObject.FindProperty("skillDamge"));
-                        EditorGUILayout.PropertyField(serializedObject.FindProperty("damgeTakeNerf"));
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("damgeAttackBonus"));
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("damgeTakeNerf")); 
                         break;
                 }
                 break;

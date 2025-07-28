@@ -1,7 +1,6 @@
+using PlayFab;
 using System.Collections.Generic;
 using UnityEngine;
-using PlayFab;
-using PlayFab.ClientModels;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -53,6 +52,7 @@ public class InventoryManager : MonoBehaviour
         var def = Player.GetComponent<PlayerTakeDamge>();
         var weapon = Player.GetComponent<WeaponEquip>();
         var baseSkill = Player.GetComponent<PlayerBuff>();
+        var specialSkill = Player.GetComponent<SpecialSkill>();
 
         switch (item.allowedSlot)
         {
@@ -88,6 +88,22 @@ public class InventoryManager : MonoBehaviour
                 }
                 break;
             case EquidmentSlotType.SpecialSkill:
+                specialSkill.canSkill = true;
+                switch (item.skillSpecialType)
+                {
+                    case SpecialSkillType.GreenFire:
+                        specialSkill.skillTpye = SpecialSkill.SpecialSkillTpye.GreenFire;
+                        specialSkill.damgeTakeNerf = item.damgeTakeNerf;
+                        specialSkill.skillDamge = item.skillDamge;
+                        break;
+                    case SpecialSkillType.DragonFire:
+                        specialSkill.skillTpye = SpecialSkill.SpecialSkillTpye.DragonFire;
+                        specialSkill.damgeBonus = item.damgeAttackBonus;
+                        specialSkill.skillFireDragonDamge = item.skillDamge;
+                        break;
+                    default:
+                        break;
+                }
                 break;
             default:
                 break;
@@ -175,6 +191,7 @@ public class InventoryManager : MonoBehaviour
         var def = Player.GetComponent<PlayerTakeDamge>();
         var weapon = Player.GetComponent<WeaponEquip>();
         var baseSkill = Player.GetComponent<PlayerBuff>();
+        var specialSkill = Player.GetComponent<SpecialSkill>();
 
         switch (item.allowedSlot)
         {
@@ -196,6 +213,7 @@ public class InventoryManager : MonoBehaviour
                 baseSkill.canBuff = false;
                 break;
             case EquidmentSlotType.SpecialSkill:
+                specialSkill.canSkill = false;
                 break;
             default:
                 break;
