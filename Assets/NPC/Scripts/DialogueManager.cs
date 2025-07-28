@@ -16,6 +16,7 @@ public class DialogueManager : MonoBehaviour
     [Header("Khóa Script")]
     private vThirdPersonInput inputScript;
     private PlayerAttackController attackScript;
+    private PlayerDodge dodgeScript;
     private Animator playerAnimator;
 
     void Start()
@@ -28,6 +29,7 @@ public class DialogueManager : MonoBehaviour
         {
             inputScript = player.GetComponent<vThirdPersonInput>();
             attackScript = player.GetComponent<PlayerAttackController>();
+            dodgeScript = player.GetComponent<PlayerDodge>();
             playerAnimator = player.GetComponentInChildren<Animator>();
         }
     }
@@ -91,13 +93,14 @@ public class DialogueManager : MonoBehaviour
     {
         if (inputScript != null) inputScript.enabled = state;
         if (attackScript != null) attackScript.enabled = state;
+        if (dodgeScript != null) dodgeScript.enabled = state;
 
         if (!state && playerAnimator != null)
         {
             playerAnimator.SetFloat("InputMagnitude", 0f);
             playerAnimator.SetFloat("Vertical", 0f);
             playerAnimator.SetFloat("Horizontal", 0f);
-            playerAnimator.SetBool("Attack", false); 
+            playerAnimator.SetBool("Attack", false);
         }
     }
 }
