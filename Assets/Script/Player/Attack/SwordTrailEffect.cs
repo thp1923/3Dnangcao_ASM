@@ -5,23 +5,12 @@ public class SwordTrailEffect : MonoBehaviour
 {
     public VisualEffect trailEffect;
 
-    public bool isFlame;
-
-    public ParticleSystem fireTrail;
-
     bool damageEnabled;
 
     [SerializeField] MeleeWeapon currentWeapon;
     private void Start()
     {
-        if(trailEffect != null) 
-            trailEffect.gameObject.SetActive(false);
-        if(fireTrail != null)
-        {
-            fireTrail.gameObject.SetActive(false);
-            fireTrail.Stop();
-        }
-
+        trailEffect.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -33,44 +22,16 @@ public class SwordTrailEffect : MonoBehaviour
     {
         if (number != 0)
         {
+            trailEffect.SetBool("UseForce", true);
+            trailEffect.gameObject.SetActive(true);
             damageEnabled = true;
-            if (isFlame && fireTrail != null)
-            {
-                fireTrail.Play();
-            }
-            else
-            {
-                if (trailEffect != null)
-                {
-                    trailEffect.SetBool("UseForce", true);
-                    trailEffect.gameObject.SetActive(true);
-                }
-            }
         }
         else
         {
+            trailEffect.SetBool("UseForce", false);
+            trailEffect.gameObject.SetActive(false);
             damageEnabled = false;
             currentWeapon.ResetSettings();
-            if (isFlame && fireTrail != null)
-            {
-                fireTrail.Stop();
-            }
-            else
-            {
-                if (trailEffect != null)
-                {
-                    trailEffect.SetBool("UseForce", false);
-                    trailEffect.gameObject.SetActive(false);
-                }
-            }
         }
-    }
-
-    public void PlayFlame(bool IsFlame)
-    {
-        if (isFlame)
-            fireTrail.gameObject.SetActive(IsFlame);
-        else
-            fireTrail.gameObject.SetActive(false);
     }
 }
