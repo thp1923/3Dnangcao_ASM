@@ -93,6 +93,7 @@ public class PlayerBuff : MonoBehaviour
                 atp.atkBonus += atkBonus;
                 atp.stunDamgeBonus += stunDamgeBonus;
                 GetComponent<AudioPlayer>().isBuff = true;
+                GetComponent<SwordTrailEffect>().isFlame = true;
                 buffSource.PlayOneShot(atkClip);
                 fireLoop.Play();
                 effect.SetVector4("Color", (Vector4)colorEffect);
@@ -139,6 +140,7 @@ public class PlayerBuff : MonoBehaviour
                 atp.atkBonus -= atkBonus;
                 atp.stunDamgeBonus -= stunDamgeBonus;
                 GetComponent<AudioPlayer>().isBuff = false;
+                GetComponent<SwordTrailEffect>().isFlame = false;
                 buffSource.PlayOneShot(atkClip);
                 fireLoop.Stop();
                 effect.SetVector4("Color", (Vector4)currentColor);
