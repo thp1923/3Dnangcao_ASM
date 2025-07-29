@@ -1828,6 +1828,8 @@ PlayableDirector:
     value: {fileID: 369164789}
   - key: {fileID: -3568222763965344687, guid: ebee461e7b5a61b49b3e1565a21f0cec, type: 2}
     value: {fileID: 1806632443}
+  - key: {fileID: 5901980329783695269, guid: ebee461e7b5a61b49b3e1565a21f0cec, type: 2}
+    value: {fileID: 2086922239}
   m_ExposedReferences:
     m_References:
     - 0046acddbcd3fce48b71981f97097183: {fileID: 1340985425}
@@ -3980,8 +3982,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1364746988}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.07782622, y: 0.023001699, z: -0.0017960622, w: 0.9967}
-  m_LocalPosition: {x: 10.874874, y: -4.4870605, z: 145.10683}
+  m_LocalRotation: {x: 0.048107043, y: 0.2072023, z: -0.010201907, w: 0.97706133}
+  m_LocalPosition: {x: -74.003456, y: -4.4699707, z: -39.24762}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7644,6 +7646,82 @@ Transform:
   - {fileID: 1469965060}
   m_Father: {fileID: 266914966}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2086922236
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2086922238}
+  - component: {fileID: 2086922237}
+  - component: {fileID: 2086922239}
+  m_Layer: 0
+  m_Name: TransitionProxy
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2086922237
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2086922236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f56cfff1d1ec0a54692ebd213ae1be51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nextSceneName: DauTruongBoss
+--- !u!4 &2086922238
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2086922236}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 230.33966, y: -11.29739, z: 593.53455}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2086922239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2086922236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Events:
+    m_Signals:
+    - {fileID: 11400000, guid: f9bdb46427a654c4cab52e64e5844fff, type: 2}
+    m_Events:
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 2086922237}
+          m_TargetAssemblyTypeName: SceneTransitionProxy, Assembly-CSharp
+          m_MethodName: triggerTransition
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1001 &296056696975983123
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8570,3 +8648,4 @@ SceneRoots:
   - {fileID: 34582138}
   - {fileID: 1956575523}
   - {fileID: 369164793}
+  - {fileID: 2086922238}

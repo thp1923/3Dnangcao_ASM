@@ -6,8 +6,10 @@ using TMPro;
 
 public class letter : MonoBehaviour
 {
+    private bool open = false;
+
     //I recommend you watch the full tutorial to know how this script works :)
-    
+
     //The UI version of the letter that appears after picking up the letter.
     public GameObject letterUI;
 
@@ -26,12 +28,16 @@ public class letter : MonoBehaviour
         //Toggle will equal to the opposite of what it currently equals to.
         toggle = !toggle;
 
+        //Open will equal to the opposite of what it currently equals to.
+        open = !open;
+
         //If toggle equals false, that means the player is putting down the letter.
-        if(toggle == false)
+        if (toggle == false)
         {
             letterUI.SetActive(false);
             letterMesh.enabled = true;
             player.enabled = true;
+           
         }
 
         //If toggle equals true, that means the player is picking up the letter.
@@ -40,6 +46,10 @@ public class letter : MonoBehaviour
             letterUI.SetActive(true);
             letterMesh.enabled = false;
             player.enabled = false;
-        }
+        }      
+    }
+    public bool IsOpen()
+    {
+        return open;
     }
 }
