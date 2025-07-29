@@ -14,7 +14,8 @@ public class SwordTrailEffect : MonoBehaviour
     [SerializeField] MeleeWeapon currentWeapon;
     private void Start()
     {
-        trailEffect.gameObject.SetActive(false);
+        if(trailEffect != null) 
+            trailEffect.gameObject.SetActive(false);
         if(fireTrail != null)
         {
             fireTrail.gameObject.SetActive(false);
@@ -39,8 +40,11 @@ public class SwordTrailEffect : MonoBehaviour
             }
             else
             {
-                trailEffect.SetBool("UseForce", true);
-                trailEffect.gameObject.SetActive(true);
+                if (trailEffect != null)
+                {
+                    trailEffect.SetBool("UseForce", true);
+                    trailEffect.gameObject.SetActive(true);
+                }
             }
         }
         else
@@ -53,8 +57,11 @@ public class SwordTrailEffect : MonoBehaviour
             }
             else
             {
-                trailEffect.SetBool("UseForce", false);
-                trailEffect.gameObject.SetActive(false);
+                if (trailEffect != null)
+                {
+                    trailEffect.SetBool("UseForce", false);
+                    trailEffect.gameObject.SetActive(false);
+                }
             }
         }
     }
