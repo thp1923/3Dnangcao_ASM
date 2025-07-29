@@ -22,8 +22,6 @@ namespace StatsManager
         #endregion
 
         internal int defenseBonus;
-        internal int defenseBonusSkill;
-        internal float damgeTake;
         internal int stunResistanceBonus;
 
         protected int DefenseMax = 2000; // Tối đa phòng thử đạt đc
@@ -44,10 +42,9 @@ namespace StatsManager
 
         public virtual void TakeDamge(int damge, int stunDamge, int trueDamge)
         {
-            int Damge = Mathf.FloorToInt((damge 
-                * (1 - Mathf.Clamp(Defense + defenseBonus + defenseBonusSkill, 0, DefenseMax)
-                * (1 - Mathf.Clamp(StunResistance + stunResistanceBonus, 0, StunResistanceMax) / StunResistanceMax)/ 2500)) 
-                * ((100f - Mathf.Clamp(damgeTake, 0, 100))/100));
+            int Damge = Mathf.FloorToInt(damge 
+                * (1 - Mathf.Clamp(Defense + defenseBonus, 0, DefenseMax)
+                * (1 - Mathf.Clamp(StunResistance + stunResistanceBonus, 0, StunResistanceMax) / StunResistanceMax)/ 2500));
             Damge = Mathf.Max(Damge, 1); // luôn gây damge ít nhất là 1
             currentHP -= Damge + trueDamge;
             HpSlider.value = currentHP;
@@ -56,13 +53,6 @@ namespace StatsManager
             //{
             //    // sẽ chạy stun tùy theo mức độ
             //}
-        }
-
-        public virtual void UpgradeAlive(int HP_Upgrade, int Def_Upgrade)
-        {
-            MaxHP = HP_Upgrade;
-            HpSlider.maxValue = HP_Upgrade;
-            Defense = Def_Upgrade;
         }
     }
 
@@ -78,31 +68,20 @@ namespace StatsManager
         #endregion
 
         internal int atkBonus;
-        internal float damgeAttack;
-        internal int atkBonusSkill;
         internal int stunDamgeBonus;
-        internal float critRateBonus;
-        internal float critDamgeBonus;
         protected int atk;
 
         public virtual void Attack(int attackNumber)
         {
-            int damge = Mathf.FloorToInt(((BaseATK + atkBonus + atkBonusSkill) * (ATK[attackNumber]/100)) * ((100 + damgeAttack)/100f));
-            if(Random.Range(0, 1f) <= (critRate+critRateBonus))
+            int damge = Mathf.FloorToInt((BaseATK + atkBonus) * (ATK[attackNumber]/100));
+            if(Random.Range(0, 1f) <= critRate)
             {
-                atk = Mathf.FloorToInt(damge * (1f + (critDamge+critDamgeBonus)/100));
+                atk = Mathf.FloorToInt(damge * (1f + (critDamge)/100));
             }
             else
             {
                 atk = damge;
             }
-        }
-
-        public virtual void UpgradeAttack(int BaseATK_Upgrade, float critRate_Upgrade, float critDamge_Upgrade)
-        {
-            BaseATK = BaseATK_Upgrade;
-            critRate = critRate_Upgrade;
-            critDamge = critDamge_Upgrade;
         }
     }
 
@@ -123,12 +102,6 @@ namespace StatsManager
             stamina = StaminaMax;
             staminaBar.maxValue = StaminaMax;
             staminaBar.value = stamina;
-        }
-
-        public virtual void UpgradeStamina(int StaminaMax_Upgrade)
-        {
-            StaminaMax = StaminaMax_Upgrade;
-            staminaBar.maxValue = StaminaMax_Upgrade;
         }
 
         public virtual void TakeStamina(int staminaLost)

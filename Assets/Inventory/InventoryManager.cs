@@ -1,10 +1,10 @@
-using PlayFab;
 using System.Collections.Generic;
 using UnityEngine;
+using PlayFab;
+using PlayFab.ClientModels;
 
 public class InventoryManager : MonoBehaviour
 {
-    public GameObject Player;
     public GameObject bagSlotPrefab;  // Dùng để tạo item trong túi
     public GameObject equipmentSlotPrefab; // Dùng để tạo giao diện Equipment nếu cần
 
@@ -47,67 +47,6 @@ public class InventoryManager : MonoBehaviour
         Item item = fromSlot.GetItem();
         if (item == null) return;
         if (!IsEquipment(item.itemType)) return;
-        //Debug.Log("Thay" +  item.itemName);
-        var atk = Player.GetComponent<AttackDamgePlayer>();
-        var def = Player.GetComponent<PlayerTakeDamge>();
-        var weapon = Player.GetComponent<WeaponEquip>();
-        var baseSkill = Player.GetComponent<PlayerBuff>();
-        var specialSkill = Player.GetComponent<SpecialSkill>();
-
-        switch (item.allowedSlot)
-        {
-            case EquidmentSlotType.Weapon:
-                int weaponBonus = (int)(atk.BaseATK * (item.damgeBonus / 100f));
-                atk.atkBonus = weaponBonus;
-                weapon.SwordSwich(item.SwordId);
-                break;
-            case EquidmentSlotType.Ring:
-                atk.critRateBonus = item.critRateBonus;
-                atk.critDamgeBonus = item.critDamBonus;
-                break;
-            case EquidmentSlotType.AttackGem:
-                atk.damgeAttack = item.damgeBonusGem;
-                break;
-            case EquidmentSlotType.DefenceGem:
-                def.defenseBonus = item.defBonusGem;
-                break;
-            case EquidmentSlotType.BaseSkill:
-                baseSkill.canBuff = true;
-                switch (item.skillBaseType)
-                {
-                    case BaseSkillType.AttackBuff:
-                        baseSkill.buffTypePlayer = PlayerBuff.BuffType.Atk;
-                        baseSkill.atkBonus = item.damgeBonusSkill;
-                        break;
-                    case BaseSkillType.DefenseBuff:
-                        baseSkill.buffTypePlayer = PlayerBuff.BuffType.Def;
-                        baseSkill.defBonus = item.defBonusSkill;
-                        break;
-                    default:
-                        break;
-                }
-                break;
-            case EquidmentSlotType.SpecialSkill:
-                specialSkill.canSkill = true;
-                switch (item.skillSpecialType)
-                {
-                    case SpecialSkillType.GreenFire:
-                        specialSkill.skillTpye = SpecialSkill.SpecialSkillTpye.GreenFire;
-                        specialSkill.damgeTakeNerf = item.damgeTakeNerf;
-                        specialSkill.skillDamge = item.skillDamge;
-                        break;
-                    case SpecialSkillType.DragonFire:
-                        specialSkill.skillTpye = SpecialSkill.SpecialSkillTpye.DragonFire;
-                        specialSkill.damgeBonus = item.damgeAttackBonus;
-                        specialSkill.skillFireDragonDamge = item.skillDamge;
-                        break;
-                    default:
-                        break;
-                }
-                break;
-            default:
-                break;
-        }
 
         foreach (var slot in equipmentSlots)
         {
@@ -126,13 +65,13 @@ public class InventoryManager : MonoBehaviour
             {
                 slot.AddItem(item, fromSlot.GetStackCount());
 
-                //Debug.Log($"[TryMoveItem] fromSlot: {fromSlot.name}, isEquipmentSlot: {fromSlot.isEquipmentSlot}");
+                Debug.Log($"[TryMoveItem] fromSlot: {fromSlot.name}, isEquipmentSlot: {fromSlot.isEquipmentSlot}");
 
                 // ✅ Đây là điểm cần chắc chắn destroy slot nếu từ túi
                 if (!fromSlot.isEquipmentSlot)
                 {
                     fromSlot.ClearSlot(true); // Destroy gameObject
-                    //Debug.Log("[Destroy] Đã huỷ slot túi sau khi trang bị");
+                    Debug.Log("[Destroy] Đã huỷ slot túi sau khi trang bị");
                 }
                 else
                 {
@@ -149,24 +88,10 @@ public class InventoryManager : MonoBehaviour
 
     public void CreateBagSlot(Item item, int amount = 1)
     {
-        // ⚠ Trước khi tạo mới → thử stack vào slot đã có
-        foreach (Transform child in contentPanel)
-        {
-            var slot = child.GetComponentInChildren<InventorySlot>();
-            if (slot != null && slot.CanStack(item))
-            {
-                slot.AddItem(item, amount);
-                MergeAllStackableItems(); // Gộp gọn lại
-                return; // ✅ Đã stack thành công → không tạo mới
-            }
-        }
-
-        // ❌ Không stack được → tạo slot mới
         GameObject slotGO = Instantiate(bagSlotPrefab, contentPanel);
         InventorySlot newSlot = slotGO.GetComponent<InventorySlot>();
         newSlot.AddItem(item, amount);
 
-        MergeAllStackableItems(); // Gộp sau khi tạo mới
         //SaveInventory();
 
     }
@@ -174,7 +99,7 @@ public class InventoryManager : MonoBehaviour
 
     bool IsEquipment(ItemType type)
     {
-        return type == ItemType.Equipment;
+        return type == ItemType.Equipment || type == ItemType.Weapon || type == ItemType.Armor;
     }
     void Awake()
     {
@@ -185,42 +110,12 @@ public class InventoryManager : MonoBehaviour
         Item item = fromSlot.GetItem();
         if (item == null) return;
 
-        // ⚠ gọi CreateBagSlot → đã có stack logic
-        CreateBagSlot(item, fromSlot.GetStackCount());
-        var atk = Player.GetComponent<AttackDamgePlayer>();
-        var def = Player.GetComponent<PlayerTakeDamge>();
-        var weapon = Player.GetComponent<WeaponEquip>();
-        var baseSkill = Player.GetComponent<PlayerBuff>();
-        var specialSkill = Player.GetComponent<SpecialSkill>();
+        GameObject newSlotGO = Instantiate(itemSlotPrefab, contentPanel);
+        InventorySlot newSlot = newSlotGO.GetComponentInChildren<InventorySlot>();
+        newSlot.AddItem(item);
 
-        switch (item.allowedSlot)
-        {
-            case EquidmentSlotType.Weapon:
-                atk.atkBonus = 0;
-                weapon.SwordSwich(0);
-                break;
-            case EquidmentSlotType.Ring:
-                atk.critRateBonus = 0;
-                atk.critDamgeBonus = 0;
-                break;
-            case EquidmentSlotType.AttackGem:
-                atk.damgeAttack = 0;
-                break;
-            case EquidmentSlotType.DefenceGem:
-                def.defenseBonus = 0;
-                break;
-            case EquidmentSlotType.BaseSkill:
-                baseSkill.canBuff = false;
-                break;
-            case EquidmentSlotType.SpecialSkill:
-                specialSkill.canSkill = false;
-                break;
-            default:
-                break;
-        }
         fromSlot.ClearSlot();
-        //Debug.Log("Tháo" + item.itemName);
-        //Debug.Log($"[Unequip] {item.itemName} → tạo lại trong Bag");
+        Debug.Log($"[Unequip] {item.itemName} → tạo lại trong Bag");
 
         //SaveInventory();
 

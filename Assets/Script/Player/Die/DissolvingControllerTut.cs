@@ -67,24 +67,9 @@ public class DissolvingControllerTut : MonoBehaviour
 
                 foreach (var materials in skinnedMaterialsList)
                 {
-                    Material[] tempMaterials = materials;
-
-                    if (tempMaterials.Length > 1)
+                    foreach (var mat in materials)
                     {
-                        List<Material> tempList = new List<Material>(tempMaterials);
-                        tempList.RemoveAt(tempList.Count - 1); // Xoá material cuối cùng
-
-                        foreach (var mat in tempList)
-                        {
-                            mat.SetFloat("_DissolveAmount", counter);
-                        }
-                    }
-                    else
-                    {
-                        foreach (var mat in tempMaterials)
-                        {
-                            mat.SetFloat("_DissolveAmount", counter);
-                        }
+                        mat.SetFloat("_DissolveAmount", counter);
                     }
                 }
 

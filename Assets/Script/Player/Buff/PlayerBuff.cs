@@ -5,14 +5,12 @@ using System.Collections.Generic;
 
 public class PlayerBuff : MonoBehaviour
 {
-    public enum BuffType
+    public enum ClassPlayer
     {
-        Atk = 0, Def = 1
+        Atk, Def
     }
 
-    internal bool canBuff;
-
-    public BuffType buffTypePlayer;
+    public ClassPlayer classPlayer;
 
     AttackDamgePlayer atp;
     PlayerTakeDamge ptd;
@@ -26,7 +24,7 @@ public class PlayerBuff : MonoBehaviour
     public float CD;
     float _CD;
     [Header("--------Atk--------")]
-    public float atkBonus;
+    public int atkBonus;
     public int stunDamgeBonus;
     public ParticleSystem[] attackEffect;
     public VisualEffect effect;
@@ -34,22 +32,16 @@ public class PlayerBuff : MonoBehaviour
     public AudioClip atkClip;
     private Color currentColor;
     [Header("--------Def--------")]
-    public float defBonus;
+    public int defBonus;
     public int stunDefBonus;
     public Material defMaterial;
     public GameObject targetRoot;
     public List<SkinnedMeshRenderer> skinnedMeshes;
     public AudioClip defClip;
 
-    int aBonus;
-    int dBonus;
-
-    protected int buffTypeId; // Lưu loại buff
-
     private void Start()
     {
         Collect();
-        buffTypePlayer = (BuffType)buffTypeId;
         atp = GetComponent<AttackDamgePlayer>();
         ptd = GetComponent<PlayerTakeDamge>();
         animator = GetComponent<Animator>();
@@ -76,16 +68,15 @@ public class PlayerBuff : MonoBehaviour
     private void Update()
     {
         _CD -= Time.deltaTime;
-        if (Input.GetKeyDown(BuffKey) && _CD <= 0 && canBuff)
+        if (Input.GetKeyDown(BuffKey) && _CD <= 0)
         {
             _CD = CD;
-            buffTypeId = (int)(buffTypePlayer);
-            switch (buffTypePlayer)
+            switch (classPlayer)
             {
-                case BuffType.Atk:
+                case ClassPlayer.Atk:
                     animator.SetTrigger("BuffATK");
                     break;
-                case BuffType.Def:
+                case ClassPlayer.Def:
                     animator.SetTrigger("BuffDEF");
                     break;
                 default:
@@ -96,12 +87,11 @@ public class PlayerBuff : MonoBehaviour
 
     public void Buff()
     {
-        switch (buffTypePlayer)
+        switch (classPlayer)
         {
-            case BuffType.Atk:
-                aBonus = (int)(atp.BaseATK * (atkBonus / 100f));
-                atp.atkBonusSkill = aBonus;
-                atp.stunDamgeBonus = stunDamgeBonus;
+            case ClassPlayer.Atk:
+                atp.atkBonus += atkBonus;
+                atp.stunDamgeBonus += stunDamgeBonus;
                 GetComponent<AudioPlayer>().isBuff = true;
                 buffSource.PlayOneShot(atkClip);
                 fireLoop.Play();
@@ -112,10 +102,9 @@ public class PlayerBuff : MonoBehaviour
                     atkEf.GetComponent<Light>().enabled = true;
                 }
                 break;
-            case BuffType.Def:
-                dBonus = (int)(ptd.Defense * (defBonus / 100f));
-                ptd.stunResistanceBonus = stunDefBonus;
-                ptd.defenseBonusSkill = dBonus;
+            case ClassPlayer.Def:
+                ptd.stunResistanceBonus += stunDefBonus;
+                ptd.defenseBonus += defBonus;
                 buffSource.PlayOneShot(defClip);
                 foreach (var renderer in skinnedMeshes)
                 {
@@ -144,11 +133,11 @@ public class PlayerBuff : MonoBehaviour
     IEnumerator EndBuff()
     {
         yield return new WaitForSeconds(CD/3);
-        switch (buffTypePlayer)
+        switch (classPlayer)
         {
-            case BuffType.Atk:
-                atp.atkBonusSkill = 0;
-                atp.stunDamgeBonus = 0;
+            case ClassPlayer.Atk:
+                atp.atkBonus -= atkBonus;
+                atp.stunDamgeBonus -= stunDamgeBonus;
                 GetComponent<AudioPlayer>().isBuff = false;
                 buffSource.PlayOneShot(atkClip);
                 fireLoop.Stop();
@@ -159,9 +148,9 @@ public class PlayerBuff : MonoBehaviour
                     atkEf.GetComponent<Light>().enabled = false;
                 }
                 break;
-            case BuffType.Def:
-                ptd.stunResistanceBonus -= 0;
-                ptd.defenseBonus -= 0;
+            case ClassPlayer.Def:
+                ptd.stunResistanceBonus -= stunDefBonus;
+                ptd.defenseBonus -= defBonus;
                 foreach (var renderer in skinnedMeshes)
                 {
                     Material[] mats = renderer.materials;
