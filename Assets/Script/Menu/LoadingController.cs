@@ -10,23 +10,20 @@ public class LoadingController : MonoBehaviour
     public CanvasGroup fadeGroup;   // nếu cần fade in/out
     public float fakeSpeed = 0.5f;
 
-    private int targetSceneIndex;
+    private string targetSceneName;
 
     private void Start()
     {
-        // Lấy index scene cần load
-        targetSceneIndex = PlayerPrefs.GetInt("NextSceneIndex", 1);
+        targetSceneName = PlayerPrefs.GetString("NextSceneName", "DefaultScene");
         StartCoroutine(LoadAsyncScene());
-        Debug.Log(">>> LoadingController START, targetSceneIndex = " + targetSceneIndex);
-
+        Debug.Log(">>> LoadingController START, targetSceneName = " + targetSceneName);
     }
-
     private IEnumerator LoadAsyncScene()
     {
         // Fade in (nếu có)
         // yield return StartCoroutine(Fade(0f, 1f, 2f));
 
-        AsyncOperation op = SceneManager.LoadSceneAsync(targetSceneIndex);
+        AsyncOperation op = SceneManager.LoadSceneAsync(targetSceneName);
         op.allowSceneActivation = false;
 
         float displayed = 0f;

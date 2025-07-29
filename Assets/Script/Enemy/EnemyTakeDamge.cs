@@ -15,8 +15,6 @@ public class EnemyTakeDamge : StatsAlive
     Animator aim;
     public GameObject me;
     public TextMeshProUGUI damPopUp;
-
-    public int Point;
     [Header("---------Items Drop-----------")]
     public List<GameObject> itemsDrop;
     // Start is called before the first frame update
@@ -94,7 +92,6 @@ public class EnemyTakeDamge : StatsAlive
         {
             Instantiate(items, gameObject.transform.position + new Vector3(Random.Range(-1f, 1f), 1, Random.Range(-1f, 1f)), Quaternion.identity);
         }
-        FindObjectOfType<UpgradeStats>().AddPoint(Point);
         if(me != null)
             Destroy(me);
     }
