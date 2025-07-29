@@ -67,7 +67,7 @@ public class Item : ScriptableObject
 
     public virtual void Use()
     {
-        Debug.Log("Used " + itemName);
+        //Debug.Log("Used " + itemName);
         // Nếu là HP Potion: hồi máu
         // Nếu là Buff: tăng tốc
         // Nếu là Scroll: mở cửa,...
@@ -81,7 +81,7 @@ public class HealthPotion : Item
     public override void Use()
     {
         base.Use();
-        Debug.Log("Healed for " + healAmount + " HP");
+        //Debug.Log("Healed for " + healAmount + " HP");
         // Gọi PlayerHealth.Instance.Heal(healAmount) chẳng hạn
     }
 }

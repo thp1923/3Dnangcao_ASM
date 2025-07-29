@@ -104,14 +104,14 @@ public class InventorySlot : MonoBehaviour,
     public void OnBeginDrag(PointerEventData eventData)
     {
 
-        Debug.Log("[OnBeginDrag] Click vào slot: " + gameObject.name);
+        //Debug.Log("[OnBeginDrag] Click vào slot: " + gameObject.name);
 
         if (currentItem != null)
         {
-            Debug.Log("[OnBeginDrag] Kéo item: " + currentItem.itemName);
+            //Debug.Log("[OnBeginDrag] Kéo item: " + currentItem.itemName);
             if (icon.sprite == null)
             {
-                Debug.LogError("[OnBeginDrag] ICON.SPRITE = NULL");
+                //Debug.LogError("[OnBeginDrag] ICON.SPRITE = NULL");
 
             }
             else
@@ -122,7 +122,7 @@ public class InventorySlot : MonoBehaviour,
         else
         {
 
-            Debug.LogWarning("[OnBeginDrag] currentItem = null!");
+            //Debug.LogWarning("[OnBeginDrag] currentItem = null!");
 
         }
     }
@@ -130,7 +130,7 @@ public class InventorySlot : MonoBehaviour,
     public void OnEndDrag(PointerEventData eventData)
     {
 
-        Debug.Log("[OnEndDrag] Thả kéo");
+        //Debug.Log("[OnEndDrag] Thả kéo");
 
         DragItem.Instance?.Hide();
     }
@@ -148,7 +148,7 @@ public class InventorySlot : MonoBehaviour,
     {
         if (!IsEquipment(draggedItem.itemType) || slotType != draggedItem.allowedSlot)
         {
-            Debug.LogWarning("[OnDrop] Slot không hợp lệ");
+            //Debug.LogWarning("[OnDrop] Slot không hợp lệ");
             return;
         }
     }
@@ -253,7 +253,7 @@ public class InventorySlot : MonoBehaviour,
 
             if (!IsEquipment(currentItem.itemType))
             {
-                Debug.LogWarning("[Ctrl+Click] Vật phẩm không hợp lệ để trang bị: " + currentItem.itemName);
+                //Debug.LogWarning("[Ctrl+Click] Vật phẩm không hợp lệ để trang bị: " + currentItem.itemName);
                 return;
             }
 
@@ -336,7 +336,7 @@ public class InventorySlot : MonoBehaviour,
         if (destroySlot && !isEquipmentSlot)
         {
             Destroy(gameObject); // Huỷ slot nếu là bag slot
-            Debug.Log("[ClearSlot] Đã huỷ slot khỏi Bag");
+            //Debug.Log("[ClearSlot] Đã huỷ slot khỏi Bag");
         }
     }
     public void UpdateStackCount(int amount)
