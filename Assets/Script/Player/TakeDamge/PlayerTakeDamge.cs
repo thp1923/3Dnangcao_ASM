@@ -23,9 +23,12 @@ public class PlayerTakeDamge : StatsAlive
 
     [Header("-------------Heath----------")]
     [SerializeField] private KeyCode heathKey = KeyCode.R;
-    int heath;
+    public int heath;
     public int heathCount;
-    protected int _heathCount;
+    int _heathCount;
+
+    [Header("Test")]
+    public int stunDamgeTest;
 
     [Header("-------------Shake----------")]
     public float[] duration; // Time shake
@@ -43,6 +46,8 @@ public class PlayerTakeDamge : StatsAlive
     void Update()
     {
         Block();
+        //if(Input.GetKeyDown(KeyCode.J)) // Test take damge
+        //    TakeDamge( 10000 ,stunDamgeTest, 0);
         Heath();
     }
     
@@ -60,7 +65,6 @@ public class PlayerTakeDamge : StatsAlive
     
     public void HeathHp()
     {
-        heath = (int)(MaxHP * 0.3f);
         currentHP += heath;
         if (currentHP >= MaxHP)
         {
@@ -166,12 +170,12 @@ public class PlayerTakeDamge : StatsAlive
     public void Death()
     {
         if (PlayerAim == null) return;
-        isDeath = true;
         PlayerAim.SetBool("IsDeath", true);
         CanvaDied.SetBool("IsDeath", true);
         PlayerAim.SetFloat("InputMagnitude", -1f);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+        isDeath = true;
         GetComponent<vThirdPersonInput>().enabled = false;
         GetComponent<vThirdPersonController>().enabled = false;
         GetComponent<PlayerAttackController>().enabled = false;

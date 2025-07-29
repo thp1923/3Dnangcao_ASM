@@ -617,7 +617,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5235128873512775131}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_ConstrainProportionsScale: 0
@@ -625,7 +625,7 @@ RectTransform:
   - {fileID: 8365192645949185671}
   - {fileID: 7459075048951192327}
   m_Father: {fileID: 8128282747979906805}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 2.3}
@@ -1002,13 +1002,13 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6306907854370577338}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 488409502202608514}
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -68.265, y: 15.195}
@@ -1076,7 +1076,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 4
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -1156,7 +1156,6 @@ GameObject:
   - component: {fileID: 5841399077279139249}
   - component: {fileID: 4942170726226235751}
   - component: {fileID: 7730362432392690296}
-  - component: {fileID: 4507908462236530770}
   m_Layer: 0
   m_Name: VFX_CharacterDissolve2
   m_TagString: Untagged
@@ -1201,10 +1200,10 @@ VisualEffect:
       m_Array: []
     m_Vector3f:
       m_Array:
-      - m_Value: {x: 359.44427, y: 0.24734767, z: 0.99895775}
+      - m_Value: {x: 358.47913, y: 0.091747314, z: 1.3222332}
         m_Name: Transform_angles
         m_Overridden: 1
-      - m_Value: {x: 26.884884, y: 1.2553524, z: 21.911322}
+      - m_Value: {x: 26.88794, y: 1.1232864, z: 21.914824}
         m_Name: Transform_position
         m_Overridden: 1
       - m_Value: {x: 1, y: 1, z: 1}
@@ -1285,24 +1284,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ExecuteInEditor: 1
-  m_Bindings:
-  - {fileID: 4507908462236530770}
+  m_Bindings: []
   m_VisualEffect: {fileID: 5841399077279139249}
---- !u!114 &4507908462236530770
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6909789280212206475}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fdfea1f838247c40921a07afedde962, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Property:
-    m_Name: Transform
-  Target: {fileID: 4367687709666926177}
 --- !u!1 &7325085645542469556
 GameObject:
   m_ObjectHideFlags: 0
@@ -3808,12 +3791,7 @@ MonoBehaviour:
   HP_Bar: {fileID: 5235128873512775131}
   me: {fileID: 6828081505396481519}
   damPopUp: {fileID: 1521589357981441010}
-  Point: 200
-  drop: {fileID: 2008192556107255439, guid: ad8e45d9b72484d42a730922e47c6f68, type: 3}
-  itemsDrop:
-  - {fileID: 11400000, guid: 9ec3e824e73d3254dba0a60297e99be8, type: 2}
-  dropRate:
-  - 1
+  itemsDrop: []
 --- !u!114 &3914339137429670443
 MonoBehaviour:
   m_ObjectHideFlags: 0

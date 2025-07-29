@@ -25,6 +25,10 @@ public class BarukEffect : MonoBehaviour
                     Light light = fireHowl.GetComponent<Light>();
                     if (light != null) light.enabled = false;
                 }
+                else
+                {
+                    Debug.LogWarning("Một phần tử trong fireHowls bị null.");
+                }
             }
         }
     }
@@ -66,6 +70,10 @@ public class BarukEffect : MonoBehaviour
             );
 
             StartCoroutine(EndFire());
+        }
+        else
+        {
+            Debug.LogWarning("firePound is null in Pound().");
         }
     }
 

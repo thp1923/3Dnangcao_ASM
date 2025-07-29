@@ -22,7 +22,8 @@ public class InventorySlot : MonoBehaviour,
     public void AddItem(Item newItem, int amount = 1)
     {
         // Nếu là Equipment slot hoặc item không stack → luôn gán mới
-        if (isEquipmentSlot || newItem.itemType == ItemType.Equipment)
+        if (isEquipmentSlot || newItem.itemType == ItemType.Equipment ||
+            newItem.itemType == ItemType.Weapon || newItem.itemType == ItemType.Armor)
         {
             currentItem = newItem;
             stackCount = 1;
@@ -64,7 +65,8 @@ public class InventorySlot : MonoBehaviour,
 
     public bool CanStack(Item item)
     {
-        if (isEquipmentSlot || item.itemType == ItemType.Equipment)
+        if (isEquipmentSlot || item.itemType == ItemType.Equipment ||
+         item.itemType == ItemType.Weapon || item.itemType == ItemType.Armor)
             return false;
 
         return currentItem != null &&
@@ -219,35 +221,8 @@ public class InventorySlot : MonoBehaviour,
         {
             if (isEquipmentSlot)
             {
-                //if(currentItem == null)
-                //{
-                //    ClearSlot();
-                //}
-                //InventoryManager.Instance.CreateBagSlot(currentItem);
-                //switch (currentItem.allowedSlot)
-                //{
-                //    case EquidmentSlotType.Weapon:
-                //        Debug.Log("Weapon: "+ currentItem.name);
-                //        break;
-                //    case EquidmentSlotType.Ring:
-                //        Debug.Log("Ring: " + currentItem.name);
-                //        break;
-                //    case EquidmentSlotType.AttackGem:
-                //        Debug.Log("AttackGem: " + currentItem.name);
-                //        break;
-                //    case EquidmentSlotType.DefenceGem:
-                //        Debug.Log("DefenceGem: " + currentItem.name);
-                //        break;
-                //    case EquidmentSlotType.BaseSkill:
-                //        Debug.Log("BaseSkill: " + currentItem.name);
-                //        break;
-                //    case EquidmentSlotType.SpecialSkill:
-                //        Debug.Log("SpeacialSkill: " + currentItem.name);
-                //        break;
-                //    default:
-                //        break;
-                //}
-                InventoryManager.Instance.UnequipItem(this);
+                InventoryManager.Instance.CreateBagSlot(currentItem);
+                ClearSlot();
                 return;
             }
 
@@ -296,36 +271,12 @@ public class InventorySlot : MonoBehaviour,
 
     private bool IsEquipment(ItemType type)
     {
-        return type == ItemType.Equipment;
+        return type == ItemType.Equipment || type == ItemType.Weapon || type == ItemType.Armor;
     }
     public void ClearSlot(bool destroySlot = false)
     {
 
-        //Debug.Log("[ClearSlot] Xoá item: " + (currentItem != null ? currentItem.itemName : "null"));
-
-        //switch (currentItem.allowedSlot)
-        //{
-        //    case EquidmentSlotType.Weapon:
-        //        Debug.Log("Xoa Weapon: " + currentItem.name);
-        //        break;
-        //    case EquidmentSlotType.Ring:
-        //        Debug.Log("Xoa Ring: " + currentItem.name);
-        //        break;
-        //    case EquidmentSlotType.AttackGem:
-        //        Debug.Log("Xoa AttackGem: " + currentItem.name);
-        //        break;
-        //    case EquidmentSlotType.DefenceGem:
-        //        Debug.Log("Xoa DefenceGem: " + currentItem.name);
-        //        break;
-        //    case EquidmentSlotType.BaseSkill:
-        //        Debug.Log("Xoa BaseGem: " + currentItem.name);
-        //        break;
-        //    case EquidmentSlotType.SpecialSkill:
-        //        Debug.Log("Xoa SpeacialSkill: " + currentItem.name);
-        //        break;
-        //    default:
-        //        break;
-        //}
+        Debug.Log("[ClearSlot] Xoá item: " + (currentItem != null ? currentItem.itemName : "null"));
 
         currentItem = null;
         stackCount = 0;

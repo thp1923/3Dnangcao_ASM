@@ -13,7 +13,7 @@ public class DropToBagArea : MonoBehaviour, IDropHandler
 
         // Tạo lại slot trong Bag
         InventoryManager.Instance.UnequipItem(draggedSlot);
-        //DragItem.Instance.Hide();
+        DragItem.Instance.Hide();
 
         Debug.Log($"[DropToBagArea] Tạo slot mới cho: {draggedItem.itemName}");
     }

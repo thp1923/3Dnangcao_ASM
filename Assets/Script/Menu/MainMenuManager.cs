@@ -58,7 +58,7 @@ public class MainMenuManager : MonoBehaviour
         GameAutoSaveManager.Instance.souls = 0;
         GameAutoSaveManager.Instance.playTime = 0;
 
-        SceneManager.LoadScene("CutsceneOpeningFinal");
+        SceneTransitionManager.Instance.FadeToScene("CutsceneOpeningDraft");
     }
 
 
@@ -119,7 +119,7 @@ public class MainMenuManager : MonoBehaviour
                     GameAutoSaveManager.Instance.nextPlayerPosition =
                         new Vector3(data.posX, data.posY, data.posZ);
 
-                    SceneManager.LoadScene(data.LastScene);
+                    SceneTransitionManager.Instance.FadeToScene(data.LastScene);
                 }
                 else
                 {
