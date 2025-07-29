@@ -23,12 +23,9 @@ public class PlayerTakeDamge : StatsAlive
 
     [Header("-------------Heath----------")]
     [SerializeField] private KeyCode heathKey = KeyCode.R;
-    public int heath;
+    int heath;
     public int heathCount;
-    int _heathCount;
-
-    [Header("Test")]
-    public int stunDamgeTest;
+    protected int _heathCount;
 
     [Header("-------------Shake----------")]
     public float[] duration; // Time shake
@@ -46,8 +43,6 @@ public class PlayerTakeDamge : StatsAlive
     void Update()
     {
         Block();
-        //if(Input.GetKeyDown(KeyCode.J)) // Test take damge
-        //    TakeDamge( 10000 ,stunDamgeTest, 0);
         Heath();
     }
     
@@ -65,6 +60,7 @@ public class PlayerTakeDamge : StatsAlive
     
     public void HeathHp()
     {
+        heath = (int)(MaxHP * 0.3f);
         currentHP += heath;
         if (currentHP >= MaxHP)
         {
