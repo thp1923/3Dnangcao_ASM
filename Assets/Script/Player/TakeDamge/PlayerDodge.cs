@@ -51,7 +51,7 @@ public class PlayerDodge : MonoBehaviour
     private void Update()
     {
         // Bắt đầu nhấn
-        if (Input.GetKeyDown(dodgeKey))
+        if (Input.GetKeyDown(dodgeKey) && !attackCtrl.inventory.activeSelf)
         {
             holdTime = 0f;
             isHolding = true;
@@ -59,7 +59,7 @@ public class PlayerDodge : MonoBehaviour
         }
 
         // Đang giữ
-        if (isHolding && Input.GetKey(dodgeKey))
+        if (isHolding && Input.GetKey(dodgeKey) && !attackCtrl.inventory.activeSelf)
         {
             holdTime += Time.deltaTime;
 
@@ -69,7 +69,7 @@ public class PlayerDodge : MonoBehaviour
                 return; // 👉 gọi ngay khi vừa qua ngưỡng giữ
             }
         }
-        if (Input.GetKeyUp(dodgeKey))
+        if (Input.GetKeyUp(dodgeKey) && !attackCtrl.inventory.activeSelf)
         {
             if (!holdActionTriggered)
             {

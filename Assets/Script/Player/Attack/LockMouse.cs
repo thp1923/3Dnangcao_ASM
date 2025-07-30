@@ -7,11 +7,14 @@ public class LockMouse : MonoBehaviour
     public static bool CursorLocked = true;
     [SerializeField] protected KeyCode lockMouseKey = KeyCode.LeftAlt;
 
-    [SerializeField] protected GameObject inventory;
+    Animator animator;
+
+    [SerializeField] internal GameObject inventory;
     // Start is called before the first frame update
     protected virtual void Start()
     {
         inventory.SetActive(false);
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame

@@ -7,7 +7,7 @@ public class SwordTrailEffect : MonoBehaviour
 
     public bool isFlame;
 
-    public ParticleSystem fireTrail;
+    public ParticleSystem[] fireTrails;
 
     bool damageEnabled;
 
@@ -16,10 +16,13 @@ public class SwordTrailEffect : MonoBehaviour
     {
         if(trailEffect != null) 
             trailEffect.gameObject.SetActive(false);
-        if(fireTrail != null)
+        if(fireTrails != null)
         {
-            fireTrail.gameObject.SetActive(false);
-            fireTrail.Stop();
+            foreach(var fireTrail in fireTrails)
+            {
+                fireTrail.gameObject.SetActive(false);
+                fireTrail.Stop();
+            }
         }
 
     }
@@ -34,9 +37,12 @@ public class SwordTrailEffect : MonoBehaviour
         if (number != 0)
         {
             damageEnabled = true;
-            if (isFlame && fireTrail != null)
+            if (isFlame && fireTrails != null)
             {
-                fireTrail.Play();
+                foreach (var fireTrail in fireTrails)
+                {
+                    fireTrail.Play();
+                }
             }
             else
             {
@@ -51,9 +57,12 @@ public class SwordTrailEffect : MonoBehaviour
         {
             damageEnabled = false;
             currentWeapon.ResetSettings();
-            if (isFlame && fireTrail != null)
+            if (isFlame && fireTrails != null)
             {
-                fireTrail.Stop();
+                foreach (var fireTrail in fireTrails)
+                {
+                    fireTrail.Stop();
+                }
             }
             else
             {
@@ -69,8 +78,18 @@ public class SwordTrailEffect : MonoBehaviour
     public void PlayFlame(bool IsFlame)
     {
         if (isFlame)
-            fireTrail.gameObject.SetActive(IsFlame);
+        {
+            foreach (var fireTrail in fireTrails)
+            {
+                fireTrail.gameObject.SetActive(IsFlame);
+            }
+        }
         else
-            fireTrail.gameObject.SetActive(false);
+        {
+            foreach (var fireTrail in fireTrails)
+            {
+                fireTrail.gameObject.SetActive(false);
+            }
+        }
     }
 }

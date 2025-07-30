@@ -68,7 +68,6 @@ public class PlayerAttackController : LockMouse
     {
         base.Update();
         AttackCombo();
-        playerAim.SetBool("IsAttacking", isAttacking);
         //LockMove();
     }
 
