@@ -6,6 +6,7 @@ public class TalkZoneTrigger : MonoBehaviour
 {
     public GameObject pressFPanel;
     public DialogueTrigger dialogueTrigger;
+    public DialogueManager dialogueManager;
 
     private bool isPlayerNear = false;
 
@@ -18,8 +19,11 @@ public class TalkZoneTrigger : MonoBehaviour
     {
         if (isPlayerNear && Input.GetKeyDown(KeyCode.F))
         {
-            pressFPanel.SetActive(false);
-            dialogueTrigger.StartDialogue();
+            if (!dialogueManager.IsDialogueActive()) 
+            {
+                pressFPanel.SetActive(false);
+                dialogueTrigger.StartDialogue();
+            }
         }
     }
 

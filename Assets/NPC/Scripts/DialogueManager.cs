@@ -12,12 +12,15 @@ public class DialogueManager : MonoBehaviour
 
     private Queue<string> sentences;
     private bool isTyping = false;
+    private bool isDialogueActive = false;
 
     [Header("Khóa Script")]
     private vThirdPersonInput inputScript;
     private PlayerAttackController attackScript;
     private PlayerDodge dodgeScript;
     private Animator playerAnimator;
+    [Header("Khoa chuyen dong")]
+    private Rigidbody rb;
 
     void Start()
     {
@@ -31,11 +34,15 @@ public class DialogueManager : MonoBehaviour
             attackScript = player.GetComponent<PlayerAttackController>();
             dodgeScript = player.GetComponent<PlayerDodge>();
             playerAnimator = player.GetComponentInChildren<Animator>();
+            rb = player.GetComponent<Rigidbody>();
         }
     }
 
     public void StartDialogue(List<string> dialogueLines)
     {
+        if (isDialogueActive) return;
+
+        isDialogueActive = true;
         dialoguePanel.SetActive(true);
         TogglePlayerScripts(false);
 
@@ -79,6 +86,7 @@ public class DialogueManager : MonoBehaviour
     {
         dialoguePanel.SetActive(false);
         TogglePlayerScripts(true);
+        isDialogueActive = false;
     }
 
     void Update()
@@ -95,6 +103,19 @@ public class DialogueManager : MonoBehaviour
         if (attackScript != null) attackScript.enabled = state;
         if (dodgeScript != null) dodgeScript.enabled = state;
 
+        if (rb != null)
+        {
+            if (!state)
+            {
+                rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ |
+                                 RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+            }
+            else
+            {
+                rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+            }
+        }
+
         if (!state && playerAnimator != null)
         {
             playerAnimator.SetFloat("InputMagnitude", 0f);
@@ -102,5 +123,10 @@ public class DialogueManager : MonoBehaviour
             playerAnimator.SetFloat("Horizontal", 0f);
             playerAnimator.SetBool("Attack", false);
         }
+    }
+
+    public bool IsDialogueActive()
+    {
+        return isDialogueActive;
     }
 }
