@@ -1187,7 +1187,7 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
+  MinDistance: 30
   MaxDistance: 500
   Pan2D: 0
   rolloffMode: 0
@@ -1409,7 +1409,7 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
+  MinDistance: 30
   MaxDistance: 500
   Pan2D: 0
   rolloffMode: 0
@@ -1538,7 +1538,7 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
+  MinDistance: 30
   MaxDistance: 500
   Pan2D: 0
   rolloffMode: 0
@@ -2077,7 +2077,7 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
+  MinDistance: 30
   MaxDistance: 500
   Pan2D: 0
   rolloffMode: 0
@@ -6333,7 +6333,10 @@ MonoBehaviour:
   HP_Bar: {fileID: 0}
   me: {fileID: 0}
   damPopUp: {fileID: 0}
+  Point: 0
+  drop: {fileID: 0}
   itemsDrop: []
+  dropRate: []
 --- !u!114 &3597207567392554611
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6449,7 +6452,10 @@ MonoBehaviour:
   HP_Bar: {fileID: 0}
   me: {fileID: 0}
   damPopUp: {fileID: 0}
+  Point: 0
+  drop: {fileID: 0}
   itemsDrop: []
+  dropRate: []
 --- !u!114 &6981882093703195016
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6559,7 +6565,10 @@ MonoBehaviour:
   HP_Bar: {fileID: 0}
   me: {fileID: 0}
   damPopUp: {fileID: 0}
+  Point: 0
+  drop: {fileID: 0}
   itemsDrop: []
+  dropRate: []
 --- !u!114 &8924551590926883580
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6710,7 +6719,10 @@ MonoBehaviour:
   HP_Bar: {fileID: 0}
   me: {fileID: 0}
   damPopUp: {fileID: 0}
+  Point: 0
+  drop: {fileID: 0}
   itemsDrop: []
+  dropRate: []
 --- !u!114 &4822984472375008224
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6826,8 +6838,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 746af45c41e963643976a73beccb8e75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHP: 70000
-  Defense: 500
+  MaxHP: 3000
+  Defense: 200
   StunResistance: 100000
   HpSlider: {fileID: 5914361805580525764}
   type: 0
@@ -6838,6 +6850,10 @@ MonoBehaviour:
     m_Bits: 8
   rangeShow: 80
   HP_Bar: {fileID: 6849019706870545527}
+  Point: 2000
+  drop: {fileID: 2008192556107255439, guid: ad8e45d9b72484d42a730922e47c6f68, type: 3}
+  itemsDrop:
+  - {fileID: 11400000, guid: 40704c54e1aed6a4d9bec4aaf6ccba04, type: 2}
 --- !u!114 &5745022304801682055
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7106,7 +7122,10 @@ MonoBehaviour:
   HP_Bar: {fileID: 0}
   me: {fileID: 0}
   damPopUp: {fileID: 0}
+  Point: 0
+  drop: {fileID: 0}
   itemsDrop: []
+  dropRate: []
 --- !u!114 &5804034340680772131
 MonoBehaviour:
   m_ObjectHideFlags: 0
