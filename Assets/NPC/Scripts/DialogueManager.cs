@@ -134,7 +134,7 @@ public class DialogueManager : MonoBehaviour
         return isDialogueActive;
     }
 
-    public void SkipDialogue()
+    void SkipDialogue()
     {
         StopAllCoroutines();       
         isTyping = false;
