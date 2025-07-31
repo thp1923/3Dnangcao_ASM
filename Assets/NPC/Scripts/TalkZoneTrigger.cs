@@ -24,7 +24,7 @@ public class TalkZoneTrigger : MonoBehaviour
                 pressFPanel.SetActive(false);
                 dialogueTrigger.StartDialogue();
             }
-        }
+        }   
     }
 
     private void OnTriggerEnter(Collider other)

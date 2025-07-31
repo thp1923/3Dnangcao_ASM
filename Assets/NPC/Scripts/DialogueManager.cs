@@ -95,6 +95,10 @@ public class DialogueManager : MonoBehaviour
         {
             DisplayNextSentence();
         }
+        else if (Input.GetMouseButtonDown(1))
+        {
+            SkipDialogue();
+        }    
     }
 
     void TogglePlayerScripts(bool state)
@@ -129,4 +133,13 @@ public class DialogueManager : MonoBehaviour
     {
         return isDialogueActive;
     }
+
+    public void SkipDialogue()
+    {
+        StopAllCoroutines();       
+        isTyping = false;
+        sentences.Clear();        
+        EndDialogue();            
+    }
+
 }
