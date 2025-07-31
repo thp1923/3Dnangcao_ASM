@@ -30,6 +30,7 @@ public class BarukAttackDamge : StatsAttack
         else if(attackNumber >= (ATK.Count - 2))
         {
             Attack2(ATK.Count - 2);
+            return;
         }
         Attack1(attackNumber);
     }
@@ -47,7 +48,8 @@ public class BarukAttackDamge : StatsAttack
         Collider[] colInfo = Physics.OverlapBox(pointAttack2.position, attackRange2, Quaternion.identity, attackMask);
         foreach (Collider enemy in colInfo)
         {
-            animator.SetTrigger("Combo3");
+            if(attackNum == 5)
+                animator.SetTrigger("Combo3");
             enemy.GetComponent<PlayerTakeDamge>().TakeDamge(atk, (stunDamge[attackNum] + stunDamgeBonus), 0);
         }
     }

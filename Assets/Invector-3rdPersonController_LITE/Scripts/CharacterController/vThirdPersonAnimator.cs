@@ -15,7 +15,8 @@ namespace Invector.vCharacterController
 
         public virtual void UpdateAnimator()
         {
-            if (animator == null || !animator.enabled) return;
+            var attackCtrl = GetComponent<PlayerAttackController>();
+            if (animator == null || !animator.enabled || attackCtrl.inventory.activeSelf) return;
 
             animator.SetBool(vAnimatorParameters.IsStrafing, isStrafing); ;
             animator.SetBool(vAnimatorParameters.IsSprinting, isSprinting);
