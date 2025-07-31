@@ -22,6 +22,11 @@ public class SpecialSkill : MonoBehaviour
     Animator animator;
     public LayerMask attackMask;
 
+    public AudioSource buffSource;
+    public AudioSource fireLoop;
+    public AudioClip[] skillClip;
+    public AudioClip[] Loop;
+
     [Header("--------CD--------")]
     public float CD;
     float _CD;
@@ -105,6 +110,20 @@ public class SpecialSkill : MonoBehaviour
             animator.SetTrigger("Skill");
         }
     }
+    public void PlayAudio()
+    {
+        switch (skillTpye)
+        {
+            case SpecialSkillTpye.GreenFire:
+                buffSource.PlayOneShot(skillClip[0]);
+                break;
+            case SpecialSkillTpye.DragonFire:
+                buffSource.PlayOneShot(skillClip[1]);
+                break;
+            default:
+                break;
+        }
+    }
     public void BeginSkill()
     {
         SpecialSkillId = (int)skillTpye;
@@ -113,6 +132,9 @@ public class SpecialSkill : MonoBehaviour
             case SpecialSkillTpye.GreenFire:
                 isGreenFire = true;
                 ptdPlayer.damgeTake += damgeTakeNerf;
+                fireLoop.clip = Loop[0];
+                fireLoop.pitch = 1f;
+                fireLoop.Play();
                 foreach (var ef in fireEffect)
                 {
                     if (ef != null)
@@ -129,6 +151,10 @@ public class SpecialSkill : MonoBehaviour
             case SpecialSkillTpye.DragonFire:
                 isDragonFire = true;
                 atkPlayer.damgeAttack += damgeBonus;
+                fireLoop.clip = Loop[0];
+                fireLoop.pitch = 1f;
+                fireLoop.Play();
+                buffSource.PlayOneShot(skillClip[1]);
                 for (int i = 0; i < fireDragonEffect.Length; i++)
                 {
                     if (i < firePoints.Length && fireDragonEffect[i] != null && firePoints[i] != null)
@@ -161,6 +187,7 @@ public class SpecialSkill : MonoBehaviour
         {
             case SpecialSkillTpye.GreenFire:
                 isGreenFire = false;
+                fireLoop.Stop();
                 ptdPlayer.damgeTake -= damgeTakeNerf;
                 foreach (var ef in fireEffect)
                 {
@@ -211,6 +238,9 @@ public class SpecialSkill : MonoBehaviour
     IEnumerator DragonFire()
     {
         yield return new WaitForSeconds(CD / 3 - 1f);
+        fireLoop.clip = Loop[1];
+        fireLoop.pitch = 2f;
+        fireLoop.Play();
         DragonTrans.Play();
         DragonTrans.GetComponent<Light>().enabled = true;
         StartCoroutine(DragonFire2());
@@ -221,6 +251,7 @@ public class SpecialSkill : MonoBehaviour
         yield return new WaitForSeconds(2f);
         if (DragonTrans != null)
         {
+            fireLoop.Stop();
             DragonTrans.Stop();
             var light = DragonTrans.GetComponent<Light>();
             if (light != null)
