@@ -12,6 +12,7 @@ public class AttackBehaviour : StateMachineBehaviour
         animator.GetComponent<MoveManager>().CheckLockMove(true);
         animator.GetComponent<PlayerAttackController>().isAttacking = true;
         animator.GetComponent<Stamina>().TakeStamina(animator.GetComponent<PlayerAttackController>().staminaLost);
+        animator.GetComponent<SwordTrailEffect>().PlayFlame(true);
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
