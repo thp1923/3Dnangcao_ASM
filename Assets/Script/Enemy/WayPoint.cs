@@ -1,25 +1,23 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class WayPoint : MonoBehaviour
 {
-    public GameObject wayPoint;
-    public List<Transform> WayPoints = new List<Transform>();
-    // Start is called before the first frame update
+    public GameObject parentObject;
+    public List<Transform> childTransforms = new List<Transform>();
+
     void Start()
     {
-        GameObject parentObject = wayPoint;
-
-        foreach (Transform child in parentObject.transform)
-        {
-            WayPoints.Add(child.transform);
-        }
+        AddAllChildTransforms(parentObject);
     }
 
-    // Update is called once per frame
-    void Update()
+    void AddAllChildTransforms(GameObject parent)
     {
-        
+        childTransforms.Clear(); // Xoá cũ nếu cần
+        foreach (Transform child in parent.transform)
+        {
+            childTransforms.Add(child);
+        }
     }
 }

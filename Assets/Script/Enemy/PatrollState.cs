@@ -19,10 +19,16 @@ public class PatrollState : StateMachineBehaviour
         timer = 0;
         agent.speed = speed;
         WayPoint wayPointScript = animator.GetComponent<WayPoint>();
-        foreach (Transform wayPoint in wayPointScript.WayPoints)
+        if (wayPointScript != null && wayPointScript.childTransforms.Count > 0)
         {
-            wayPoints.Add(wayPoint);
+            wayPoints = wayPointScript.childTransforms;
+            agent.SetDestination(wayPoints[Random.Range(0, wayPoints.Count)].position);
         }
+        else
+        {
+            Debug.LogWarning("No waypoints found for patrol.");
+        }
+
         agent.SetDestination(wayPoints[Random.Range(0, wayPoints.Count)].position);
         player = GameObject.FindGameObjectWithTag("Player").transform;
     }
