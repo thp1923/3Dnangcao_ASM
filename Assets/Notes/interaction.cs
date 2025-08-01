@@ -30,7 +30,7 @@ public class interaction : MonoBehaviour
                 interactionText.SetActive(true);
 
                 //If the E key is pressed,
-                if (Input.GetKeyDown(KeyCode.T))
+                if (Input.GetKeyDown(KeyCode.F))
                 {
                     //The letter component is accessed and the letter will open or close
                     hit.collider.gameObject.GetComponent<letter>().openCloseLetter();
