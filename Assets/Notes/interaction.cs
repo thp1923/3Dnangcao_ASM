@@ -21,7 +21,7 @@ public class interaction : MonoBehaviour
     void Update()
     {
         //If a letter is currently open and the player presses T, close the letter
-        if (currentOpenLetter != null && Input.GetKeyDown(KeyCode.T))
+        if (currentOpenLetter != null && Input.GetKeyDown(KeyCode.F))
         {
             currentOpenLetter.openCloseLetter();
             currentOpenLetter = null;
@@ -41,7 +41,7 @@ public class interaction : MonoBehaviour
                 interactionText.SetActive(true);
 
                 //If the T key is pressed,
-                if (Input.GetKeyDown(KeyCode.T))
+                if (Input.GetKeyDown(KeyCode.F))
                 {
                     //The letter component is accessed and the letter will open or close
                     letter letterComponent = hit.collider.gameObject.GetComponent<letter>();
