@@ -12,6 +12,7 @@ public class AttackKnightBehaviour : StateMachineBehaviour
         if (animator.GetComponent<SwordTrailEffect>() != null)
         {
             animator.GetComponent<SwordTrailEffect>().PlayFlame(true);
+            animator.GetComponent<SwordTrailEffect>().PlayPartical(1);
         }
     }
 
@@ -28,6 +29,11 @@ public class AttackKnightBehaviour : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         ResetAllTriggers(animator);
+        if (animator.GetComponent<SwordTrailEffect>() != null)
+        {
+            animator.GetComponent<SwordTrailEffect>().PlayFlame(false);
+            animator.GetComponent<SwordTrailEffect>().PlayPartical(1);
+        }
         if (animator.GetComponent<BossKnightAttackController>().enabled != false)
             animator.GetComponent<BossKnightAttackController>().enabled = false;
         if(animator.GetComponent<BossKnightMoveAI>().enabled != true)

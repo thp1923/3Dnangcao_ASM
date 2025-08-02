@@ -163,6 +163,17 @@ public class PlayerAim : MonoBehaviour
         }
     }
 
+    public void LockForStun()
+    {
+        Vector3 directionToEnemy = (closestEnemy.transform.position - transform.position).normalized;
+        directionToEnemy.y = 0;
+
+
+        // Xoay nhân vật mượt
+        Quaternion targetRotation = Quaternion.LookRotation(directionToEnemy);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeedCharacter * Time.deltaTime);
+    }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.grey;

@@ -102,6 +102,7 @@ public class PlayerTakeDamge : StatsAlive
             if(PlayerAim == null) return;
             int stun = stunDamge - (StunResistance + stunResistanceBonus);
             GetComponent<PlayerAim>().ClosestEnemy();
+            GetComponent<PlayerAim>().LockForStun();
             if(stun > 4000)
             {
                 PlayerAim.SetTrigger("Hit3");
