@@ -12,6 +12,10 @@ public class IdleKnightBehaviour : StateMachineBehaviour
         {
             animator.GetComponent<SwordTrailEffect>().PlayFlame(false);
         }
+        if(animator.GetComponent<FastAttack>() != null)
+        {
+            animator.GetComponent<FastAttack>().QuickAttack();
+        }
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

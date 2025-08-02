@@ -77,11 +77,9 @@ public class InventoryManager : MonoBehaviour
                 {
                     case BaseSkillType.AttackBuff:
                         baseSkill.buffTypePlayer = PlayerBuff.BuffType.Atk;
-                        baseSkill.atkBonus = item.damgeBonusSkill;
                         break;
                     case BaseSkillType.DefenseBuff:
                         baseSkill.buffTypePlayer = PlayerBuff.BuffType.Def;
-                        baseSkill.defBonus = item.defBonusSkill;
                         break;
                     default:
                         break;
@@ -93,13 +91,9 @@ public class InventoryManager : MonoBehaviour
                 {
                     case SpecialSkillType.GreenFire:
                         specialSkill.skillTpye = SpecialSkill.SpecialSkillTpye.GreenFire;
-                        specialSkill.damgeTakeNerf = item.damgeTakeNerf;
-                        specialSkill.skillDamge = item.skillDamge;
                         break;
                     case SpecialSkillType.DragonFire:
                         specialSkill.skillTpye = SpecialSkill.SpecialSkillTpye.DragonFire;
-                        specialSkill.damgeBonus = item.damgeAttackBonus;
-                        specialSkill.skillFireDragonDamge = item.skillDamge;
                         break;
                     default:
                         break;

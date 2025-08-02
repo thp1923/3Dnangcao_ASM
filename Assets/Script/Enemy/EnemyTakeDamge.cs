@@ -30,8 +30,9 @@ public class EnemyTakeDamge : StatsAlive
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
+        base.Update();
         ShowAndHide();
         if(HP_Bar == null) return;
         if(isShow) HP_Bar.SetActive(true);

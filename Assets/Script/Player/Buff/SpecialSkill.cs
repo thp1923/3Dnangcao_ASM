@@ -36,9 +36,9 @@ public class SpecialSkill : MonoBehaviour
     [Header("-----Green Fire-----")]
     public ParticleSystem[] fireEffect;
 
-    internal float skillDamge;
+    public float skillDamgeWolf;
 
-    internal float damgeTakeNerf;
+    public float damgeTakeNerf;
 
     public float rangeGreenFire;
 
@@ -53,9 +53,9 @@ public class SpecialSkill : MonoBehaviour
 
     public Transform[] firePoints;
 
-    internal float skillFireDragonDamge;
+    public float skillFireDragonDamge;
 
-    internal float damgeBonus;
+    public float damgeBonus;
 
     public float rangeDragonFire;
 
@@ -223,7 +223,7 @@ public class SpecialSkill : MonoBehaviour
     public void GreenFireDamge()
     {
         _damgeRefTime -= Time.deltaTime;
-        int damge = (int)(atkPlayer.BaseATK * (skillDamge/100f));
+        int damge = (int)(atkPlayer.BaseATK * (skillDamgeWolf/100f));
         if(isGreenFire && _damgeRefTime <= 0)
         {
             _damgeRefTime = damgeRefTime;
