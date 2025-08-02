@@ -30,6 +30,9 @@ public class PlayerTakeDamge : StatsAlive
     [Header("-------------Shake----------")]
     public float[] duration; // Time shake
     public float[] magnitude; // Shake level
+
+    public static int MaxHp { get; internal set; }
+
     // Start is called before the first frame update
     protected override void Start()
     {

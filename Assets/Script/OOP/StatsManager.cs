@@ -31,6 +31,7 @@ namespace StatsManager
         protected int currentHP;
 
         protected int DamPopUp;
+        internal int CurrentHP;
 
         protected virtual void Start()
         {
