@@ -12,6 +12,7 @@ namespace StatsManager
         public int Defense; // Chỉ số phòng thủ
         public int StunResistance; // Chỉ sô kháng stun
         public Slider HpSlider;
+        public Slider HpLostSlider;
 
         public enum TypeTakeDamge
         {
@@ -32,6 +33,9 @@ namespace StatsManager
 
         protected int DamPopUp;
 
+        public float timer;
+        protected float _timer;
+
         protected virtual void Start()
         {
             currentHP = MaxHP;
@@ -39,6 +43,29 @@ namespace StatsManager
             {
                 HpSlider.maxValue = MaxHP;
                 HpSlider.value = currentHP;
+            }
+            if(HpLostSlider != null)
+            {
+                HpLostSlider.maxValue = MaxHP;
+                HpLostSlider.value = currentHP;
+            }
+        }
+
+        protected virtual void Update()
+        {
+            _timer -= Time.deltaTime;
+            if (HpLostSlider != null)
+            {
+                if (HpSlider.value < HpLostSlider.value && _timer <= 0)
+                {
+                    _timer = timer;
+                    HpLostSlider.value -= (int)(MaxHP * 0.05f);
+                
+                }
+                if(HpSlider.value > HpLostSlider.value)
+                {
+                    HpLostSlider.value = HpSlider.value;
+                }
             }
         }
 
@@ -116,13 +143,19 @@ namespace StatsManager
         internal int stamina;
         internal bool canRecover;
 
+        public float timer;
+        protected float _timer;
+
         public Slider staminaBar;
+        public Slider staminaLostBar;
 
         protected virtual void Start()
         {
             stamina = StaminaMax;
             staminaBar.maxValue = StaminaMax;
             staminaBar.value = stamina;
+            staminaLostBar.maxValue = StaminaMax;
+            staminaLostBar.value = stamina;
         }
 
         public virtual void UpgradeStamina(int StaminaMax_Upgrade)
@@ -139,6 +172,16 @@ namespace StatsManager
 
         protected virtual void Update()
         {
+            _timer -= Time.deltaTime;
+            if(staminaBar.value < staminaLostBar.value && _timer <= 0)
+            {
+                _timer = timer;
+                staminaLostBar.value -= (int)(StaminaMax * 0.05f);
+            }
+            if(staminaBar.value >  staminaLostBar.value)
+            {
+                staminaLostBar.value = staminaBar.value;
+            }
             RecoveStamina();
             staminaBar.value = stamina;
         }

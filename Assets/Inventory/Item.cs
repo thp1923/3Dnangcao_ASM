@@ -53,11 +53,6 @@ public class Item : ScriptableObject
     #endregion
 
     #region Skill
-    public float damgeBonusSkill;
-    public float defBonusSkill;
-    public float damgeTakeNerf;
-    public float damgeAttackBonus;
-    public float skillDamge;
     public BaseSkillType skillBaseType;
     public SpecialSkillType skillSpecialType;
     #endregion

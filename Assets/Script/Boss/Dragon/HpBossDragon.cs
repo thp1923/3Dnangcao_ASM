@@ -28,8 +28,9 @@ public class HpBossDragon : StatsAlive
         aim = GetComponent<Animator>();
     }
 
-    void Update()
+    protected override void Update()
     {
+        base.Update();
         ShowAndHide();
         if (HP_Bar == null) return;
         if (isShow) HP_Bar.SetActive(true);
