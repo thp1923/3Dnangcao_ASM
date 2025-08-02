@@ -46,7 +46,6 @@ public class BossKnightMoveAI : MonoBehaviour
 
     void Update()
     {
-
         DetectPlayer();
 
         if (!playerInRange)

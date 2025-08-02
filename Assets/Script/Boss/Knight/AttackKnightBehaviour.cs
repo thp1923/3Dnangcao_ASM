@@ -16,16 +16,33 @@ public class AttackKnightBehaviour : StateMachineBehaviour
     }
 
     // OnStateUpdate is called before OnStateUpdate is called on any state inside this state machine
-    //override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //    
-    //}
+    override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        if (animator.GetComponent<BossKnightAttackController>().enabled != false)
+            animator.GetComponent<BossKnightAttackController>().enabled = false;
+        if (animator.GetComponent<BossKnightMoveAI>().enabled != false)
+            animator.GetComponent<BossKnightMoveAI>().enabled = false;
+    }
 
     // OnStateExit is called before OnStateExit is called on any state inside this state machine
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.GetComponent<BossKnightAttackController>().enabled = false;
-        animator.GetComponent<BossKnightMoveAI>().enabled = true;
+        ResetAllTriggers(animator);
+        if (animator.GetComponent<BossKnightAttackController>().enabled != false)
+            animator.GetComponent<BossKnightAttackController>().enabled = false;
+        if(animator.GetComponent<BossKnightMoveAI>().enabled != true)
+            animator.GetComponent<BossKnightMoveAI>().enabled = true;
+    }
+
+    void ResetAllTriggers(Animator animator)
+    {
+        foreach (AnimatorControllerParameter param in animator.parameters)
+        {
+            if (param.type == AnimatorControllerParameterType.Trigger)
+            {
+                animator.ResetTrigger(param.name);
+            }
+        }
     }
 
     // OnStateMove is called before OnStateMove is called on any state inside this state machine
