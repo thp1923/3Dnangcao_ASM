@@ -165,13 +165,25 @@ public class PlayerAim : MonoBehaviour
 
     public void LockForStun()
     {
+        float range = lockRange;
+        foreach (GameObject enemy in enemiesList)
+        {
+            if (enemy == null) continue;
+
+            float dist = Vector3.Distance(transform.position, enemy.transform.position);
+            if (dist < range)
+            {
+                range = dist;
+                closestEnemy = enemy;
+            }
+        }
+        if (closestEnemy == null) return;
+
         Vector3 directionToEnemy = (closestEnemy.transform.position - transform.position).normalized;
         directionToEnemy.y = 0;
 
-
-        // Xoay nhân vật mượt
         Quaternion targetRotation = Quaternion.LookRotation(directionToEnemy);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeedCharacter * Time.deltaTime);
+        transform.rotation = targetRotation; // Xoay ngay lập tức
     }
 
     private void OnDrawGizmos()

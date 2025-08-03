@@ -1,21 +1,24 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class HitState : StateMachineBehaviour
+public class StunArtoriasBehaviour : StateMachineBehaviour
 {
-    public bool Hit3;
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.GetComponent<PlayerTakeDamge>().noTakeDamge = true;
-        animator.GetComponent<MoveManager>().CheckLockMove(true);
-        animator.GetComponent<MoveManager>().CheckSleep(true);
+        if (animator.GetComponent<DragonRotation>().enabled != false)
+            animator.GetComponent<DragonRotation>().enabled = false;
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
-    //override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //    
-    //}
+    override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        if (animator.GetComponent<BossKnightAttackController>().enabled != false)
+            animator.GetComponent<BossKnightAttackController>().enabled = false;
+        if (animator.GetComponent<BossKnightMoveAI>().enabled != false)
+            animator.GetComponent<BossKnightMoveAI>().enabled = false;
+    }
 
     void ResetAllTriggers(Animator animator)
     {
@@ -27,15 +30,22 @@ public class HitState : StateMachineBehaviour
             }
         }
     }
-
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        animator.SetBool("NotStun", true);
         ResetAllTriggers(animator);
-        if (Hit3) return;
-        animator.GetComponent<PlayerTakeDamge>().noTakeDamge = false;
-        animator.GetComponent<MoveManager>().CheckLockMove(false);
-        animator.GetComponent<MoveManager>().CheckSleep(false);
+        if (animator.GetComponent<SwordTrailEffect>() != null)
+        {
+            animator.GetComponent<SwordTrailEffect>().PlayFlame(false);
+            animator.GetComponent<SwordTrailEffect>().PlayPartical(1);
+        }
+        if (animator.GetComponent<BossKnightAttackController>().enabled != false)
+            animator.GetComponent<BossKnightAttackController>().enabled = false;
+        if (animator.GetComponent<BossKnightMoveAI>().enabled != true)
+            animator.GetComponent<BossKnightMoveAI>().enabled = true;
+        if (animator.GetComponent<DragonRotation>().enabled != true)
+            animator.GetComponent<DragonRotation>().enabled = true;
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

@@ -10,6 +10,7 @@ public class ShieldAttackState : StateMachineBehaviour
         animator.GetComponent<PlayerTakeDamge>().isBlock = true;
         animator.GetComponent<MoveManager>().CheckLockMove(true);
         animator.GetComponent<MoveManager>().CheckSleep(true);
+        animator.GetComponent<PlayerTakeDamge>().BlockEffect(true);
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

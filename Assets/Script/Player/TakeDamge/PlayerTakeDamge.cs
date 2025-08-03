@@ -1,6 +1,7 @@
 ﻿using Invector.vCharacterController;
 using StatsManager;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -15,6 +16,10 @@ public class PlayerTakeDamge : StatsAlive
     [SerializeField] private KeyCode blockKey = KeyCode.Mouse1;
     public int staminaLost = 35;
     public Animator CanvaDied;
+
+    public Material defMaterial;
+    public GameObject targetRoot;
+    public List<SkinnedMeshRenderer> skinnedMeshes;
 
     [Header("---------Knock Back----------")]
     public float[] knockbackForce;
@@ -37,6 +42,7 @@ public class PlayerTakeDamge : StatsAlive
         PlayerAim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
         _heathCount = heathCount;
+        Collect();
     }
 
     // Update is called once per frame
@@ -83,9 +89,64 @@ public class PlayerTakeDamge : StatsAlive
         }
     }
 
+    void Collect()
+    {
+        if (targetRoot == null)
+        {
+            return;
+        }
+
+        skinnedMeshes.Clear(); // Xoá dữ liệu cũ tránh lỗi
+        skinnedMeshes.AddRange(targetRoot.GetComponentsInChildren<SkinnedMeshRenderer>());
+    }
+
+    public void BlockEffect(bool block)
+    {
+        if(block)
+        {
+            foreach (var renderer in skinnedMeshes)
+            {
+                // Kiểm tra nếu đã có thì không thêm nữa
+                if (System.Array.Exists(renderer.materials, mat => mat == defMaterial))
+                    continue;
+
+                Material[] currentMaterials = renderer.materials;
+                Material[] newMaterials = new Material[currentMaterials.Length + 1];
+
+                for (int i = 0; i < currentMaterials.Length; i++)
+                    newMaterials[i] = currentMaterials[i];
+
+                newMaterials[currentMaterials.Length] = defMaterial;
+                renderer.materials = newMaterials;
+            }
+        }
+        else
+        {
+            foreach (var renderer in skinnedMeshes)
+            {
+                Material[] mats = renderer.materials;
+
+                if (mats.Length == 0)
+                    continue;
+
+                // Tạo mảng mới ngắn hơn 1
+                Material[] newMats = new Material[mats.Length - 1];
+
+                // Copy hết trừ cái cuối cùng
+                for (int i = 0; i < newMats.Length; i++)
+                {
+                    newMats[i] = mats[i];
+                }
+
+                // Gán lại mảng đã rút gọn
+                renderer.materials = newMats;
+            }
+        }
+    }
+
     public override void TakeDamge(int damge, int stunDamge, int trueDamge)
     {
-        if (noTakeDamge || GetComponent<PlayerDodge>().isDodging) return;
+        if (/*noTakeDamge || */GetComponent<PlayerDodge>().isDodging) return;
         if (isBlock)
         {
             PlayerAim.SetTrigger("Hit");
@@ -99,7 +160,7 @@ public class PlayerTakeDamge : StatsAlive
         }
         if(stunDamge > (StunResistance + stunResistanceBonus))
         {
-            if(PlayerAim == null) return;
+            if(PlayerAim == null && noTakeDamge) return;
             int stun = stunDamge - (StunResistance + stunResistanceBonus);
             GetComponent<PlayerAim>().ClosestEnemy();
             GetComponent<PlayerAim>().LockForStun();
