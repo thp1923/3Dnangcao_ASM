@@ -14,32 +14,31 @@ public class FireBallShot : MonoBehaviour
     public Transform startPos;
     public GameObject Explosion;
 
-    bool isEnable;
+    private void Start()
+    {
+        target = GameObject.FindWithTag("Player").transform;
+    }
     private void OnEnable()
     {
         transform.position = startPos.position;
-        target = GameObject.FindWithTag("Player").transform;
-        isEnable = true;
+        isFlying = false;
+        timer = 0f;
         StartCoroutine(FireBallStart());
     }
 
     private void OnDisable()
     {
-        isEnable = false;
         isFlying = false;
-        Explosion.SetActive(true);
-        Explosion.transform.position = gameObject.transform.position;
+        
+        
     }
 
     IEnumerator FireBallStart()
     {
         yield return new WaitForSeconds(1f);
-        if (isEnable)
-        {
-            // Tính hướng bay ngay lúc bắt đầu (chỉ một lần)
-            flyDirection = (target.position - transform.position).normalized;
-            isFlying = true;
-        }
+        // Tính hướng bay ngay lúc bắt đầu (chỉ một lần)
+        flyDirection = (target.position - transform.position).normalized;
+        isFlying = true;
     }
 
     void Update()
@@ -56,13 +55,18 @@ public class FireBallShot : MonoBehaviour
         {
             // Hết thời gian thì ẩn đối tượng
             gameObject.SetActive(false);
+            timer = 0f;
         }
     }
 
     // Khi va chạm thì tắt luôn object
     private void OnTriggerEnter(Collider other)
     {
-        //if(CompareTag("Player") || CompareTag("Ground"))
-        gameObject.SetActive(false);
+        if (other.CompareTag("Player") || other.CompareTag("Ground"))
+        {
+            Explosion.SetActive(true);
+            Explosion.transform.position = gameObject.transform.position;
+            gameObject.SetActive(false);
+        }
     }
 }

@@ -18,6 +18,8 @@ public class ArtoriasAttackDamge : StatsAttack
     int hit;
     public TextMeshProUGUI hitText;
 
+    internal bool canAttack;
+
     [Header("---Attack(0)---")]
     public float rangeAttack;
 
@@ -34,6 +36,7 @@ public class ArtoriasAttackDamge : StatsAttack
         animator = GetComponent<Animator>();
         animator.SetBool("NotStun", true);
         hitText.gameObject.SetActive(false);
+        canAttack = true;
     }
 
     public override void Attack(int attackNumber)
@@ -44,6 +47,7 @@ public class ArtoriasAttackDamge : StatsAttack
 
     void AttackDamge(int attackIndex)
     {
+        if (!canAttack) return;
         switch (attackIndex)
         {
             case 0:

@@ -25,7 +25,6 @@ public class Item : ScriptableObject
     public Sprite icon;
     public int maxStack = 1;
     public int value; // giá tiền
-    public GameObject prefab;
     public bool isUsable;
     public string description;
 
@@ -56,9 +55,6 @@ public class Item : ScriptableObject
     public BaseSkillType skillBaseType;
     public SpecialSkillType skillSpecialType;
     #endregion
-
-    [Header("3D Model Prefab")]
-    public GameObject modelPrefab;  // prefab để spawn mô hình vũ khí/giáp
 
     public virtual void Use()
     {

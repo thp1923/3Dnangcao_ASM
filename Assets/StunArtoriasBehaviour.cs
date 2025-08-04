@@ -9,6 +9,15 @@ public class StunArtoriasBehaviour : StateMachineBehaviour
     {
         if (animator.GetComponent<DragonRotation>().enabled != false)
             animator.GetComponent<DragonRotation>().enabled = false;
+        if (animator.GetComponent<SwordTrailEffect>() != null)
+        {
+            animator.GetComponent<SwordTrailEffect>().PlayFlame(false);
+            animator.GetComponent<SwordTrailEffect>().PlayPartical(1);
+        }
+        if (animator.GetComponent<ArtoriasAttackDamge>() != null)
+        {
+            animator.GetComponent<ArtoriasAttackDamge>().canAttack = false;
+        }
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -18,6 +27,8 @@ public class StunArtoriasBehaviour : StateMachineBehaviour
             animator.GetComponent<BossKnightAttackController>().enabled = false;
         if (animator.GetComponent<BossKnightMoveAI>().enabled != false)
             animator.GetComponent<BossKnightMoveAI>().enabled = false;
+        
+        
     }
 
     void ResetAllTriggers(Animator animator)
@@ -39,6 +50,10 @@ public class StunArtoriasBehaviour : StateMachineBehaviour
         {
             animator.GetComponent<SwordTrailEffect>().PlayFlame(false);
             animator.GetComponent<SwordTrailEffect>().PlayPartical(1);
+        }
+        if (animator.GetComponent<ArtoriasAttackDamge>() != null)
+        {
+            animator.GetComponent<ArtoriasAttackDamge>().canAttack = true;
         }
         if (animator.GetComponent<BossKnightAttackController>().enabled != false)
             animator.GetComponent<BossKnightAttackController>().enabled = false;
