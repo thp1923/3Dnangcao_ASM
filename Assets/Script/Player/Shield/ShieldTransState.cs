@@ -23,6 +23,7 @@ public class ShieldTransState : StateMachineBehaviour
         
         animator.GetComponent<MoveManager>().CheckLockMove(false);
         animator.GetComponent<MoveManager>().CheckSleep(false);
+        animator.GetComponent<PlayerTakeDamge>().PlayFlame(false);
         animator.GetComponent<Stamina>().canRecover = true;
     }
 

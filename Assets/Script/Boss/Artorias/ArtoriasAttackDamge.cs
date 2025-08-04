@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using StatsManager;
+using TMPro;
 
 public class ArtoriasAttackDamge : StatsAttack
 {
@@ -15,6 +16,7 @@ public class ArtoriasAttackDamge : StatsAttack
     public int hitStun;
     public int stunParry;
     int hit;
+    public TextMeshProUGUI hitText;
 
     [Header("---Attack(0)---")]
     public float rangeAttack;
@@ -31,6 +33,7 @@ public class ArtoriasAttackDamge : StatsAttack
     {
         animator = GetComponent<Animator>();
         animator.SetBool("NotStun", true);
+        hitText.gameObject.SetActive(false);
     }
 
     public override void Attack(int attackNumber)
@@ -51,11 +54,18 @@ public class ArtoriasAttackDamge : StatsAttack
                     {
                         GetComponent<EnemyTakeDamge>().TakeDamge(0, stunParry, 0);
                         hit++;
+                        hitText.gameObject.SetActive(true);
                         if (hit >= hitStun)
                         {
                             animator.SetBool("NotStun", false);
                             hit -= hitStun;
+                            hitText.text = "Stunned";
                         }
+                        else
+                        {
+                            hitText.text = "Hit";
+                        }
+                        StartCoroutine(TextEnd());
                         return;
                     }
                     if (isHeavy)
@@ -74,11 +84,18 @@ public class ArtoriasAttackDamge : StatsAttack
                     {
                         GetComponent<EnemyTakeDamge>().TakeDamge(0, stunParry, 0);
                         hit++;
+                        hitText.gameObject.SetActive(true);
                         if (hit >= hitStun)
                         {
                             animator.SetBool("NotStun", false);
                             hit -= hitStun;
+                            hitText.text = "Stunned";
                         }
+                        else
+                        {
+                            hitText.text = "Hit";
+                        }
+                        StartCoroutine(TextEnd());
                         return;
                     }
                     if (isHeavy)
@@ -97,11 +114,18 @@ public class ArtoriasAttackDamge : StatsAttack
                     {
                         GetComponent<EnemyTakeDamge>().TakeDamge(0, stunParry, 0);
                         hit++;
+                        hitText.gameObject.SetActive(true);
                         if (hit >= hitStun)
                         {
                             animator.SetBool("NotStun", false);
                             hit -= hitStun;
+                            hitText.text = "Stunned";
                         }
+                        else
+                        {
+                            hitText.text = "Hit";
+                        }
+                        StartCoroutine(TextEnd());
                         return;
                     }
                     if (isHeavy)
@@ -116,6 +140,12 @@ public class ArtoriasAttackDamge : StatsAttack
                 break;
         }
         
+    }
+
+    IEnumerator TextEnd()
+    {
+        yield return new WaitForSeconds(0.4f);
+        hitText.gameObject.SetActive(false);
     }
 
     public void StunBuff(int index)

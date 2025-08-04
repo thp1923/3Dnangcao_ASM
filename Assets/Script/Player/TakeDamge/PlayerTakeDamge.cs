@@ -10,9 +10,13 @@ public class PlayerTakeDamge : StatsAlive
     Animator PlayerAim;
     Rigidbody rb;
 
+    public AudioSource parrySource;
+    public AudioClip parryClip;
+
     internal bool isBlock;
     internal bool isDeath;
     internal bool noTakeDamge;
+    public ParticleSystem[] fireTrails;
     [SerializeField] private KeyCode blockKey = KeyCode.Mouse1;
     public int staminaLost = 35;
     public Animator CanvaDied;
@@ -31,6 +35,12 @@ public class PlayerTakeDamge : StatsAlive
     int heath;
     public int heathCount;
     protected int _heathCount;
+    public ParticleSystem healFire;
+    bool isHealling;
+    public float timeHeal;
+    public AudioSource heallSound;
+    public AudioClip[] healClip;
+    public TextMeshProUGUI healText;
 
     [Header("-------------Shake----------")]
     public float[] duration; // Time shake
@@ -39,6 +49,12 @@ public class PlayerTakeDamge : StatsAlive
     protected override void Start()
     {
         base.Start();
+        healFire.Stop();
+        healText.gameObject.SetActive(false);
+        foreach (var fireTrail in fireTrails)
+        {
+            fireTrail.gameObject.SetActive(false);
+        }
         PlayerAim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
         _heathCount = heathCount;
@@ -55,26 +71,53 @@ public class PlayerTakeDamge : StatsAlive
     
     void Heath()
     {
-        if (_heathCount <= 0 || isDeath)
+        if (_heathCount <= 0 || isDeath )
         {
             return;
         }
-        if (Input.GetKeyDown(heathKey))
+        if (Input.GetKeyDown(heathKey) && !isHealling)
         {
             HeathHp();
         }
     }
     
+    public void ParryAudio()
+    {
+        parrySource.PlayOneShot(parryClip);
+    }
+
     public void HeathHp()
     {
         heath = (int)(MaxHP * 0.3f);
         currentHP += heath;
+        isHealling = true;
+        _heathCount -= 1;
+        healText.gameObject.SetActive(true);
+        healText.text = _heathCount.ToString();
+        heallSound.PlayOneShot(healClip[0]);
+        healFire.Play();
         if (currentHP >= MaxHP)
         {
             currentHP = MaxHP;
         }
-        heathCount -= 1;
         HpSlider.value = currentHP;
+        StartCoroutine(Healling());
+    }
+    public void PlayFlame(bool IsFlame)
+    {
+        if (fireTrails == null) return;
+        foreach (var fireTrail in fireTrails)
+        {
+            fireTrail.gameObject.SetActive(IsFlame);
+        }
+    }
+    IEnumerator Healling()
+    {
+        yield return new WaitForSeconds(timeHeal);
+        healFire.Stop();
+        healText.gameObject.SetActive(false);
+        heallSound.PlayOneShot(healClip[1]);
+        isHealling = false;
     }
 
     void Block()
