@@ -12,11 +12,16 @@ public class StunArtoriasBehaviour : StateMachineBehaviour
         if (animator.GetComponent<SwordTrailEffect>() != null)
         {
             animator.GetComponent<SwordTrailEffect>().PlayFlame(false);
-            animator.GetComponent<SwordTrailEffect>().PlayPartical(1);
+            animator.GetComponent<SwordTrailEffect>().PlayPartical(0);
         }
         if (animator.GetComponent<ArtoriasAttackDamge>() != null)
         {
             animator.GetComponent<ArtoriasAttackDamge>().canAttack = false;
+        }
+        if(animator.GetComponent<BarukClawsTrail>() != null)
+        {
+            animator.GetComponent<BarukClawsTrail>().PlayParticalOff(0);
+            animator.GetComponent<BarukClawsTrail>().PlayParticalOff(1);
         }
     }
 
@@ -41,15 +46,27 @@ public class StunArtoriasBehaviour : StateMachineBehaviour
             }
         }
     }
+    bool HasParameter(Animator animator, string name, AnimatorControllerParameterType type)
+    {
+        foreach (var param in animator.parameters)
+        {
+            if (param.name == name && param.type == type)
+                return true;
+        }
+        return false;
+    }
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.SetBool("NotStun", true);
+        if (HasParameter(animator, "NotStun", AnimatorControllerParameterType.Bool))
+        {
+            animator.SetBool("NotStun", true);
+        }
         ResetAllTriggers(animator);
         if (animator.GetComponent<SwordTrailEffect>() != null)
         {
             animator.GetComponent<SwordTrailEffect>().PlayFlame(false);
-            animator.GetComponent<SwordTrailEffect>().PlayPartical(1);
+            animator.GetComponent<SwordTrailEffect>().PlayPartical(0);
         }
         if (animator.GetComponent<ArtoriasAttackDamge>() != null)
         {
@@ -61,6 +78,11 @@ public class StunArtoriasBehaviour : StateMachineBehaviour
             animator.GetComponent<BossKnightMoveAI>().enabled = true;
         if (animator.GetComponent<DragonRotation>().enabled != true)
             animator.GetComponent<DragonRotation>().enabled = true;
+        if (animator.GetComponent<BarukClawsTrail>() != null)
+        {
+            animator.GetComponent<BarukClawsTrail>().PlayParticalOff(0);
+            animator.GetComponent<BarukClawsTrail>().PlayParticalOff(1);
+        }
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

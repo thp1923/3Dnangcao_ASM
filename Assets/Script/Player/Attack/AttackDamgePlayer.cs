@@ -18,7 +18,12 @@ public class AttackDamgePlayer : StatsAttack
 
     public void Attack1(int attackNum)
     {
-        Collider[] colInfo = Physics.OverlapBox(pointAttack2.position, attackRange, Quaternion.identity, attackMask);
+        Collider[] colInfo = Physics.OverlapBox(
+            pointAttack2.position,
+            attackRange * 0.5f, // Vì OverlapBox dùng nửa kích thước
+            pointAttack2.rotation,
+            attackMask
+        );
         foreach (Collider enemy in colInfo)
         {
             enemy.GetComponent<EnemyTakeDamge>().TakeDamge(atk, (stunDamge[attackNum]+stunDamgeBonus), 0);
@@ -26,7 +31,11 @@ public class AttackDamgePlayer : StatsAttack
     }
     private void OnDrawGizmosSelected()
     {
+        if (pointAttack2 == null) return;
+
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireCube(pointAttack2.position, attackRange);
+        Matrix4x4 rotationMatrix = Matrix4x4.TRS(pointAttack2.position, pointAttack2.rotation, Vector3.one);
+        Gizmos.matrix = rotationMatrix;
+        Gizmos.DrawWireCube(Vector3.zero, attackRange);
     }
 }

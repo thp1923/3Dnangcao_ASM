@@ -1,4 +1,4 @@
-using StatsManager;
+﻿using StatsManager;
 using System.Dynamic;
 using UnityEngine;
 
@@ -37,15 +37,29 @@ public class BarukAttackDamge : StatsAttack
 
     public void Attack1(int attackNum)
     {
-        Collider[] colInfo = Physics.OverlapBox(pointAttack1.position, attackRange, Quaternion.identity, attackMask);
+        Collider[] colInfo = Physics.OverlapBox(
+            pointAttack1.position,
+            attackRange * 0.5f, // Vì OverlapBox dùng nửa kích thước
+            pointAttack1.rotation,
+            attackMask
+        );
         foreach (Collider enemy in colInfo)
         {
+            if (enemy.GetComponent<PlayerTakeDamge>().isBlock)
+            {
+                GetComponent<EnemyTakeDamge>().TakeDamge(0, 2000, 0);
+            }
             enemy.GetComponent<PlayerTakeDamge>().TakeDamge(atk, (stunDamge[attackNum] + stunDamgeBonus), 0);
         }
     }
     public void Attack2(int attackNum)
     {
-        Collider[] colInfo = Physics.OverlapBox(pointAttack2.position, attackRange2, Quaternion.identity, attackMask);
+        Collider[] colInfo = Physics.OverlapBox(
+            pointAttack2.position,
+            attackRange2 * 0.5f, // Vì OverlapBox dùng nửa kích thước
+            pointAttack2.rotation,
+            attackMask
+        );
         foreach (Collider enemy in colInfo)
         {
             if(attackNum == 5)
@@ -64,9 +78,13 @@ public class BarukAttackDamge : StatsAttack
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireCube(pointAttack1.position, attackRange);
+        Matrix4x4 rotationMatrix = Matrix4x4.TRS(pointAttack1.position, pointAttack1.rotation, Vector3.one);
+        Gizmos.matrix = rotationMatrix;
+        Gizmos.DrawWireCube(Vector3.zero, attackRange);
         Gizmos.color = Color.green;
-        Gizmos.DrawWireCube(pointAttack2.position, attackRange2);
+        Matrix4x4 rotationMatrix2 = Matrix4x4.TRS(pointAttack2.position, pointAttack2.rotation, Vector3.one);
+        Gizmos.matrix = rotationMatrix;
+        Gizmos.DrawWireCube(Vector3.zero, attackRange2);
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(pointAttack3.position, attackRange3);
     }

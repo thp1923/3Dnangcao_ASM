@@ -15,7 +15,6 @@ public class InventoryManager : MonoBehaviour
 
     public static InventoryManager Instance { get; private set; }
 
-
     void Start()
     {
         if (PlayFabClientAPI.IsClientLoggedIn())
