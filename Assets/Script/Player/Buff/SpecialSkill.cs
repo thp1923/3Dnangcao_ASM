@@ -182,7 +182,7 @@ public class SpecialSkill : MonoBehaviour
 
     IEnumerator EndSkill()
     {
-        yield return new WaitForSeconds(CD/3);
+        yield return new WaitForSeconds(CD/2f);
         switch (skillTpye)
         {
             case SpecialSkillTpye.GreenFire:
@@ -237,7 +237,7 @@ public class SpecialSkill : MonoBehaviour
 
     IEnumerator DragonFire()
     {
-        yield return new WaitForSeconds(CD / 3 - 1f);
+        yield return new WaitForSeconds(CD / 2f - 1f);
         fireLoop.clip = Loop[1];
         fireLoop.pitch = 2f;
         fireLoop.Play();

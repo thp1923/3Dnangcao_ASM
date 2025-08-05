@@ -27,6 +27,7 @@ public class Item : ScriptableObject
     public int value; // giá tiền
     public bool isUsable;
     public string description;
+    public string descriptionStats;
 
     #region Consumable
     public int addHeath;
