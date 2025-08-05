@@ -5,10 +5,11 @@ using UnityEngine;
 public class ShieldTransState : StateMachineBehaviour
 {
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
-    //override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //    
-    //}
+    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        animator.GetComponent<PlayerTakeDamge>().isBlock = false;
+        animator.GetComponent<PlayerTakeDamge>().BlockEffect(false);
+    }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -19,9 +20,10 @@ public class ShieldTransState : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.GetComponent<PlayerTakeDamge>().isBlock = false;
+        
         animator.GetComponent<MoveManager>().CheckLockMove(false);
         animator.GetComponent<MoveManager>().CheckSleep(false);
+        animator.GetComponent<PlayerTakeDamge>().PlayFlame(false);
         animator.GetComponent<Stamina>().canRecover = true;
     }
 

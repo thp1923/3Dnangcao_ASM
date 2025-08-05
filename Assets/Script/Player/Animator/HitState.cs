@@ -17,9 +17,21 @@ public class HitState : StateMachineBehaviour
     //    
     //}
 
+    void ResetAllTriggers(Animator animator)
+    {
+        foreach (AnimatorControllerParameter param in animator.parameters)
+        {
+            if (param.type == AnimatorControllerParameterType.Trigger)
+            {
+                animator.ResetTrigger(param.name);
+            }
+        }
+    }
+
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        ResetAllTriggers(animator);
         if (Hit3) return;
         animator.GetComponent<PlayerTakeDamge>().noTakeDamge = false;
         animator.GetComponent<MoveManager>().CheckLockMove(false);

@@ -17,6 +17,8 @@ public class EnemyTakeDamge : StatsAlive
     public TextMeshProUGUI damPopUp;
 
     public int Point;
+
+    internal bool isHurt;
     [Header("---------Items Drop-----------")]
     public GameObject drop;
     public List<Item> itemsDrop;
@@ -37,6 +39,10 @@ public class EnemyTakeDamge : StatsAlive
         if(HP_Bar == null) return;
         if(isShow) HP_Bar.SetActive(true);
         else HP_Bar.SetActive(false);
+        if(currentHP <= (int)(MaxHP/2f) && !isHurt)
+        {
+            isHurt = true;
+        }
     }
 
     void ShowAndHide()
