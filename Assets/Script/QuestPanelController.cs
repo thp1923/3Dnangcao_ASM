@@ -7,6 +7,7 @@ using UnityEngine;
     public float fadeDuration = 0.3f;
     private bool isOpen = false;
     private Coroutine currentRoutine;
+    
 
     void Start()
     {
@@ -23,9 +24,16 @@ using UnityEngine;
                 StopCoroutine(currentRoutine);
 
             if (!isOpen)
+            {
                 currentRoutine = StartCoroutine(FadeIn());
+                PlayerAttackController.CursorLocked = false;
+            }
             else
+            {
                 currentRoutine = StartCoroutine(FadeOut());
+                PlayerAttackController.CursorLocked = true;
+            }
+                
 
             isOpen = !isOpen;
         }
