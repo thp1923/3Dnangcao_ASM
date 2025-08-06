@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class SpecialSkill : MonoBehaviour
@@ -29,6 +30,8 @@ public class SpecialSkill : MonoBehaviour
 
     [Header("--------CD--------")]
     public float CD;
+    public GameObject CD_Panal;
+    public TextMeshProUGUI cdText;
     float _CD;
 
     public float damgeRefTime;
@@ -67,6 +70,7 @@ public class SpecialSkill : MonoBehaviour
 
     private void Start()
     {
+        CD_Panal.SetActive(false);
         skillTpye = (SpecialSkillTpye)SpecialSkillId;
         atkPlayer = GetComponent<AttackDamgePlayer>();
         ptdPlayer = GetComponent<PlayerTakeDamge>();
@@ -104,6 +108,16 @@ public class SpecialSkill : MonoBehaviour
     public void SpecialSkillController()
     {
         _CD -= Time.deltaTime;
+        if (CD_Panal.activeSelf)
+            cdText.text = _CD.ToString("F1");
+        if (_CD > 0)
+        {
+            CD_Panal.SetActive(true);
+        }
+        else
+        {
+            CD_Panal.SetActive(false);
+        }
         if (Input.GetKeyDown(SpecialSkillKey) && _CD <= 0 && canSkill)
         {
             _CD = CD;

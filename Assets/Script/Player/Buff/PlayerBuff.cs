@@ -2,6 +2,8 @@
 using UnityEngine.VFX;
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.UI;
+using TMPro;
 
 public class PlayerBuff : MonoBehaviour
 {
@@ -24,6 +26,8 @@ public class PlayerBuff : MonoBehaviour
 
     [Header("--------CD--------")]
     public float CD;
+    public GameObject CD_Panal;
+    public TextMeshProUGUI cdText;
     float _CD;
     [Header("--------Atk--------")]
     public float atkBonus;
@@ -49,6 +53,7 @@ public class PlayerBuff : MonoBehaviour
     private void Start()
     {
         Collect();
+        CD_Panal.SetActive(false);
         buffTypePlayer = (BuffType)buffTypeId;
         atp = GetComponent<AttackDamgePlayer>();
         ptd = GetComponent<PlayerTakeDamge>();
@@ -76,6 +81,16 @@ public class PlayerBuff : MonoBehaviour
     private void Update()
     {
         _CD -= Time.deltaTime;
+        if(CD_Panal.activeSelf)
+            cdText.text = _CD.ToString("F1");
+        if(_CD > 0)
+        {
+            CD_Panal.SetActive(true);
+        }
+        else
+        {
+            CD_Panal.SetActive(false);
+        }
         if (Input.GetKeyDown(BuffKey) && _CD <= 0 && canBuff)
         {
             _CD = CD;
