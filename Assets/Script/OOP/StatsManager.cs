@@ -71,14 +71,32 @@ namespace StatsManager
 
         public virtual void TakeDamge(int damge, int stunDamge, int trueDamge)
         {
-            int Damge = Mathf.FloorToInt((damge 
-                * (1 - Mathf.Clamp(Defense + defenseBonus + defenseBonusSkill, 0, DefenseMax)
-                * (1 - Mathf.Clamp(StunResistance + stunResistanceBonus, 0, StunResistanceMax) / StunResistanceMax)/ 2500)) 
-                * ((100f - Mathf.Clamp(damgeTake, 0, 100))/100));
-            Damge = Mathf.Max(Damge, 1); // luôn gây damge ít nhất là 1
-            currentHP -= Damge + trueDamge;
-            HpSlider.value = currentHP;
-            DamPopUp = Damge + trueDamge;
+            int totalDefense = Mathf.Clamp(Defense + defenseBonus + defenseBonusSkill, 0, DefenseMax);
+            int totalStunRes = Mathf.Clamp(StunResistance + stunResistanceBonus, 0, StunResistanceMax);
+
+            // Hệ số kháng stun ảnh hưởng đến hiệu quả phòng thủ (0.0 - 1.0)
+            float stunResFactor = 1f - (totalStunRes / (float)StunResistanceMax); // càng nhiều kháng stun, càng ít bị giảm hiệu quả phòng thủ
+
+            // Hệ số giảm sát thương từ phòng thủ (tối đa giảm ~90%)
+            float defenseEffectiveness = totalDefense * stunResFactor / DefenseMax; // 0 - ~1
+            float defenseFactor = Mathf.Clamp01(1f - defenseEffectiveness * 0.9f); // giảm damage tối đa 90%
+
+            // Hệ số chịu thêm damage (nếu damgeTake > 0)
+            float damgeTakeFactor = Mathf.Clamp01(1f - damgeTake / 100f);
+
+            // Tính damage cuối cùng
+            int finalDamage = Mathf.FloorToInt(damge * defenseFactor * damgeTakeFactor);
+            finalDamage = Mathf.Max(finalDamage, 1); // ít nhất luôn gây 1 damage
+
+            // Trừ máu
+            currentHP -= finalDamage + trueDamge;
+            currentHP = Mathf.Max(currentHP, 0);
+
+            // Cập nhật thanh máu
+            if (HpSlider != null)
+                HpSlider.value = currentHP;
+
+            DamPopUp = finalDamage + trueDamge;
             //if(stunDamge > StunResistance)
             //{
             //    // sẽ chạy stun tùy theo mức độ
@@ -114,10 +132,24 @@ namespace StatsManager
 
         public virtual void Attack(int attackNumber)
         {
-            int damge = Mathf.FloorToInt(((BaseATK + atkBonus + atkBonusSkill) * (ATK[attackNumber]/100)) * ((100 + damgeAttack)/100f));
-            if(Random.Range(0, 1f) <= (critRate+critRateBonus))
+            float totalCritRate = critRate + critRateBonus;          // Ví dụ: 120%
+            float totalCritDamage = critDamge + critDamgeBonus;
+
+            // Tính damage gốc
+            int damge = Mathf.FloorToInt(((BaseATK + atkBonus + atkBonusSkill) * (ATK[attackNumber] / 100f)) * ((100f + damgeAttack) / 100f));
+
+            // Tính toán phần critRate vượt quá 100%
+            if (totalCritRate > 100f)
             {
-                atk = Mathf.FloorToInt(damge * (1f + (critDamge+critDamgeBonus)/100));
+                float overflowRate = totalCritRate - 100f;
+                totalCritDamage += overflowRate * 1.5f;
+                totalCritRate = 100f; // Giới hạn về 100%
+            }
+
+            // Kiểm tra có crit hay không
+            if (Random.Range(0f, 1f) <= (totalCritRate / 100f))
+            {
+                atk = Mathf.FloorToInt(damge * (1f + totalCritDamage / 100f));
             }
             else
             {
