@@ -14,6 +14,7 @@ public class NPC : MonoBehaviour
     private vThirdPersonInput inputScript;
     private PlayerAttackController attackScript;
     private PlayerDodge dodgeScript;
+    private PlayerTakeDamge playerTakeDamage;
     private Animator playerAnimator;
     private Rigidbody rb;
 
@@ -30,6 +31,7 @@ public class NPC : MonoBehaviour
             inputScript = player.GetComponent<vThirdPersonInput>();
             attackScript = player.GetComponent<PlayerAttackController>();
             dodgeScript = player.GetComponent<PlayerDodge>();
+            playerTakeDamage = player.GetComponent<PlayerTakeDamge>();
             playerAnimator = player.GetComponentInChildren<Animator>();
             rb = player.GetComponent<Rigidbody>();
         }
@@ -81,6 +83,7 @@ public class NPC : MonoBehaviour
         if (inputScript != null) inputScript.enabled = state;
         if (attackScript != null) attackScript.enabled = state;
         if (dodgeScript != null) dodgeScript.enabled = state;
+        if (playerTakeDamage != null) playerTakeDamage.enabled = state;
 
         if (rb != null)
         {
