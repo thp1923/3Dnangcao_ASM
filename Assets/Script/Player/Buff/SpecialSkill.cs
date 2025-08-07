@@ -47,6 +47,8 @@ public class SpecialSkill : MonoBehaviour
 
     public Transform wolfSpawnPoint;
 
+    public ParticleSystem fireWolf;
+
     public GameObject Wolf;
 
     bool isGreenFire = false;
@@ -69,16 +71,22 @@ public class SpecialSkill : MonoBehaviour
 
     public ParticleSystem DragonTrans;
 
+    public Transform dragonSpawnPoint;
+
+    public GameObject Dragon;
+
     bool isDragonFire = false;
 
     private void Start()
     {
         CD_Panal.SetActive(false);
+        fireWolf.Stop();
         skillTpye = (SpecialSkillTpye)SpecialSkillId;
         atkPlayer = GetComponent<AttackDamgePlayer>();
         ptdPlayer = GetComponent<PlayerTakeDamge>();
         animator = GetComponent<Animator>();
         Wolf.SetActive(false);
+        Dragon.SetActive(false);
         foreach(var ef in fireEffect)
         {
             ef.Stop();
@@ -169,6 +177,7 @@ public class SpecialSkill : MonoBehaviour
                 break;
             case SpecialSkillTpye.DragonFire:
                 isDragonFire = true;
+                DragonSpawn();
                 atkPlayer.damgeAttack += damgeBonus;
                 fireLoop.clip = Loop[0];
                 fireLoop.pitch = 1f;
@@ -205,6 +214,12 @@ public class SpecialSkill : MonoBehaviour
         Wolf.SetActive(true);
     }
 
+    public void DragonSpawn()
+    {
+        Dragon.transform.position = new Vector3(dragonSpawnPoint.position.x, transform.position.y, dragonSpawnPoint.position.z);
+        Dragon.SetActive(true);
+    }
+
     IEnumerator EndSkill()
     {
         yield return new WaitForSeconds(CD/2f);
@@ -228,6 +243,7 @@ public class SpecialSkill : MonoBehaviour
         else if (isDragonFire)
         {
             isDragonFire = false;
+            DragonSpawn();
             atkPlayer.damgeAttack -= damgeBonus;
             foreach (var ef in fireDragonEffect)
             {

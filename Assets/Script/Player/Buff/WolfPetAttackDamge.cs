@@ -5,12 +5,18 @@ using UnityEngine;
 
 public class WolfPetAttackDamge : StatsAttack
 {
+    public AttackDamgePlayer damgePlayer;
     public float attackRange;
     public LayerMask attackMask;
     // Start is called before the first frame update
     void Start()
     {
         
+    }
+
+    private void OnEnable()
+    {
+        BaseATK = damgePlayer.BaseATK;
     }
 
     public override void Attack(int attackNumber)
