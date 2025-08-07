@@ -45,6 +45,9 @@ public class SpecialSkill : MonoBehaviour
 
     public float rangeGreenFire;
 
+    public Transform wolfSpawnPoint;
+
+    public GameObject Wolf;
 
     bool isGreenFire = false;
 
@@ -75,6 +78,7 @@ public class SpecialSkill : MonoBehaviour
         atkPlayer = GetComponent<AttackDamgePlayer>();
         ptdPlayer = GetComponent<PlayerTakeDamge>();
         animator = GetComponent<Animator>();
+        Wolf.SetActive(false);
         foreach(var ef in fireEffect)
         {
             ef.Stop();
@@ -161,6 +165,7 @@ public class SpecialSkill : MonoBehaviour
                         }
                     }
                 }
+                WolfSpawn();
                 break;
             case SpecialSkillTpye.DragonFire:
                 isDragonFire = true;
@@ -194,43 +199,47 @@ public class SpecialSkill : MonoBehaviour
         _CD = CD;
     }
 
+    public void WolfSpawn()
+    {
+        Wolf.transform.position = new Vector3(wolfSpawnPoint.position.x, transform.position.y, wolfSpawnPoint.position.z);
+        Wolf.SetActive(true);
+    }
+
     IEnumerator EndSkill()
     {
         yield return new WaitForSeconds(CD/2f);
-        switch (skillTpye)
+        if (isGreenFire)
         {
-            case SpecialSkillTpye.GreenFire:
-                isGreenFire = false;
-                fireLoop.Stop();
-                ptdPlayer.damgeTake -= damgeTakeNerf;
-                foreach (var ef in fireEffect)
+            isGreenFire = false;
+            fireLoop.Stop();
+            ptdPlayer.damgeTake -= damgeTakeNerf;
+            foreach (var ef in fireEffect)
+            {
+                if (ef != null)
                 {
-                    if (ef != null)
-                    {
-                        ef.Stop();
-                        var light = ef.GetComponent<Light>();
-                        if (light != null)
-                            light.enabled = false;
-                    }
+                    ef.Stop();
+                    var light = ef.GetComponent<Light>();
+                    if (light != null)
+                        light.enabled = false;
                 }
-                break;
-            case SpecialSkillTpye.DragonFire:
-                isDragonFire = false;
-                atkPlayer.damgeAttack -= damgeBonus;
-                foreach (var ef in fireDragonEffect)
+            }
+            WolfSpawn();
+        }
+        else if (isDragonFire)
+        {
+            isDragonFire = false;
+            atkPlayer.damgeAttack -= damgeBonus;
+            foreach (var ef in fireDragonEffect)
+            {
+                if (ef != null)
                 {
-                    if (ef != null)
-                    {
-                        ef.Stop();
-                        var light = ef.GetComponent<Light>();
-                        if (light != null)
-                            light.enabled = false;
-                    }
+                    ef.Stop();
+                    var light = ef.GetComponent<Light>();
+                    if (light != null)
+                        light.enabled = false;
                 }
-                dragonWings.SetActive(false);
-                break;
-            default:
-                break;
+            }
+            dragonWings.SetActive(false);
         }
     }
 

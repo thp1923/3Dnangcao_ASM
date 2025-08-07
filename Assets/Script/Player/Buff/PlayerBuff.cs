@@ -37,6 +37,7 @@ public class PlayerBuff : MonoBehaviour
     public Color colorEffect;
     public AudioClip atkClip;
     private Color currentColor;
+    bool isFireSword;
     [Header("--------Def--------")]
     public float defBonus;
     public int stunDefBonus;
@@ -44,6 +45,7 @@ public class PlayerBuff : MonoBehaviour
     public GameObject targetRoot;
     public List<SkinnedMeshRenderer> skinnedMeshes;
     public AudioClip defClip;
+    bool isBodyShield;
 
     int aBonus;
     int dBonus;
@@ -115,6 +117,7 @@ public class PlayerBuff : MonoBehaviour
         {
             case BuffType.Atk:
                 aBonus = (int)(atp.BaseATK * (atkBonus / 100f));
+                isFireSword = true;
                 atp.atkBonusSkill = aBonus;
                 atp.stunDamgeBonus = stunDamgeBonus;
                 GetComponent<AudioPlayer>().isBuff = true;
@@ -130,6 +133,7 @@ public class PlayerBuff : MonoBehaviour
                 break;
             case BuffType.Def:
                 dBonus = (int)(ptd.Defense * (defBonus / 100f));
+                isBodyShield = true;
                 ptd.stunResistanceBonus = stunDefBonus;
                 ptd.defenseBonusSkill = dBonus;
                 buffSource.PlayOneShot(defClip);
@@ -160,47 +164,46 @@ public class PlayerBuff : MonoBehaviour
     IEnumerator EndBuff()
     {
         yield return new WaitForSeconds(CD/3);
-        switch (buffTypePlayer)
+        if (isFireSword)
         {
-            case BuffType.Atk:
-                atp.atkBonusSkill = 0;
-                atp.stunDamgeBonus = 0;
-                GetComponent<AudioPlayer>().isBuff = false;
-                GetComponent<SwordTrailEffect>().isFlame = false;
-                buffSource.PlayOneShot(atkClip);
-                fireLoop.Stop();
-                effect.SetVector4("Color", (Vector4)currentColor);
-                foreach (var atkEf in attackEffect)
+            atp.atkBonusSkill = 0;
+            atp.stunDamgeBonus = 0;
+            GetComponent<AudioPlayer>().isBuff = false;
+            GetComponent<SwordTrailEffect>().isFlame = false;
+            buffSource.PlayOneShot(atkClip);
+            fireLoop.Stop();
+            effect.SetVector4("Color", (Vector4)currentColor);
+            foreach (var atkEf in attackEffect)
+            {
+                atkEf.Stop();
+                atkEf.GetComponent<Light>().enabled = false;
+            }
+            isFireSword = false;
+        }
+        else if (isBodyShield)
+        {
+            ptd.stunResistanceBonus -= 0;
+            ptd.defenseBonus -= 0;
+            foreach (var renderer in skinnedMeshes)
+            {
+                Material[] mats = renderer.materials;
+
+                if (mats.Length == 0)
+                    continue;
+
+                // Tạo mảng mới ngắn hơn 1
+                Material[] newMats = new Material[mats.Length - 1];
+
+                // Copy hết trừ cái cuối cùng
+                for (int i = 0; i < newMats.Length; i++)
                 {
-                    atkEf.Stop();
-                    atkEf.GetComponent<Light>().enabled = false;
+                    newMats[i] = mats[i];
                 }
-                break;
-            case BuffType.Def:
-                ptd.stunResistanceBonus -= 0;
-                ptd.defenseBonus -= 0;
-                foreach (var renderer in skinnedMeshes)
-                {
-                    Material[] mats = renderer.materials;
 
-                    if (mats.Length == 0)
-                        continue;
-
-                    // Tạo mảng mới ngắn hơn 1
-                    Material[] newMats = new Material[mats.Length - 1];
-
-                    // Copy hết trừ cái cuối cùng
-                    for (int i = 0; i < newMats.Length; i++)
-                    {
-                        newMats[i] = mats[i];
-                    }
-
-                    // Gán lại mảng đã rút gọn
-                    renderer.materials = newMats;
-                }
-                break;
-            default:
-                break;
+                // Gán lại mảng đã rút gọn
+                renderer.materials = newMats;
+            }
+            isBodyShield = false;
         }
     }
 }
