@@ -1,4 +1,4 @@
-using DialogueEditor;
+﻿using DialogueEditor;
 using Invector.vCharacterController;
 using System.Collections;
 using System.Collections.Generic;
@@ -43,14 +43,14 @@ public class NPC : MonoBehaviour
         {
             ConversationManager.Instance.StartConversation(con);
             if (FPanel != null)
-            {
                 FPanel.SetActive(false);
-            }
+
             TogglePlayerScripts(false);
         }
         else if (player_detected && Input.GetKeyDown(KeyCode.Escape))
         {
-            ConversationManager.Instance.EndConversation();
+            if (ConversationManager.Instance != null)
+                ConversationManager.Instance.EndConversation();
         }
     }
 
