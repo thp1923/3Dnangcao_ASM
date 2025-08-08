@@ -27,12 +27,11 @@ namespace StatsManager
         internal float damgeTake;
         internal int stunResistanceBonus;
 
-        protected int DefenseMax = 2000; // Tối đa phòng thử đạt đc
-        protected int StunResistanceMax = 2000; // Tối đa kháng stun đạt đc
-        protected int currentHP;
+        protected int DefenseMax = 10000; // Tối đa phòng thử đạt đc
+        protected int StunResistanceMax = 10000; // Tối đa kháng stun đạt đc
+        internal int currentHP;
 
         protected int DamPopUp;
-        internal int CurrentHP;
 
         public float timer;
         protected float _timer;
@@ -40,6 +39,8 @@ namespace StatsManager
         protected virtual void Start()
         {
             currentHP = MaxHP;
+            DefenseMax = 10000;
+            StunResistanceMax = 10000;
             if (HpSlider != null)
             {
                 HpSlider.maxValue = MaxHP;

@@ -13,7 +13,7 @@ public class SpecialSkill : MonoBehaviour
         GreenFire = 0, DragonFire = 1
     }
 
-    protected int SpecialSkillId;
+    internal int SpecialSkillId;
     [Header("-----Skill Controller-----")]
 
     public SpecialSkillTpye skillTpye;

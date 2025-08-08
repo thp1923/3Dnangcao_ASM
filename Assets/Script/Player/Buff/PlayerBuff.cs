@@ -50,7 +50,7 @@ public class PlayerBuff : MonoBehaviour
     int aBonus;
     int dBonus;
 
-    protected int buffTypeId; // Lưu loại buff
+    internal int buffTypeId; // Lưu loại buff
 
     private void Start()
     {
@@ -182,8 +182,8 @@ public class PlayerBuff : MonoBehaviour
         }
         else if (isBodyShield)
         {
-            ptd.stunResistanceBonus -= 0;
-            ptd.defenseBonus -= 0;
+            ptd.stunResistanceBonus = 0;
+            ptd.defenseBonusSkill = 0;
             foreach (var renderer in skinnedMeshes)
             {
                 Material[] mats = renderer.materials;
