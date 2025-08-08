@@ -32,6 +32,7 @@ namespace StatsManager
         protected int currentHP;
 
         protected int DamPopUp;
+        internal int CurrentHP;
 
         public float timer;
         protected float _timer;
