@@ -16,7 +16,7 @@ public class PlayerAim : MonoBehaviour
     Animator animator;
 
     private List<GameObject> enemiesList = new List<GameObject>();
-    private GameObject closestEnemy;
+    [HideInInspector] public GameObject closestEnemy;
     private bool lockOn = false;
     private bool transitioningFromLock = false;
     private vThirdPersonController tcp;

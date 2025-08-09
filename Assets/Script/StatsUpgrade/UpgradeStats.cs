@@ -264,11 +264,15 @@ public class UpgradeStats : MonoBehaviour
 
         if (isHide)
         {
+            var attackCtrl = FindObjectOfType<PlayerAttackController>();
+            attackCtrl.LockController(true);
             StatsCanva?.SetActive(false);
         }
         else
         {
             CurrentStats();
+            var lockCtrl = FindObjectOfType<LockController>();
+            lockCtrl.OutPlayerController();
             int index = SceneManager.GetActiveScene().buildIndex;
             SceneManager.LoadScene(index);
         }
