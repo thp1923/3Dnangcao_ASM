@@ -38,7 +38,8 @@ namespace StatsManager
 
         protected virtual void Start()
         {
-            currentHP = MaxHP;
+            if (currentHP <= 0)
+                currentHP = MaxHP;
             DefenseMax = 10000;
             StunResistanceMax = 10000;
             if (HpSlider != null)
@@ -110,6 +111,9 @@ namespace StatsManager
             MaxHP = HP_Upgrade;
             HpSlider.maxValue = HP_Upgrade;
             Defense = Def_Upgrade;
+            currentHP = MaxHP;
+            HpSlider.value = currentHP;
+            HpLostSlider.maxValue = MaxHP;
         }
     }
 

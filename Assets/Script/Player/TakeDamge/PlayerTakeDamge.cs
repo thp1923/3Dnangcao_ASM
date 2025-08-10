@@ -34,7 +34,7 @@ public class PlayerTakeDamge : StatsAlive
     [SerializeField] private KeyCode heathKey = KeyCode.R;
     int heath;
     public int heathCount;
-    protected int _heathCount;
+    internal int _heathCount;
     public ParticleSystem healFire;
     bool isHealling;
     public float timeHeal;
@@ -286,5 +286,6 @@ public class PlayerTakeDamge : StatsAlive
         GetComponent<PlayerAttackController>().enabled = false;
         GetComponent<CapsuleCollider>().enabled = false;
         rb.useGravity = false;
+        
     }
 }

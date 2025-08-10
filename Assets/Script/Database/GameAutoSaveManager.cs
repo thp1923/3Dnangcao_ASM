@@ -3,6 +3,8 @@ using PlayFab;
 using PlayFab.ClientModels;
 using UnityEngine.SceneManagement;
 using StatsManager;
+using System.Collections.Generic;
+
 public class GameAutoSaveManager : MonoBehaviour
 {
     public static GameAutoSaveManager Instance;
@@ -32,9 +34,15 @@ public class GameAutoSaveManager : MonoBehaviour
 
     public Vector3 nextPlayerPosition = Vector3.zero;
 
-    float autoSaveInterval = 60f;
     float timer = 0f;
     float playTimeAccum = 0f;
+
+    // ==== Cách 1: RAM snapshot ====
+    private bool _isSceneChange = false;
+    private GameStateData _lastSavedSnapshot = null;
+
+    // Giữ pending data khi load từ server sau khi đổi scene vì die
+    private GameStateData _pendingLoadData;
 
     void Awake()
     {
@@ -56,8 +64,8 @@ public class GameAutoSaveManager : MonoBehaviour
 
     void Update()
     {
+        // chỉ đếm playTime
         timer += Time.deltaTime;
-
         playTimeAccum += Time.deltaTime;
         if (playTimeAccum >= 1f)
         {
@@ -65,52 +73,59 @@ public class GameAutoSaveManager : MonoBehaviour
             playTime += add;
             playTimeAccum -= add;
         }
-
-        if (timer >= autoSaveInterval)
-        {
-            SaveCurrentGame();
-            timer = 0f;
-        }
     }
+
     public void Init(string slot, int startLevel = 1, int startSouls = 0)
     {
         saveSlot = slot;
         level = startLevel;
         playTime = 0;
-
-
-        SaveCurrentGame();
+        SaveCurrentGame(); // snapshot + push PlayFab
     }
 
-    public void SaveCurrentGame()
+    // GỌI HÀM NÀY TRƯỚC KHI ĐỔI SCENE
+    public void PrepareSceneChange()
+    {
+        _isSceneChange = true;
+        timer = 0f; // tránh autosave ngay lúc vào scene
+    }
+
+    public void SaveCurrentGame(System.Action onDone = null)
     {
         var sceneName = SceneManager.GetActiveScene().name;
-    var player = GameObject.FindWithTag("Player");
-    if (player == null)
-    {
-        Debug.LogWarning("Skip save: Player not found in this scene.");
-        return;
-    }
+        var player = GameObject.FindWithTag("Player");
+        if (player == null)
+        {
+            Debug.LogWarning("Skip save: Player not found in this scene.");
+            onDone?.Invoke();
+            return;
+        }
 
-    var statsAlive = player.GetComponent<StatsAlive>();
-    var attackDamgePlayer = FindObjectOfType<AttackDamgePlayer>();
-    var stamina = FindObjectOfType<Stamina>();
-    var upgradeStats = FindObjectOfType<UpgradeStats>();
-    var specialSkill = FindObjectOfType<SpecialSkill>();
-    var playerBuff = FindObjectOfType<PlayerBuff>();
+        var statsAlive = player.GetComponent<StatsAlive>();
+        var attackDamgePlayer = FindObjectOfType<AttackDamgePlayer>();
+        var stamina = FindObjectOfType<Stamina>();
+        var upgradeStats = FindObjectOfType<UpgradeStats>();
+        var specialSkill = FindObjectOfType<SpecialSkill>();
+        var playerBuff = FindObjectOfType<PlayerBuff>();
 
-    if (statsAlive == null || attackDamgePlayer == null || stamina == null || upgradeStats == null)
-    {
-        Debug.LogWarning("Skip save: some required components are missing.");
-        return;
-    }
+        if (statsAlive == null || attackDamgePlayer == null || stamina == null || upgradeStats == null)
+        {
+            Debug.LogWarning("Skip save: some required components are missing.");
+            onDone?.Invoke();
+            return;
+        }
+
         if (statsAlive != null)
         {
-            currentHP = statsAlive.HpSlider ? Mathf.RoundToInt(statsAlive.HpSlider.value) : statsAlive.currentHP;
+            currentHP = (statsAlive.HpSlider != null)
+                ? Mathf.RoundToInt(statsAlive.HpSlider.value)
+                : statsAlive.currentHP;
+
             MaxHP = statsAlive.MaxHP;
             Defense = statsAlive.Defense;
             StunResistance = statsAlive.StunResistance;
         }
+
         Vector3 pos = player.transform.position;
 
         GameStateData data = new GameStateData
@@ -129,10 +144,10 @@ public class GameAutoSaveManager : MonoBehaviour
             critRateBonus = attackDamgePlayer.critRateBonus,
             critDamgeBonus = attackDamgePlayer.critDamgeBonus,
             StaminaMax = stamina.StaminaMax,
-            canSkill = specialSkill.canSkill,
-            SpecialSkillId = specialSkill.SpecialSkillId,
-            canBuff = playerBuff.canBuff,
-            buffTypeId = playerBuff.buffTypeId,
+            canSkill = specialSkill != null && specialSkill.canSkill,
+            SpecialSkillId = specialSkill != null ? specialSkill.SpecialSkillId : 0,
+            canBuff = playerBuff != null && playerBuff.canBuff,
+            buffTypeId = playerBuff != null ? playerBuff.buffTypeId : 0,
             LastScene = sceneName,
             PlayTime = playTime,
             posX = pos.x,
@@ -140,17 +155,27 @@ public class GameAutoSaveManager : MonoBehaviour
             posZ = pos.z,
         };
 
-        string json = JsonUtility.ToJson(data);
+        // === SNAPSHOT RAM ===
+        _lastSavedSnapshot = data;
 
-        PlayFabClientAPI.UpdateUserData(new UpdateUserDataRequest
-        {
-            Data = new System.Collections.Generic.Dictionary<string, string>
-        {
-            { saveSlot, json }
-        }
-        },
-        result => Debug.Log($"✅ AutoSaved: {sceneName} at {pos}"),
-        error => Debug.LogError(error.GenerateErrorReport()));
+        // === PUSH LÊN PLAYFAB (async) ===
+        string json = JsonUtility.ToJson(data);
+        PlayFabClientAPI.UpdateUserData(
+            new UpdateUserDataRequest
+            {
+                Data = new Dictionary<string, string> { { saveSlot, json } }
+            },
+            result =>
+            {
+                Debug.Log($"✅ AutoSaved: {sceneName} at {pos}");
+                onDone?.Invoke();
+            },
+            error =>
+            {
+                Debug.LogError(error.GenerateErrorReport());
+                onDone?.Invoke();
+            }
+        );
     }
 
     public void OnBonfireRest()
@@ -158,20 +183,42 @@ public class GameAutoSaveManager : MonoBehaviour
         SaveCurrentGame();
     }
 
+    // Khi chết: quay về checkpoint đã save ở bonfire (server)
     public void OnPlayerDie()
     {
-        SaveCurrentGame();
+        // Không dùng snapshot RAM, mà load từ PlayFab để về checkpoint
+        LoadGame(saveSlot);
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        // đặt vị trí khi có yêu cầu
         if (nextPlayerPosition != Vector3.zero)
         {
-            GameObject player = GameObject.FindWithTag("Player");
-            player.transform.position = nextPlayerPosition;
+            GameObject playerSet = GameObject.FindWithTag("Player");
+            if (playerSet != null)
+                playerSet.transform.position = nextPlayerPosition;
             nextPlayerPosition = Vector3.zero;
         }
+
+        // ƯU TIÊN: nếu vừa đổi scene bình thường (PrepareSceneChange), áp snapshot từ RAM
+        if (_isSceneChange && _lastSavedSnapshot != null)
+        {
+            ApplyLoadedState(_lastSavedSnapshot);
+            _isSceneChange = false;
+            return;
+        }
+
+        // Nếu đang chờ apply data load từ server (vì die)
+        if (_pendingLoadData != null)
+        {
+            ApplyLoadedState(_pendingLoadData);
+            _pendingLoadData = null;
+            // bật lại nếu trước đó có tắt
+            enabled = true;
+        }
     }
+
     public void LoadGame(string slot)
     {
         saveSlot = slot;
@@ -183,20 +230,17 @@ public class GameAutoSaveManager : MonoBehaviour
                 string json = result.Data[saveSlot].Value;
                 GameStateData data = JsonUtility.FromJson<GameStateData>(json);
 
-                // Nếu đang ở scene khác với LastScene thì load trước rồi apply sau khi scene loaded
                 string currentScene = SceneManager.GetActiveScene().name;
                 if (!string.IsNullOrEmpty(data.LastScene) && data.LastScene != currentScene)
                 {
-                    // Tạm thời lưu vị trí để OnSceneLoaded đặt lại
+                    // chuyển scene để respawn
                     nextPlayerPosition = new Vector3(data.posX, data.posY, data.posZ);
 
-                    // Tạm tắt auto-save trong lúc load để tránh ghi đè
-                    enabled = false;
-
+                    enabled = false; // tránh autosave chen ngang
                     SceneManager.sceneLoaded += OnSceneLoadedAfterLoad;
                     SceneManager.LoadScene(data.LastScene);
 
-                    // Lưu kèm data để apply stat sau khi scene load xong
+                    // lưu pending để apply sau khi scene load xong
                     _pendingLoadData = data;
                 }
                 else
@@ -211,12 +255,9 @@ public class GameAutoSaveManager : MonoBehaviour
         },
         error => Debug.LogError(error.GenerateErrorReport()));
     }
-    // Biến tạm giữ state khi chờ scene load
-    private GameStateData _pendingLoadData;
 
     private void OnSceneLoadedAfterLoad(Scene scene, LoadSceneMode mode)
     {
-        // Đặt lại vị trí nếu có
         if (nextPlayerPosition != Vector3.zero)
         {
             GameObject player = GameObject.FindWithTag("Player");
@@ -233,16 +274,13 @@ public class GameAutoSaveManager : MonoBehaviour
             _pendingLoadData = null;
         }
 
-        // Bật lại autosave sau khi apply xong
         enabled = true;
-
-        // Hủy đăng ký để tránh lặp
         SceneManager.sceneLoaded -= OnSceneLoadedAfterLoad;
     }
 
     private void ApplyLoadedState(GameStateData data)
     {
-        // Cập nhật biến quản lý
+        // cập nhật biến quản lý
         level = Mathf.Max(1, data.Level);
         playTime = Mathf.Max(0, data.PlayTime);
 
@@ -275,10 +313,8 @@ public class GameAutoSaveManager : MonoBehaviour
             statsAlive.Defense = Mathf.Max(0, data.Defense);
             statsAlive.StunResistance = Mathf.Max(0, data.StunResistance);
 
-            // Clamp currentHP vào [0, MaxHP]
             statsAlive.currentHP = Mathf.Clamp(data.currentHP, 0, statsAlive.MaxHP);
 
-            // Nếu bạn dùng Slider cho HP
             if (statsAlive.HpSlider != null)
             {
                 statsAlive.HpSlider.maxValue = statsAlive.MaxHP;
@@ -302,9 +338,8 @@ public class GameAutoSaveManager : MonoBehaviour
         if (stamina != null)
         {
             stamina.StaminaMax = Mathf.Max(0, data.StaminaMax);
-            // Nếu có current stamina, set thêm tại đây
+            // nếu có current stamina: clamp tại đây
             // stamina.Current = Mathf.Clamp(stamina.Current, 0, stamina.StaminaMax);
-            // nếu bạn có event/UI update
         }
 
         // Skill & Buff
@@ -312,13 +347,11 @@ public class GameAutoSaveManager : MonoBehaviour
         {
             special.canSkill = data.canSkill;
             special.SpecialSkillId = data.SpecialSkillId;
-         // nếu có logic set-up theo skill id
         }
         if (playerBuff != null)
         {
             playerBuff.canBuff = data.canBuff;
             playerBuff.buffTypeId = data.buffTypeId;
-           // gọi ApplyOnLoad 
         }
 
         // Đặt vị trí nếu cùng scene
@@ -328,7 +361,6 @@ public class GameAutoSaveManager : MonoBehaviour
             player.transform.position = new Vector3(data.posX, data.posY, data.posZ);
         }
 
-        Debug.Log("✅ Loaded game state và áp dụng thành công.");
+        Debug.Log("✅ Loaded game state và áp dụng thành công (RAM snapshot / server).");
     }
-
 }

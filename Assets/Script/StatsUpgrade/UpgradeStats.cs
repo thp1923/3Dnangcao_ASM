@@ -264,6 +264,7 @@ public class UpgradeStats : MonoBehaviour
 
         if (isHide)
         {
+            GameAutoSaveManager.Instance.OnBonfireRest();
             var attackCtrl = FindObjectOfType<PlayerAttackController>();
             attackCtrl.LockController(true);
             StatsCanva?.SetActive(false);
@@ -273,8 +274,12 @@ public class UpgradeStats : MonoBehaviour
             CurrentStats();
             var lockCtrl = FindObjectOfType<LockController>();
             lockCtrl.OutPlayerController();
-            int index = SceneManager.GetActiveScene().buildIndex;
-            SceneManager.LoadScene(index);
+            StatsCanva?.SetActive(true);
+            var takeDamage = player.GetComponent<PlayerTakeDamge>();
+            takeDamage.currentHP = takeDamage.MaxHP;
+            takeDamage._heathCount = takeDamage.heathCount;
+            //int index = SceneManager.GetActiveScene().buildIndex;
+            //SceneManager.LoadScene(index);
         }
     }
 }
