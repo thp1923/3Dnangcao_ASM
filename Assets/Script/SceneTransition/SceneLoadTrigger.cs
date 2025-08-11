@@ -12,15 +12,18 @@ public class SceneLoadTrigger : MonoBehaviour
         if (!col.CompareTag("Player")) return;
         if (string.IsNullOrEmpty(sceneName)) return;
 
-        hasTriggered = true; // chống đúp ngay khi đủ điều kiện
+        hasTriggered = true; // chống đúp
 
         var gsm = GameAutoSaveManager.Instance;
         if (gsm != null)
         {
-            // báo cho GSM biết sắp đổi scene (để áp snapshot RAM khi sang map mới)
+            // báo cho GSM biết sắp đổi scene
             gsm.PrepareSceneChange();
 
-            // save rồi mới chuyển scene (an toàn)
+            // lưu inventory trước
+            InventoryManager.Instance?.SaveInventoryForSlot(gsm.saveSlot);
+
+            // save state rồi mới chuyển scene
             gsm.SaveCurrentGame(() =>
             {
                 if (SceneTransitionManager.Instance != null)
@@ -31,12 +34,10 @@ public class SceneLoadTrigger : MonoBehaviour
         }
         else
         {
-            // fallback nếu GSM không có (không khuyến khích)
             UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
         }
     }
 
-    // Nếu object bị disable/enable lại, cho phép kích lại trigger
     private void OnDisable()
     {
         hasTriggered = false;

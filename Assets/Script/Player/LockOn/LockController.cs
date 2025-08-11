@@ -9,7 +9,7 @@ public class LockController : MonoBehaviour
     public GameObject Quest;
     [HideInInspector] public bool isInven;
     [HideInInspector] public bool isQuest;
-    [HideInInspector] public bool isOut;
+    public bool isOut;
     [Header("----Buttom Lock----")]
     public KeyCode keyInventory = KeyCode.B;
     public KeyCode keyQuest = KeyCode.J;

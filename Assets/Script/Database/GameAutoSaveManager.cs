@@ -9,7 +9,10 @@ public class GameAutoSaveManager : MonoBehaviour
 {
     public static GameAutoSaveManager Instance;
 
+    [Header("Save Slot")]
     public string saveSlot;
+
+    [Header("Player State (cached)")]
     public int level = 1;
     public int playTime = 0;
     public int MaxHP = 0;
@@ -32,39 +35,38 @@ public class GameAutoSaveManager : MonoBehaviour
     public bool CanBuff;
     public int BuffTypeId = 0;
 
+    [Header("Teleport on load")]
     public Vector3 nextPlayerPosition = Vector3.zero;
 
+    // playtime counter
     float timer = 0f;
     float playTimeAccum = 0f;
 
-    // ==== Cách 1: RAM snapshot ====
+    // ===== Cách 1: RAM snapshot =====
     private bool _isSceneChange = false;
-    private GameStateData _lastSavedSnapshot = null;
+    private GameStateData _lastSavedSnapshot = null;   // lưu stat snapshot mới nhất trong RAM
 
-    // Giữ pending data khi load từ server sau khi đổi scene vì die
+    // pending khi load từ server (die)
     private GameStateData _pendingLoadData;
 
-    void Awake()
+    private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
         }
-        else
-        {
-            Destroy(gameObject);
-        }
+        else Destroy(gameObject);
     }
 
-    void Start()
+    private void Start()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    void Update()
+    private void Update()
     {
-        // chỉ đếm playTime
+        // chỉ đếm playtime
         timer += Time.deltaTime;
         playTimeAccum += Time.deltaTime;
         if (playTimeAccum >= 1f)
@@ -83,13 +85,14 @@ public class GameAutoSaveManager : MonoBehaviour
         SaveCurrentGame(); // snapshot + push PlayFab
     }
 
-    // GỌI HÀM NÀY TRƯỚC KHI ĐỔI SCENE
+    /// <summary>Gọi ngay trước khi chuyển scene bình thường (cổng/door/trigger)</summary>
     public void PrepareSceneChange()
     {
         _isSceneChange = true;
-        timer = 0f; // tránh autosave ngay lúc vào scene
+        timer = 0f; // tránh autosave chen ngang ngay khi vào scene mới
     }
 
+    /// <summary>Lưu stat hiện tại (và snapshot RAM). Callback gọi sau khi PlayFab trả về (thành/bại).</summary>
     public void SaveCurrentGame(System.Action onDone = null)
     {
         var sceneName = SceneManager.GetActiveScene().name;
@@ -101,12 +104,12 @@ public class GameAutoSaveManager : MonoBehaviour
             return;
         }
 
-        var statsAlive = player.GetComponent<StatsAlive>();
-        var attackDamgePlayer = FindObjectOfType<AttackDamgePlayer>();
-        var stamina = FindObjectOfType<Stamina>();
-        var upgradeStats = FindObjectOfType<UpgradeStats>();
-        var specialSkill = FindObjectOfType<SpecialSkill>();
-        var playerBuff = FindObjectOfType<PlayerBuff>();
+        var statsAlive       = player.GetComponent<StatsAlive>();
+        var attackDamgePlayer= FindObjectOfType<AttackDamgePlayer>();
+        var stamina          = FindObjectOfType<Stamina>();
+        var upgradeStats     = FindObjectOfType<UpgradeStats>();
+        var specialSkill     = FindObjectOfType<SpecialSkill>();
+        var playerBuff       = FindObjectOfType<PlayerBuff>();
 
         if (statsAlive == null || attackDamgePlayer == null || stamina == null || upgradeStats == null)
         {
@@ -121,8 +124,8 @@ public class GameAutoSaveManager : MonoBehaviour
                 ? Mathf.RoundToInt(statsAlive.HpSlider.value)
                 : statsAlive.currentHP;
 
-            MaxHP = statsAlive.MaxHP;
-            Defense = statsAlive.Defense;
+            MaxHP          = statsAlive.MaxHP;
+            Defense        = statsAlive.Defense;
             StunResistance = statsAlive.StunResistance;
         }
 
@@ -130,35 +133,39 @@ public class GameAutoSaveManager : MonoBehaviour
 
         GameStateData data = new GameStateData
         {
-            Level = upgradeStats.Level,
-            Point = upgradeStats.Point,
-            MaxHP = statsAlive.MaxHP,
-            Defense = statsAlive.Defense,
-            StunResistance = statsAlive.StunResistance,
-            currentHP = statsAlive.currentHP,
-            BaseATK = attackDamgePlayer.BaseATK,
-            critRate = attackDamgePlayer.critRate,
-            critDamge = attackDamgePlayer.critDamge,
-            atkBonus = attackDamgePlayer.atkBonus,
-            damgeAttack = attackDamgePlayer.damgeAttack,
-            critRateBonus = attackDamgePlayer.critRateBonus,
-            critDamgeBonus = attackDamgePlayer.critDamgeBonus,
-            StaminaMax = stamina.StaminaMax,
-            canSkill = specialSkill != null && specialSkill.canSkill,
-            SpecialSkillId = specialSkill != null ? specialSkill.SpecialSkillId : 0,
-            canBuff = playerBuff != null && playerBuff.canBuff,
-            buffTypeId = playerBuff != null ? playerBuff.buffTypeId : 0,
-            LastScene = sceneName,
-            PlayTime = playTime,
-            posX = pos.x,
-            posY = pos.y,
-            posZ = pos.z,
+            Level           = upgradeStats.Level,
+            Point           = upgradeStats.Point,
+            MaxHP           = statsAlive.MaxHP,
+            Defense         = statsAlive.Defense,
+            StunResistance  = statsAlive.StunResistance,
+            currentHP       = statsAlive.currentHP,
+
+            BaseATK         = attackDamgePlayer.BaseATK,
+            critRate        = attackDamgePlayer.critRate,
+            critDamge       = attackDamgePlayer.critDamge,
+            atkBonus        = attackDamgePlayer.atkBonus,
+            damgeAttack     = attackDamgePlayer.damgeAttack,
+            critRateBonus   = attackDamgePlayer.critRateBonus,
+            critDamgeBonus  = attackDamgePlayer.critDamgeBonus,
+
+            StaminaMax      = stamina.StaminaMax,
+
+            canSkill        = (specialSkill != null && specialSkill.canSkill),
+            SpecialSkillId  = specialSkill != null ? specialSkill.SpecialSkillId : 0,
+            canBuff         = (playerBuff != null && playerBuff.canBuff),
+            buffTypeId      = playerBuff != null ? playerBuff.buffTypeId : 0,
+
+            LastScene       = sceneName,
+            PlayTime        = playTime,
+            posX            = pos.x,
+            posY            = pos.y,
+            posZ            = pos.z,
         };
 
-        // === SNAPSHOT RAM ===
+        // --- Snapshot RAM ---
         _lastSavedSnapshot = data;
 
-        // === PUSH LÊN PLAYFAB (async) ===
+        // --- Push PlayFab (async) ---
         string json = JsonUtility.ToJson(data);
         PlayFabClientAPI.UpdateUserData(
             new UpdateUserDataRequest
@@ -178,44 +185,51 @@ public class GameAutoSaveManager : MonoBehaviour
         );
     }
 
+    /// <summary>Gọi khi nghỉ bonfire (tuỳ chọn: lưu luôn inventory).</summary>
     public void OnBonfireRest()
     {
+        // lưu inventory theo slot hiện tại (nếu có InventoryManager)
+        InventoryManager.Instance?.SaveInventoryForSlot(saveSlot);
+
+        // lưu core state
         SaveCurrentGame();
     }
 
-    // Khi chết: quay về checkpoint đã save ở bonfire (server)
+    /// <summary>Khi chết → quay về checkpoint save ở bonfire (Load từ PlayFab)</summary>
     public void OnPlayerDie()
     {
-        // Không dùng snapshot RAM, mà load từ PlayFab để về checkpoint
         LoadGame(saveSlot);
     }
 
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // đặt vị trí khi có yêu cầu
+        // Teleport nếu có
         if (nextPlayerPosition != Vector3.zero)
         {
-            GameObject playerSet = GameObject.FindWithTag("Player");
-            if (playerSet != null)
-                playerSet.transform.position = nextPlayerPosition;
+            var playerSet = GameObject.FindWithTag("Player");
+            if (playerSet != null) playerSet.transform.position = nextPlayerPosition;
             nextPlayerPosition = Vector3.zero;
         }
 
-        // ƯU TIÊN: nếu vừa đổi scene bình thường (PrepareSceneChange), áp snapshot từ RAM
+        // Nếu vừa đổi scene bình thường (trigger) → áp snapshot RAM
         if (_isSceneChange && _lastSavedSnapshot != null)
         {
             ApplyLoadedState(_lastSavedSnapshot);
             _isSceneChange = false;
+
+            // Dựng lại túi + trang bị (UI invent thường thuộc scene)
+            InventoryManager.Instance?.LoadInventoryForSlot(saveSlot);
             return;
         }
 
-        // Nếu đang chờ apply data load từ server (vì die)
+        // Nếu là nhánh respawn vì die (đã LoadGame) → áp pending và dựng invent
         if (_pendingLoadData != null)
         {
             ApplyLoadedState(_pendingLoadData);
             _pendingLoadData = null;
-            // bật lại nếu trước đó có tắt
-            enabled = true;
+
+            enabled = true; // bật lại nếu trước đó có tắt
+            InventoryManager.Instance?.LoadInventoryForSlot(saveSlot);
         }
     }
 
@@ -240,12 +254,14 @@ public class GameAutoSaveManager : MonoBehaviour
                     SceneManager.sceneLoaded += OnSceneLoadedAfterLoad;
                     SceneManager.LoadScene(data.LastScene);
 
-                    // lưu pending để apply sau khi scene load xong
+                    // chờ scene loaded rồi apply
                     _pendingLoadData = data;
                 }
                 else
                 {
                     ApplyLoadedState(data);
+                    // dựng lại inventory ngay trong scene hiện tại
+                    InventoryManager.Instance?.LoadInventoryForSlot(saveSlot);
                 }
             }
             else
@@ -260,11 +276,8 @@ public class GameAutoSaveManager : MonoBehaviour
     {
         if (nextPlayerPosition != Vector3.zero)
         {
-            GameObject player = GameObject.FindWithTag("Player");
-            if (player != null)
-            {
-                player.transform.position = nextPlayerPosition;
-            }
+            var player = GameObject.FindWithTag("Player");
+            if (player != null) player.transform.position = nextPlayerPosition;
             nextPlayerPosition = Vector3.zero;
         }
 
@@ -276,15 +289,18 @@ public class GameAutoSaveManager : MonoBehaviour
 
         enabled = true;
         SceneManager.sceneLoaded -= OnSceneLoadedAfterLoad;
+
+        // dựng lại túi + trang bị khi respawn
+        InventoryManager.Instance?.LoadInventoryForSlot(saveSlot);
     }
 
     private void ApplyLoadedState(GameStateData data)
     {
         // cập nhật biến quản lý
-        level = Mathf.Max(1, data.Level);
+        level    = Mathf.Max(1, data.Level);
         playTime = Mathf.Max(0, data.PlayTime);
 
-        GameObject player = GameObject.FindWithTag("Player");
+        var player = GameObject.FindWithTag("Player");
         if (player == null)
         {
             Debug.LogError("Player không tìm thấy để apply state.");
@@ -292,12 +308,12 @@ public class GameAutoSaveManager : MonoBehaviour
         }
 
         // Lấy components
-        StatsAlive statsAlive = player.GetComponent<StatsAlive>();
-        AttackDamgePlayer atk = FindObjectOfType<AttackDamgePlayer>();
-        Stamina stamina = FindObjectOfType<Stamina>();
-        UpgradeStats upgrade = FindObjectOfType<UpgradeStats>();
-        SpecialSkill special = FindObjectOfType<SpecialSkill>();
-        PlayerBuff playerBuff = FindObjectOfType<PlayerBuff>();
+        var statsAlive = player.GetComponent<StatsAlive>();
+        var atk        = FindObjectOfType<AttackDamgePlayer>();
+        var stamina    = FindObjectOfType<Stamina>();
+        var upgrade    = FindObjectOfType<UpgradeStats>();
+        var special    = FindObjectOfType<SpecialSkill>();
+        var playerBuff = FindObjectOfType<PlayerBuff>();
 
         // Upgrade/Level/Point
         if (upgrade != null)
@@ -309,28 +325,28 @@ public class GameAutoSaveManager : MonoBehaviour
         // StatsAlive
         if (statsAlive != null)
         {
-            statsAlive.MaxHP = Mathf.Max(1, data.MaxHP);
-            statsAlive.Defense = Mathf.Max(0, data.Defense);
-            statsAlive.StunResistance = Mathf.Max(0, data.StunResistance);
+            statsAlive.MaxHP         = Mathf.Max(1, data.MaxHP);
+            statsAlive.Defense       = Mathf.Max(0, data.Defense);
+            statsAlive.StunResistance= Mathf.Max(0, data.StunResistance);
 
             statsAlive.currentHP = Mathf.Clamp(data.currentHP, 0, statsAlive.MaxHP);
 
             if (statsAlive.HpSlider != null)
             {
                 statsAlive.HpSlider.maxValue = statsAlive.MaxHP;
-                statsAlive.HpSlider.value = statsAlive.currentHP;
+                statsAlive.HpSlider.value    = statsAlive.currentHP;
             }
         }
 
-        // Attack/crit
+        // Attack/Crit
         if (atk != null)
         {
-            atk.BaseATK = Mathf.Max(0, data.BaseATK);
-            atk.critRate = Mathf.Max(0f, data.critRate);
-            atk.critDamge = Mathf.Max(0f, data.critDamge);
-            atk.atkBonus = Mathf.Max(0, data.atkBonus);
-            atk.damgeAttack = Mathf.Max(0f, data.damgeAttack);
-            atk.critRateBonus = Mathf.Max(0f, data.critRateBonus);
+            atk.BaseATK        = Mathf.Max(0,  data.BaseATK);
+            atk.critRate       = Mathf.Max(0f, data.critRate);
+            atk.critDamge      = Mathf.Max(0f, data.critDamge);
+            atk.atkBonus       = Mathf.Max(0,  data.atkBonus);
+            atk.damgeAttack    = Mathf.Max(0f, data.damgeAttack);
+            atk.critRateBonus  = Mathf.Max(0f, data.critRateBonus);
             atk.critDamgeBonus = Mathf.Max(0f, data.critDamgeBonus);
         }
 
@@ -345,13 +361,13 @@ public class GameAutoSaveManager : MonoBehaviour
         // Skill & Buff
         if (special != null)
         {
-            special.canSkill = data.canSkill;
-            special.SpecialSkillId = data.SpecialSkillId;
+            special.canSkill      = data.canSkill;
+            special.SpecialSkillId= data.SpecialSkillId;
         }
         if (playerBuff != null)
         {
-            playerBuff.canBuff = data.canBuff;
-            playerBuff.buffTypeId = data.buffTypeId;
+            playerBuff.canBuff   = data.canBuff;
+            playerBuff.buffTypeId= data.buffTypeId;
         }
 
         // Đặt vị trí nếu cùng scene

@@ -274,6 +274,7 @@ public class UpgradeStats : MonoBehaviour
             CurrentStats();
             var lockCtrl = FindObjectOfType<LockController>();
             lockCtrl.OutPlayerController();
+            lockCtrl.isOut = false;
             StatsCanva?.SetActive(true);
             var takeDamage = player.GetComponent<PlayerTakeDamge>();
             takeDamage.currentHP = takeDamage.MaxHP;
