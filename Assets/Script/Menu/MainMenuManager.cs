@@ -54,7 +54,7 @@ public class MainMenuManager : MonoBehaviour
     void StartNewGame(string slot)
     {
         GameAutoSaveManager.Instance.Init(slot, startLevel: 1);
-        SceneTransitionManager.Instance.FadeToScene("CutsceneOpeningDraft");
+        SceneTransitionManager.Instance.FadeToScene("CutsceneOpening");
     }
 
 
