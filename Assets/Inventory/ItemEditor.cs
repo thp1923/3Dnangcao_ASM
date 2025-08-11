@@ -17,6 +17,7 @@ public class ItemEditor : Editor
         EditorGUILayout.PropertyField(serializedObject.FindProperty("rarity"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("description"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("descriptionStats"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("value"));
 
 
         // Hiển thị các biến tùy theo loại attack

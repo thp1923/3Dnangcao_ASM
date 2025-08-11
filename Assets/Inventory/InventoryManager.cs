@@ -29,10 +29,12 @@ public class InventoryManager : MonoBehaviour
     {
         BuildItemMap();
 
+        // (tùy chọn) add sẵn item test vào túi
         if (testItems != null)
             foreach (var it in testItems)
-                if (it != null) CreateBagSlot(it, 1, autosave:false); // đừng autosave dữ liệu test
+                if (it != null) CreateBagSlot(it, 1, autosave: false); // không autosave dữ liệu test
 
+        // Ẩn icon ô trang bị trống
         foreach (var slot in equipmentSlots)
             if (slot != null && slot.IsEmpty() && slot.icon != null) slot.icon.enabled = false;
 
@@ -46,11 +48,59 @@ public class InventoryManager : MonoBehaviour
         var gsm = GameAutoSaveManager.Instance;
         if (gsm == null) return;
 
-        // Lưu inventory theo slot hiện tại
         SaveInventoryForSlot(gsm.saveSlot);
-
-        // (khuyến nghị) lưu luôn core state để đồng bộ
         gsm.SaveCurrentGame();
+    }
+
+    /* ========== Helpers: check trùng trong túi / đang trang bị ========== */
+
+    // Có equipment cùng ItemID trong túi?
+    private bool ExistsDuplicateInBag(Item item)
+    {
+        if (item == null || item.itemType != ItemType.Equipment) return false;
+
+        foreach (Transform child in contentPanel)
+        {
+            var slot = child.GetComponentInChildren<InventorySlot>();
+            if (slot == null || slot.IsEmpty()) continue;
+
+            var it = slot.GetItem();
+            if (it != null && it.itemType == ItemType.Equipment && it.ItemID == item.ItemID)
+                return true;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Nếu item là Equipment và đã có item cùng ID đang trang bị (đúng allowedSlot):
+    /// - Quy đổi đúng bằng item.value * amount → UpgradeStats.AddPoint(...)
+    /// - Lưu game
+    /// - Trả về true (đã quy đổi, KHÔNG thêm item vào túi)
+    /// </summary>
+    private bool TryConvertDuplicateEquippedToPoints(Item item, int amount = 1)
+    {
+        if (item == null || item.itemType != ItemType.Equipment) return false;
+
+        foreach (var eqSlot in equipmentSlots)
+        {
+            if (!eqSlot || eqSlot.IsEmpty()) continue;
+            var equipped = eqSlot.GetItem();
+
+            if (eqSlot.slotType == item.allowedSlot && equipped != null && equipped.ItemID == item.ItemID)
+            {
+                var up = GetUpgrade();
+                if (up != null)
+                {
+                    int addPoint = Mathf.Max(0, item.value * Mathf.Max(1, amount));
+                    up.AddPoint(addPoint); // ✅ dùng API của UpgradeStats
+
+                    GameAutoSaveManager.Instance?.SaveCurrentGame();
+                    Debug.Log($"[Inventory] Duplicate EQUIPPED ID={item.ItemID} → +{addPoint} Point (value={item.value}). New={up.Point}");
+                }
+                return true; // đã xử lý quy đổi
+            }
+        }
+        return false;
     }
 
     /* ===================== CORE MOVE / EQUIP ===================== */
@@ -78,11 +128,11 @@ public class InventoryManager : MonoBehaviour
             else
             {
                 slot.AddItem(item, fromSlot.GetStackCount());
-                if (!fromSlot.isEquipmentSlot) fromSlot.ClearSlot(true);
-                else fromSlot.ClearSlot();
+                if (!fromSlot.isEquipmentSlot) fromSlot.ClearSlot(true); // destroy ô túi
+                else fromSlot.ClearSlot();                               // clear ô trang bị
             }
 
-            AutoSave(); // ← autosave sau khi equip
+            AutoSave(); // autosave sau khi equip
             return;
         }
     }
@@ -93,7 +143,8 @@ public class InventoryManager : MonoBehaviour
         Item item = fromSlot.GetItem();
         if (item == null) return;
 
-        CreateBagSlot(item, fromSlot.GetStackCount()); // auto stack trong túi
+        // trả về túi (auto stack)
+        CreateBagSlot(item, fromSlot.GetStackCount());
 
         var atk = Player.GetComponent<AttackDamgePlayer>();
         var def = Player.GetComponent<PlayerTakeDamge>();
@@ -112,14 +163,34 @@ public class InventoryManager : MonoBehaviour
         }
 
         fromSlot.ClearSlot();
-        AutoSave(); // ← autosave sau khi tháo
+        AutoSave(); // autosave sau khi tháo
     }
+
+    /* ===================== NHẶT ITEM ===================== */
 
     public void TryAddToInventory(Item item)
     {
         if (item == null) return;
 
-        // ưu tiên stack
+        // 1) Trùng với món đang trang bị → quy đổi point theo value
+        if (TryConvertDuplicateEquippedToPoints(item))
+            return;
+
+        // 2) Nếu là Equipment và túi đã có một bản cùng ID → cũng quy đổi
+        if (item.itemType == ItemType.Equipment && ExistsDuplicateInBag(item))
+        {
+            var up = GetUpgrade();
+            if (up != null)
+            {
+                int addPoint = Mathf.Max(0, item.value);
+                up.AddPoint(addPoint); // ✅ dùng UpgradeStats.AddPoint
+                GameAutoSaveManager.Instance?.SaveCurrentGame();
+                Debug.Log($"[Inventory] Duplicate in BAG ID={item.ItemID} → +{addPoint} Point. New={up.Point}");
+            }
+            return; // không thêm vào túi
+        }
+
+        // 3) Không trùng → hành vi nhặt bình thường (ưu tiên stack)
         foreach (Transform child in contentPanel)
         {
             var slot = child.GetComponentInChildren<InventorySlot>();
@@ -127,7 +198,7 @@ public class InventoryManager : MonoBehaviour
             {
                 slot.AddItem(item, 1);
                 MergeAllStackableItems();
-                AutoSave(); // ← autosave khi nhặt
+                AutoSave();
                 return;
             }
         }
@@ -137,13 +208,14 @@ public class InventoryManager : MonoBehaviour
         var newSlot = go.GetComponentInChildren<InventorySlot>();
         newSlot.AddItem(item, 1);
         MergeAllStackableItems();
-        AutoSave(); // ← autosave khi nhặt
+        AutoSave();
     }
 
     public void CreateBagSlot(Item item, int amount = 1, bool autosave = true)
     {
         if (item == null || amount <= 0) return;
 
+        // KHÔNG convert ở đây để tránh unequip bị quy đổi nhầm.
         foreach (Transform child in contentPanel)
         {
             var slot = child.GetComponentInChildren<InventorySlot>();
@@ -258,6 +330,7 @@ public class InventoryManager : MonoBehaviour
 
         PlayFabClientAPI.GetUserData(new GetUserDataRequest(), result =>
         {
+            // clear UI
             foreach (Transform child in contentPanel) Destroy(child.gameObject);
             foreach (var slot in equipmentSlots) slot.ClearSlot();
 
@@ -269,7 +342,7 @@ public class InventoryManager : MonoBehaviour
                     foreach (var it in bagData.items)
                     {
                         var item = GetItemByID(it.itemId);
-                        if (item != null) CreateBagSlot(item, it.quantity, autosave:false);
+                        if (item != null) CreateBagSlot(item, it.quantity, autosave: false);
                     }
             }
 
@@ -376,10 +449,19 @@ public class InventoryManager : MonoBehaviour
         return null;
     }
 
-    // wrapper riêng cho JsonUtility
+    // wrapper cho JsonUtility (KHÔNG định nghĩa InventoryItemData ở đây)
     [System.Serializable]
     private class InventoryListWrapper
     {
         public List<InventoryItemData> items;
     }
+
+    [SerializeField] private UpgradeStats upgradeStats;
+
+    private UpgradeStats GetUpgrade()
+    {
+        if (upgradeStats == null) upgradeStats = FindObjectOfType<UpgradeStats>();
+        return upgradeStats;
+    }
+
 }
