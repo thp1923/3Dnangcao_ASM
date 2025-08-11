@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-8340616544477560583
+--- !u!114 &-8759766152443369495
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9,15 +9,52 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f10dd60657c6004587f237a7e90f8e4, type: 3}
-  m_Name: AudioPlayableAsset
+  m_Script: {fileID: 11500000, guid: 41e02be185cb5db4da6b72119182bb90, type: 3}
+  m_Name: Lyric Marker
   m_EditorClassIdentifier: 
-  m_Clip: {fileID: 8300000, guid: d3ff67356fdbf494b8226f9d49a0f350, type: 3}
-  m_Loop: 0
-  m_bufferingTime: 0.1
-  m_ClipProperties:
-    volume: 1
---- !u!114 &-7483246805176169714
+  m_Time: 8.5
+  localizedText:
+    m_TableReference:
+      m_TableCollectionName: GUID:d11ef30f44e153746a20384cebde6558
+    m_TableEntryReference:
+      m_KeyId: 8118292480
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  suggestedDuration: 2.5
+  style:
+    typewriter: 1
+    typewriterspeed: 40
+    clearOnEnd: 0
+  _flags: -1
+  references:
+    version: 2
+    RefIds: []
+--- !u!114 &-6283873480239748315
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a16748d9461eae46a725db9776d5390, type: 3}
+  m_Name: Markers
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_AnimClip: {fileID: 0}
+  m_Locked: 0
+  m_Muted: 0
+  m_CustomPlayableFullTypename: 
+  m_Curves: {fileID: 0}
+  m_Parent: {fileID: 11400000}
+  m_Children: []
+  m_Clips: []
+  m_Markers:
+    m_Objects: []
+--- !u!114 &-5430080433402587241
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,10 +78,10 @@ MonoBehaviour:
   - m_Version: 1
     m_Start: 0
     m_ClipIn: 0
-    m_Asset: {fileID: -8340616544477560583}
+    m_Asset: {fileID: 512548737217107686}
     m_Duration: 222.17791383219955
     m_TimeScale: 1
-    m_ParentTrack: {fileID: -7483246805176169714}
+    m_ParentTrack: {fileID: -5430080433402587241}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
     m_BlendInDuration: -1
@@ -108,7 +145,9 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: Final Stand
   m_Markers:
-    m_Objects: []
+    m_Objects:
+    - {fileID: 4348536050415015452}
+    - {fileID: 4914319341478749888}
   m_TrackProperties:
     volume: 1
     stereoPan: 0
@@ -127,10 +166,136 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Version: 0
   m_Tracks:
-  - {fileID: -7483246805176169714}
+  - {fileID: -5430080433402587241}
   m_FixedDuration: 0
   m_EditorSettings:
-    m_Framerate: 60
+    m_Framerate: 24
     m_ScenePreview: 1
   m_DurationMode: 0
-  m_MarkerTrack: {fileID: 0}
+  m_MarkerTrack: {fileID: -6283873480239748315}
+--- !u!114 &512548737217107686
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f10dd60657c6004587f237a7e90f8e4, type: 3}
+  m_Name: AudioPlayableAsset
+  m_EditorClassIdentifier: 
+  m_Clip: {fileID: 8300000, guid: d3ff67356fdbf494b8226f9d49a0f350, type: 3}
+  m_Loop: 0
+  m_bufferingTime: 0.1
+  m_ClipProperties:
+    volume: 1
+--- !u!114 &1272832929514670443
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15c38f6fa1940124db1ab7f6fe7268d1, type: 3}
+  m_Name: Signal Emitter
+  m_EditorClassIdentifier: 
+  m_Time: 14.016666666666667
+  m_Retroactive: 0
+  m_EmitOnce: 0
+  m_Asset: {fileID: 11400000, guid: 43d4143142694a542a59f78eff8c20dd, type: 2}
+--- !u!114 &4348536050415015452
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41e02be185cb5db4da6b72119182bb90, type: 3}
+  m_Name: Lyric Marker
+  m_EditorClassIdentifier: 
+  m_Time: 8.5
+  localizedText:
+    m_TableReference:
+      m_TableCollectionName: GUID:d11ef30f44e153746a20384cebde6558
+    m_TableEntryReference:
+      m_KeyId: 8118292480
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  suggestedDuration: 2.5
+  style:
+    typewriter: 1
+    typewriterspeed: 40
+    clearOnEnd: 0
+  _flags: 6
+  references:
+    version: 2
+    RefIds: []
+--- !u!114 &4914319341478749888
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41e02be185cb5db4da6b72119182bb90, type: 3}
+  m_Name: Lyric Marker
+  m_EditorClassIdentifier: 
+  m_Time: 14.875
+  localizedText:
+    m_TableReference:
+      m_TableCollectionName: GUID:d11ef30f44e153746a20384cebde6558
+    m_TableEntryReference:
+      m_KeyId: 668800864256
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  suggestedDuration: 2.5
+  style:
+    typewriter: 1
+    typewriterspeed: 40
+    clearOnEnd: 0
+  _flags: 6
+  references:
+    version: 2
+    RefIds: []
+--- !u!114 &6667672918486807424
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41e02be185cb5db4da6b72119182bb90, type: 3}
+  m_Name: Lyric Marker
+  m_EditorClassIdentifier: 
+  m_Time: 14.833333333333334
+  localizedText:
+    m_TableReference:
+      m_TableCollectionName: GUID:d11ef30f44e153746a20384cebde6558
+    m_TableEntryReference:
+      m_KeyId: 668800864256
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  suggestedDuration: 2.5
+  style:
+    typewriter: 1
+    typewriterspeed: 40
+    clearOnEnd: 0
+  _flags: 6
+  references:
+    version: 2
+    RefIds: []
