@@ -149,7 +149,7 @@ public class UpgradeStats : MonoBehaviour
     {
         if (Point < Point_Lost)
         {
-            Debug.Log("Not Enough Point");
+            //Debug.Log("Not Enough Point");
             return;
         }
 
