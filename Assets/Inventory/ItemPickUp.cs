@@ -22,6 +22,9 @@ public class ItemPickUp : MonoBehaviour
     {
         // Tìm Content (ScrollView/Viewport/Content) gán tag "ItemView"
         inventoryManager = InventoryManager.Instance;
+
+        if (inventoryManager == null)
+            Debug.LogError("[ItemPickUp] ❌ InventoryManager.Instance is null (chưa được Awake?)");
         GameObject contentObj = GameObject.FindWithTag("ItemView");
         if (contentObj != null)
             viewportContent = contentObj.transform;

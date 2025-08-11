@@ -32,7 +32,7 @@ public class AttackKnightBehaviour : StateMachineBehaviour
         if (animator.GetComponent<SwordTrailEffect>() != null)
         {
             animator.GetComponent<SwordTrailEffect>().PlayFlame(false);
-            animator.GetComponent<SwordTrailEffect>().PlayPartical(1);
+            animator.GetComponent<SwordTrailEffect>().PlayPartical(0);
         }
         if (animator.GetComponent<BossKnightAttackController>().enabled != false)
             animator.GetComponent<BossKnightAttackController>().enabled = false;

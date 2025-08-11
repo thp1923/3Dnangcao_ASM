@@ -30,19 +30,4 @@ public class GameStateData
     public float posX;
     public float posY;
     public float posZ;
-
-    public GameStateData GetStatsData()
-{
-    var statsData = new GameStateData
-    {
-        MaxHP = this.MaxHP,
-        currentHP = this.currentHP,
-        Defense = this.Defense,
-        StunResistance = this.StunResistance,
-        heathCount = this.heathCount
-    };
-
-    return statsData;
-}
-
 }

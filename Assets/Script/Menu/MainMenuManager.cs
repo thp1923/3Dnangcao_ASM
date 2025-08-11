@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 using TMPro;
 using PlayFab;
 using PlayFab.ClientModels;
+using StatsManager;
 
 public class MainMenuManager : MonoBehaviour
 {
@@ -52,23 +53,22 @@ public class MainMenuManager : MonoBehaviour
     }
     void StartNewGame(string slot)
     {
-        GameAutoSaveManager.Instance.saveSlot = slot;
-        GameAutoSaveManager.Instance.level = 1;
-        GameAutoSaveManager.Instance.hp = 100;
-        GameAutoSaveManager.Instance.souls = 0;
-        GameAutoSaveManager.Instance.playTime = 0;
-
-        SceneTransitionManager.Instance.FadeToScene("CutsceneOpeningDraft");
+        GameAutoSaveManager.Instance.Init(slot, startLevel: 1);
+        SceneTransitionManager.Instance.FadeToScene("CutsceneOpening");
     }
 
 
     public void OnOverwriteSlot(int index)
     {
+        if (index < 0 || index >= usedSlots.Length || string.IsNullOrEmpty(usedSlots[index]))
+        {
+            //Debug.LogWarning("Ô overwrite không hợp lệ.");
+            return;
+        }
         string slot = usedSlots[index];
         overwritePanel.SetActive(false);
         StartNewGame(slot);
     }
-
     public void OnCancelOverwrite()
     {
         overwritePanel.SetActive(false);
@@ -78,7 +78,6 @@ public class MainMenuManager : MonoBehaviour
     {
         mainMenuPanel.SetActive(false);
         loadGamePanel.SetActive(true);
-
         PlayFabClientAPI.GetUserData(new GetUserDataRequest(),
             result =>
             {
@@ -97,38 +96,20 @@ public class MainMenuManager : MonoBehaviour
                 }
             },
             error => Debug.LogError(error.GenerateErrorReport()));
+            
     }
 
     public void OnSelectLoadSlot(int index)
     {
         string slot = $"SaveSlot{index + 1}";
 
-        PlayFabClientAPI.GetUserData(new GetUserDataRequest(),
-            result =>
-            {
-                if (result.Data.ContainsKey(slot))
-                {
-                    var data = JsonUtility.FromJson<GameStateData>(result.Data[slot].Value);
+        // Ẩn UI load để tránh người chơi click thêm
+        loadGamePanel.SetActive(false);
+        mainMenuPanel.SetActive(false);
 
-                    GameAutoSaveManager.Instance.saveSlot = slot;
-                    GameAutoSaveManager.Instance.level = data.Level;
-                    GameAutoSaveManager.Instance.hp = data.HP;
-                    GameAutoSaveManager.Instance.souls = data.Souls;
-                    GameAutoSaveManager.Instance.playTime = data.PlayTime;
-
-                    GameAutoSaveManager.Instance.nextPlayerPosition =
-                        new Vector3(data.posX, data.posY, data.posZ);
-
-                    SceneTransitionManager.Instance.FadeToScene(data.LastScene);
-                }
-                else
-                {
-                    Debug.Log("Slot trống");
-                }
-            },
-            error => Debug.LogError(error.GenerateErrorReport()));
+        // Giao toàn bộ cho GameAutoSaveManager
+        GameAutoSaveManager.Instance.LoadGame(slot);
     }
-
     public void OnCancelLoadGame()
     {
         loadGamePanel.SetActive(false);

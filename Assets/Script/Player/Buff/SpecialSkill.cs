@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class SpecialSkill : MonoBehaviour
@@ -12,7 +13,7 @@ public class SpecialSkill : MonoBehaviour
         GreenFire = 0, DragonFire = 1
     }
 
-    protected int SpecialSkillId;
+    internal int SpecialSkillId;
     [Header("-----Skill Controller-----")]
 
     public SpecialSkillTpye skillTpye;
@@ -29,6 +30,8 @@ public class SpecialSkill : MonoBehaviour
 
     [Header("--------CD--------")]
     public float CD;
+    public GameObject CD_Panal;
+    public TextMeshProUGUI cdText;
     float _CD;
 
     public float damgeRefTime;
@@ -42,6 +45,11 @@ public class SpecialSkill : MonoBehaviour
 
     public float rangeGreenFire;
 
+    public Transform wolfSpawnPoint;
+
+    public ParticleSystem fireWolf;
+
+    public GameObject Wolf;
 
     bool isGreenFire = false;
 
@@ -63,14 +71,22 @@ public class SpecialSkill : MonoBehaviour
 
     public ParticleSystem DragonTrans;
 
+    public Transform dragonSpawnPoint;
+
+    public GameObject Dragon;
+
     bool isDragonFire = false;
 
     private void Start()
     {
+        CD_Panal.SetActive(false);
+        fireWolf.Stop();
         skillTpye = (SpecialSkillTpye)SpecialSkillId;
         atkPlayer = GetComponent<AttackDamgePlayer>();
         ptdPlayer = GetComponent<PlayerTakeDamge>();
         animator = GetComponent<Animator>();
+        Wolf.SetActive(false);
+        Dragon.SetActive(false);
         foreach(var ef in fireEffect)
         {
             ef.Stop();
@@ -104,6 +120,16 @@ public class SpecialSkill : MonoBehaviour
     public void SpecialSkillController()
     {
         _CD -= Time.deltaTime;
+        if (CD_Panal.activeSelf)
+            cdText.text = _CD.ToString("F1");
+        if (_CD > 0)
+        {
+            CD_Panal.SetActive(true);
+        }
+        else
+        {
+            CD_Panal.SetActive(false);
+        }
         if (Input.GetKeyDown(SpecialSkillKey) && _CD <= 0 && canSkill)
         {
             _CD = CD;
@@ -147,9 +173,11 @@ public class SpecialSkill : MonoBehaviour
                         }
                     }
                 }
+                WolfSpawn();
                 break;
             case SpecialSkillTpye.DragonFire:
                 isDragonFire = true;
+                DragonSpawn();
                 atkPlayer.damgeAttack += damgeBonus;
                 fireLoop.clip = Loop[0];
                 fireLoop.pitch = 1f;
@@ -180,43 +208,54 @@ public class SpecialSkill : MonoBehaviour
         _CD = CD;
     }
 
+    public void WolfSpawn()
+    {
+        Wolf.transform.position = new Vector3(wolfSpawnPoint.position.x, transform.position.y, wolfSpawnPoint.position.z);
+        Wolf.SetActive(true);
+    }
+
+    public void DragonSpawn()
+    {
+        Dragon.transform.position = new Vector3(dragonSpawnPoint.position.x, transform.position.y, dragonSpawnPoint.position.z);
+        Dragon.SetActive(true);
+    }
+
     IEnumerator EndSkill()
     {
-        yield return new WaitForSeconds(CD/3);
-        switch (skillTpye)
+        yield return new WaitForSeconds(CD/2f);
+        if (isGreenFire)
         {
-            case SpecialSkillTpye.GreenFire:
-                isGreenFire = false;
-                fireLoop.Stop();
-                ptdPlayer.damgeTake -= damgeTakeNerf;
-                foreach (var ef in fireEffect)
+            isGreenFire = false;
+            fireLoop.Stop();
+            ptdPlayer.damgeTake -= damgeTakeNerf;
+            foreach (var ef in fireEffect)
+            {
+                if (ef != null)
                 {
-                    if (ef != null)
-                    {
-                        ef.Stop();
-                        var light = ef.GetComponent<Light>();
-                        if (light != null)
-                            light.enabled = false;
-                    }
+                    ef.Stop();
+                    var light = ef.GetComponent<Light>();
+                    if (light != null)
+                        light.enabled = false;
                 }
-                break;
-            case SpecialSkillTpye.DragonFire:
-                isDragonFire = false;
-                atkPlayer.damgeAttack -= damgeBonus;
-                foreach (var ef in fireDragonEffect)
+            }
+            WolfSpawn();
+        }
+        else if (isDragonFire)
+        {
+            isDragonFire = false;
+            DragonSpawn();
+            atkPlayer.damgeAttack -= damgeBonus;
+            foreach (var ef in fireDragonEffect)
+            {
+                if (ef != null)
                 {
-                    if (ef != null)
-                    {
-                        ef.Stop();
-                        var light = ef.GetComponent<Light>();
-                        if (light != null)
-                            light.enabled = false;
-                    }
+                    ef.Stop();
+                    var light = ef.GetComponent<Light>();
+                    if (light != null)
+                        light.enabled = false;
                 }
-                dragonWings.SetActive(false);
-                break;
-            default:
-                break;
+            }
+            dragonWings.SetActive(false);
         }
     }
 
@@ -237,7 +276,7 @@ public class SpecialSkill : MonoBehaviour
 
     IEnumerator DragonFire()
     {
-        yield return new WaitForSeconds(CD / 3 - 1f);
+        yield return new WaitForSeconds(CD / 2f - 1f);
         fireLoop.clip = Loop[1];
         fireLoop.pitch = 2f;
         fireLoop.Play();

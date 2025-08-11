@@ -27,7 +27,7 @@ public class PlayerAttackController : LockMouse
 
     bool swordContract;
 
-    [SerializeField] Vector2 contract_speed_time = new Vector2(0.1f, 0.1f);
+    [SerializeField] Vector2 contract_speed_time = new Vector2(0.5f, 0.5f);
 
     private void Awake()
     {

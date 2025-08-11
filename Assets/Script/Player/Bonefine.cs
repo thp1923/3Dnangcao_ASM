@@ -8,17 +8,18 @@ public class Bonefine : MonoBehaviour
     public LayerMask mask;
 
     bool isHere;
+    LockController lockController;
     // Start is called before the first frame update
     void Start()
     {
-        
+        lockController = FindObjectOfType<LockController>();
     }
 
     // Update is called once per frame
     void Update()
     {
         Check();
-        if(isHere && Input.GetKeyDown(KeyCode.F))
+        if(isHere && Input.GetKeyDown(KeyCode.F) && !lockController.isInven && !lockController.isQuest)
         {
             FindAnyObjectByType<UpgradeStats>().CanvaStats(false);
         }

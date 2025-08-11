@@ -34,7 +34,7 @@ public class PlayerTakeDamge : StatsAlive
     [SerializeField] private KeyCode heathKey = KeyCode.R;
     int heath;
     public int heathCount;
-    protected int _heathCount;
+    internal int _heathCount;
     public ParticleSystem healFire;
     bool isHealling;
     public float timeHeal;
@@ -195,8 +195,7 @@ public class PlayerTakeDamge : StatsAlive
         if (/*noTakeDamge || */GetComponent<PlayerDodge>().isDodging) return;
         if (isBlock)
         {
-            PlayerAim.SetTrigger("Hit");
-            base.TakeDamge(0, stunDamge, trueDamge);
+            base.TakeDamge(0, 0, trueDamge);
             return;
         }
         base.TakeDamge(damge, stunDamge, trueDamge);
@@ -210,6 +209,7 @@ public class PlayerTakeDamge : StatsAlive
             int stun = stunDamge - (StunResistance + stunResistanceBonus);
             GetComponent<PlayerAim>().ClosestEnemy();
             GetComponent<PlayerAim>().LockForStun();
+            PlayerAim.SetTrigger("Stun");
             if(stun > 4000)
             {
                 PlayerAim.SetTrigger("Hit3");
@@ -286,5 +286,6 @@ public class PlayerTakeDamge : StatsAlive
         GetComponent<PlayerAttackController>().enabled = false;
         GetComponent<CapsuleCollider>().enabled = false;
         rb.useGravity = false;
+        
     }
 }

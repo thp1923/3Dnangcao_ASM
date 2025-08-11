@@ -27,7 +27,7 @@ public class TooltipUI : MonoBehaviour
         tooltipPanel.SetActive(true);
         nameText.text = item.itemName;
         descriptionText.text = $"{item.description}";
-        rarityText.text = $"Rarity: {item.rarity}";
+        rarityText.text = $"Rarity: {item.rarity} \n{item.descriptionStats}";
     }
 
     public void HideTooltip()

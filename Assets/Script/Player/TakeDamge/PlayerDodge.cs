@@ -38,11 +38,13 @@ public class PlayerDodge : MonoBehaviour
     private bool isActiveTrail;
 
     private PlayerAttackController attackCtrl;
+    LockController lockCtrl;
 
 
     private void Start()
     {
         attackCtrl = GetComponent<PlayerAttackController>();
+        lockCtrl = GetComponent<LockController>();
         anim = GetComponent<Animator>();
         controller = GetComponent<vThirdPersonController>();
         rb = GetComponent<Rigidbody>();
@@ -51,7 +53,7 @@ public class PlayerDodge : MonoBehaviour
     private void Update()
     {
         // Bắt đầu nhấn
-        if (Input.GetKeyDown(dodgeKey) && !attackCtrl.inventory.activeSelf)
+        if (Input.GetKeyDown(dodgeKey) && (!lockCtrl.Inventory.activeSelf || !lockCtrl.Quest.activeSelf))
         {
             holdTime = 0f;
             isHolding = true;
@@ -59,7 +61,7 @@ public class PlayerDodge : MonoBehaviour
         }
 
         // Đang giữ
-        if (isHolding && Input.GetKey(dodgeKey) && !attackCtrl.inventory.activeSelf)
+        if (isHolding && Input.GetKey(dodgeKey) && (!lockCtrl.Inventory.activeSelf || !lockCtrl.Quest.activeSelf))
         {
             holdTime += Time.deltaTime;
 
@@ -69,7 +71,7 @@ public class PlayerDodge : MonoBehaviour
                 return; // 👉 gọi ngay khi vừa qua ngưỡng giữ
             }
         }
-        if (Input.GetKeyUp(dodgeKey) && !attackCtrl.inventory.activeSelf)
+        if (Input.GetKeyUp(dodgeKey) && (!lockCtrl.Inventory.activeSelf || !lockCtrl.Quest.activeSelf))
         {
             if (!holdActionTriggered)
             {
