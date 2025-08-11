@@ -265,9 +265,16 @@ public class UpgradeStats : MonoBehaviour
         if (isHide)
         {
             GameAutoSaveManager.Instance.OnBonfireRest();
+            // Chuẩn bị reload (snapshot giữ trong RAM)
+            GameAutoSaveManager.Instance.PrepareSceneChange();
+
             var attackCtrl = FindObjectOfType<PlayerAttackController>();
             attackCtrl.LockController(true);
             StatsCanva?.SetActive(false);
+
+            // Reload lại scene hiện tại
+            int index = SceneManager.GetActiveScene().buildIndex;
+            SceneManager.LoadScene(index);
         }
         else
         {
@@ -276,11 +283,10 @@ public class UpgradeStats : MonoBehaviour
             lockCtrl.OutPlayerController();
             lockCtrl.isOut = false;
             StatsCanva?.SetActive(true);
+
             var takeDamage = player.GetComponent<PlayerTakeDamge>();
             takeDamage.currentHP = takeDamage.MaxHP;
             takeDamage._heathCount = takeDamage.heathCount;
-            //int index = SceneManager.GetActiveScene().buildIndex;
-            //SceneManager.LoadScene(index);
         }
     }
 }
