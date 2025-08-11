@@ -10,6 +10,7 @@ public class AttackDamgePlayer : StatsAttack
     public Vector3 attackRange;
     public LayerMask attackMask;
 
+    public int godDamge;
     public override void Attack(int attackNumber)
     {
         base.Attack(attackNumber);
@@ -26,7 +27,7 @@ public class AttackDamgePlayer : StatsAttack
         );
         foreach (Collider enemy in colInfo)
         {
-            enemy.GetComponent<EnemyTakeDamge>().TakeDamge(atk, (stunDamge[attackNum]+stunDamgeBonus), 0);
+            enemy.GetComponent<EnemyTakeDamge>().TakeDamge(atk, (stunDamge[attackNum]+stunDamgeBonus), godDamge);
         }
     }
     private void OnDrawGizmosSelected()
