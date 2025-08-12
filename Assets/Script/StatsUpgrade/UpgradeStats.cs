@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class UpgradeStats : MonoBehaviour
 {
+    public int LevelMax = 500;
     public int Point;
     public int Level;
     public int Point_Lost = 10;
@@ -147,7 +148,7 @@ public class UpgradeStats : MonoBehaviour
 
     public void Upgrade(StatsType type)
     {
-        if (Point < Point_Lost)
+        if (Point < Point_Lost || Level >= LevelMax)
         {
             //Debug.Log("Not Enough Point");
             return;
@@ -155,7 +156,7 @@ public class UpgradeStats : MonoBehaviour
 
         Level++;
         Point -= Point_Lost;
-        Point_Lost = Mathf.FloorToInt(10 * Mathf.Pow(Level, 1.05f));
+        Point_Lost = Mathf.FloorToInt(200 * Mathf.Pow(Level, 1.25f));
 
         LevelText.text = "Level " + Level;
         PointText.text = "Point: " + Point;
