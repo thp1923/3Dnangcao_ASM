@@ -3960,8 +3960,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c6d329f6567b954eb266d70b4d5f177, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHP: 300
-  Defense: 40
+  MaxHP: 700
+  Defense: 200
   StunResistance: 80
   HpSlider: {fileID: 8805072190833313018}
   HpLostSlider: {fileID: 847542907717001489}
@@ -3978,8 +3978,18 @@ MonoBehaviour:
   drop: {fileID: 2008192556107255439, guid: ad8e45d9b72484d42a730922e47c6f68, type: 3}
   itemsDrop:
   - {fileID: 11400000, guid: 9ec3e824e73d3254dba0a60297e99be8, type: 2}
+  - {fileID: 11400000, guid: c1743a98c16f4b0428910d4ffeeb3172, type: 2}
+  - {fileID: 11400000, guid: a03b0b5a9ea4bd241afc5c388b59a84b, type: 2}
+  - {fileID: 11400000, guid: 579e1bcd0cdb35a41b542ddf125012fa, type: 2}
+  - {fileID: 11400000, guid: 4b3901895867cdf4087c90e49a9bcbc3, type: 2}
+  - {fileID: 11400000, guid: 6c8c9375fc7d9f144b8ec5b1f2af60b7, type: 2}
   dropRate:
-  - 1
+  - 0.05
+  - 0.01
+  - 0.04
+  - 0.07
+  - 0.05
+  - 0.07
 --- !u!114 &3914339137429670443
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4040,7 +4050,7 @@ MonoBehaviour:
   ATK:
   - 50
   - 70
-  BaseATK: 50
+  BaseATK: 200
   critRate: 30
   critDamge: 120
   stunDamge: 3200000082000000

@@ -13,6 +13,7 @@ public class PlayerTakeDamge : StatsAlive
     public AudioSource parrySource;
     public AudioClip parryClip;
 
+    internal bool GodMode;
     internal bool isBlock;
     internal bool isDeath;
     internal bool noTakeDamge;
@@ -192,7 +193,7 @@ public class PlayerTakeDamge : StatsAlive
 
     public override void TakeDamge(int damge, int stunDamge, int trueDamge)
     {
-        if (/*noTakeDamge || */GetComponent<PlayerDodge>().isDodging) return;
+        if (GodMode || GetComponent<PlayerDodge>().isDodging) return;
         if (isBlock)
         {
             base.TakeDamge(0, 0, trueDamge);

@@ -7372,8 +7372,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 746af45c41e963643976a73beccb8e75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHP: 3000
-  Defense: 200
+  MaxHP: 30000
+  Defense: 2500
   StunResistance: 100000
   HpSlider: {fileID: 5914361805580525764}
   HpLostSlider: {fileID: 2936227322738249064}
@@ -7386,10 +7386,12 @@ MonoBehaviour:
     m_Bits: 8
   rangeShow: 80
   HP_Bar: {fileID: 6849019706870545527}
-  Point: 2000
+  Point: 30000
   drop: {fileID: 2008192556107255439, guid: ad8e45d9b72484d42a730922e47c6f68, type: 3}
   itemsDrop:
   - {fileID: 11400000, guid: 40704c54e1aed6a4d9bec4aaf6ccba04, type: 2}
+  - {fileID: 11400000, guid: 572ab59615a7df546a0ff4b397e0347e, type: 2}
+  - {fileID: 11400000, guid: bc50c485594a79f46a72c29ecd659c16, type: 2}
 --- !u!114 &5745022304801682055
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7473,9 +7475,9 @@ MonoBehaviour:
   - 130
   - 140
   - 200
-  BaseATK: 200
+  BaseATK: 2000
   critRate: 50
-  critDamge: 100
+  critDamge: 200
   stunDamge: c8000000c8000000c8000000c8000000c8000000
   attackPoints:
   - {fileID: 2000257865250887491}
@@ -7492,7 +7494,7 @@ MonoBehaviour:
   attackMask:
     serializedVersion: 2
     m_Bits: 8
-  breathRate: 0.001
+  breathRate: 0.2
   source: {fileID: 7479415481161904103}
   attackClip:
   - {fileID: 8300000, guid: 7800772941b10cc45b1e80af8101e2f7, type: 3}
@@ -8646,6 +8648,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_BounceIntensity
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8674861939678076590, guid: 10e185a9c3b5bd54eace4a5e6003f07e,
+        type: 3}
+      propertyPath: BaseATK
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
