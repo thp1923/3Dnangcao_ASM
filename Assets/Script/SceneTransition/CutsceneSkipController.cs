@@ -6,7 +6,6 @@ using TMPro;
 public class CutsceneSkipController : MonoBehaviour
 {
     public PlayableDirector playableDirector;
-    public string nextSceneName = "";
 
     [Header("Skip Settings")]
     public float holdDuration = 2f;
@@ -21,7 +20,6 @@ public class CutsceneSkipController : MonoBehaviour
 
     private float holdTimer = 0f;
     private bool isSkipping = false;
-
     private bool isUIVisible = false;
 
     private CanvasGroup canvasGroup;
@@ -73,24 +71,20 @@ public class CutsceneSkipController : MonoBehaviour
         if (Input.GetKey(KeyCode.Space))
         {
             noInputTimer = 0f;
-
             if (!isUIVisible)
                 FadeUI(true);
-
             return;
         }
 
         if (Input.anyKeyDown)
         {
             noInputTimer = 0f;
-
             if (!isUIVisible)
                 FadeUI(true);
         }
         else
         {
             noInputTimer += Time.unscaledDeltaTime;
-
             if (isUIVisible && noInputTimer >= idleFadeOutDelay)
                 FadeUI(false);
         }
@@ -129,8 +123,13 @@ public class CutsceneSkipController : MonoBehaviour
         isSkipping = true;
 
         if (playableDirector != null)
+        {
             playableDirector.time = playableDirector.duration;
+            playableDirector.Evaluate();  // Đảm bảo timeline "nhảy" đến cuối
+            playableDirector.Stop();      // Dừng lại để không tiếp tục chạy
+        }
 
-        SceneTransitionManager.Instance.FadeToScene(nextSceneName);
+        // ✳️ Không load scene nữa — để script khác tiếp tục logic sau cutscene
+        //Debug.Log("Cutscene skipped. Waiting for other scripts to continue...");
     }
 }

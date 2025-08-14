@@ -1702,7 +1702,25 @@ MonoBehaviour:
     m_BlendOutDuration: -1
     m_MixInCurve:
       serializedVersion: 2
-      m_Curve: []
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -8926,8 +8944,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   template:
     color: {r: 0.7735849, g: 0.5051153, b: 0.09122462, a: 1}
-    intensity: 0.07
-    bounceIntensity: 1
+    intensity: 0.69
+    bounceIntensity: 0.49
     range: 10
 --- !u!114 &-3646095230974118949
 MonoBehaviour:
@@ -9352,6 +9370,30 @@ MonoBehaviour:
   m_Clips: []
   m_Markers:
     m_Objects: []
+--- !u!114 &-2844058955533313677
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b46e36075dd1c124a8422c228e75e1fb, type: 3}
+  m_Name: Signal Track
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_AnimClip: {fileID: 0}
+  m_Locked: 0
+  m_Muted: 0
+  m_CustomPlayableFullTypename: 
+  m_Curves: {fileID: 0}
+  m_Parent: {fileID: 11400000}
+  m_Children: []
+  m_Clips: []
+  m_Markers:
+    m_Objects:
+    - {fileID: 6918671683477498894}
 --- !u!114 &-2817377690982772476
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -9840,7 +9882,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   template:
     color: {r: 0.8018868, g: 0.66869503, b: 0.14751692, a: 1}
-    intensity: 0.94
+    intensity: 0.69
     bounceIntensity: 0.49
     range: 10.43
 --- !u!114 &-2494481922976095047
@@ -10742,7 +10784,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   template:
     color: {r: 0.509434, g: 0.509434, b: 0.509434, a: 1}
-    intensity: 0.77
+    intensity: 0.47
     bounceIntensity: 1
     range: 10
 --- !u!114 &-1234648267715090108
@@ -12034,6 +12076,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Version: 0
   m_Tracks:
+  - {fileID: -2844058955533313677}
   - {fileID: -8054420112918335435}
   - {fileID: -8609230543007122123}
   - {fileID: -7606576565967598949}
@@ -15854,7 +15897,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   template:
     color: {r: 1, g: 1, b: 1, a: 1}
-    intensity: 0.24
+    intensity: 0.17
     bounceIntensity: 2
     range: 10
 --- !u!114 &4191605569943368186
@@ -17772,6 +17815,22 @@ MonoBehaviour:
   VirtualCamera:
     exposedName: ff91b29ba1e0950468a25330cdb2c84e
     defaultValue: {fileID: 0}
+--- !u!114 &6918671683477498894
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15c38f6fa1940124db1ab7f6fe7268d1, type: 3}
+  m_Name: Signal Emitter
+  m_EditorClassIdentifier: 
+  m_Time: 222.16666666666666
+  m_Retroactive: 0
+  m_EmitOnce: 0
+  m_Asset: {fileID: 11400000, guid: e27551abecc7e7848a969cb5911722cc, type: 2}
 --- !u!114 &6950879376999103909
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -17938,7 +17997,7 @@ MonoBehaviour:
     m_Start: 156.08333333333334
     m_ClipIn: 0
     m_Asset: {fileID: -4960731343131590736}
-    m_Duration: 66.08333333333331
+    m_Duration: 66.45833333333331
     m_TimeScale: 1
     m_ParentTrack: {fileID: 7350484116379279831}
     m_EaseInDuration: 0
