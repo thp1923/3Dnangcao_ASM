@@ -26361,9 +26361,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   saveSlot: 
   level: 1
-  hp: 100
-  souls: 0
   playTime: 0
+  MaxHP: 0
+  Defense: 0
+  StunResistance: 0
+  currentHP: 0
+  BaseATK: 0
+  CritRate: 0
+  CritDamge: 0
+  StaminaMax: 0
+  Point: 0
+  HeathCount: 0
+  AtkBonus: 0
+  DamgeAttack: 0
+  AtkBonusSkill: 0
+  CritRateBonus: 0
+  CritDamgeBonus: 0
+  CanSkill: 0
+  SpecialSkillId: 0
+  CanBuff: 0
+  BuffTypeId: 0
   nextPlayerPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &1656070269
 GameObject:
@@ -34061,18 +34078,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1650183752}
-        m_TargetAssemblyTypeName: MainMenuManager, Assembly-CSharp
-        m_MethodName: OnNewGameClicked
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 2874846976347864358}
         m_TargetAssemblyTypeName: SceneTransitionManager, Assembly-CSharp
         m_MethodName: FadeToScene
