@@ -34783,6 +34783,7 @@ GameObject:
   m_Component:
   - component: {fileID: 763658769}
   - component: {fileID: 763658768}
+  - component: {fileID: 763658770}
   m_Layer: 0
   m_Name: NextScene
   m_TagString: Untagged
@@ -34818,6 +34819,36 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &763658770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 763658767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Events:
+    m_Signals:
+    - {fileID: 11400000, guid: e27551abecc7e7848a969cb5911722cc, type: 2}
+    m_Events:
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 763658768}
+          m_TargetAssemblyTypeName: CutsceneEndSignalHandler, Assembly-CSharp
+          m_MethodName: OnCutsceneEnded
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1001 &764027160
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -39872,6 +39903,8 @@ PlayableDirector:
     value: {fileID: 759913793}
   - key: {fileID: -7310970911804804441, guid: f4e560ad43774c545ac3de4bd03e8527, type: 2}
     value: {fileID: 1065148470}
+  - key: {fileID: -1159760730438190750, guid: f4e560ad43774c545ac3de4bd03e8527, type: 2}
+    value: {fileID: 763658770}
   m_ExposedReferences:
     m_References:
     - a7795bf0323acea409f0cd376b992d14: {fileID: 1926662781}
@@ -96496,7 +96529,7 @@ PrefabInstance:
     - target: {fileID: 7313389096487792071, guid: 1068c4018660ca54782efa1df3a125a0,
         type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
