@@ -13,8 +13,14 @@ public class DragonExplosionDamge : StatsAttack
 
     private void Start()
     {
+        
+    }
+
+    private void OnEnable()
+    {
         StartCoroutine(Hide());
         StartCoroutine(ExplosionDamge());
+        trueDamge = (int)(BaseATK * 1.2f);
     }
 
     IEnumerator ExplosionDamge()

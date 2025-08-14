@@ -6,7 +6,7 @@ public class DoorUnlock : MonoBehaviour
 
     [Header("Shader Dissolve")]
     public Renderer doorRenderer;
-    public string dissolveProperty = "_tanbien";
+    public string dissolveProperty = "_CutoffHeight";
     public float dissolveDuration = 1.5f;
 
     private Material doorMaterial;
@@ -36,7 +36,8 @@ public class DoorUnlock : MonoBehaviour
         }
         else
         {
-            Destroy(gameObject, 1f);
+            //Debug.LogWarning("No material found on door renderer.");
+            Destroy(gameObject, 1f); 
         }
     }
 
@@ -47,13 +48,13 @@ public class DoorUnlock : MonoBehaviour
         while (time < dissolveDuration)
         {
             float t = time / dissolveDuration;
-            float dissolveValue = Mathf.Lerp(0f, 1f, t); 
-            doorMaterial.SetFloat(dissolveProperty, dissolveValue);
+            float cutoff = Mathf.Lerp(1f, 0f, t);
+            doorMaterial.SetFloat(dissolveProperty, cutoff);
             time += Time.deltaTime;
             yield return null;
         }
 
-        doorMaterial.SetFloat(dissolveProperty, 1f);
+        doorMaterial.SetFloat(dissolveProperty, 0f);
         Destroy(gameObject);
     }
 }

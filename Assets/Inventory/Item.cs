@@ -4,30 +4,62 @@ using System.Collections.Generic;
 using PlayFab.EconomyModels;
 using UnityEngine;
 
-public enum ItemType { Consumable, Equipment, Quest, Material, Weapon,Armor}
+public enum ItemType { Consumable, Equipment}
 public enum Rarity { Common, Uncommon, Rare, Epic, Legendary, Mythical }
-public enum EquidmentSlotType {Head, Chest, Leg, Weapon, Shield, Ring}
+public enum EquidmentSlotType {BaseSkill, Weapon, SpecialSkill, Ring, AttackGem, DefenceGem}
+
+public enum BaseSkillType { AttackBuff, DefenseBuff }
+
+public enum SpecialSkillType { GreenFire, DragonFire }
+public enum ConsumableType { Health, Point}
 
 [CreateAssetMenu(menuName = "InventoryThaiAnh/Item")]
 public class Item : ScriptableObject
 {
     public int ItemID;
-    public string itemName;
-    public Sprite icon;
     public ItemType itemType;
     public Rarity rarity;
+    public EquidmentSlotType allowedSlot;
+    public ConsumableType consumableType;
+    public string itemName;
+    public Sprite icon;
     public int maxStack = 1;
     public int value; // giá tiền
-    public EquidmentSlotType allowedSlot;
-    public GameObject prefab;
     public bool isUsable;
+    public string description;
+    public string descriptionStats;
 
-    [Header("3D Model Prefab")]
-    public GameObject modelPrefab;  // prefab để spawn mô hình vũ khí/giáp
+    #region Consumable
+    public int addHeath;
+    public int addPoint;
+    #endregion
+
+    #region Weapon
+    public int SwordId;
+    public float damgeBonus;
+    #endregion
+
+    #region Ring
+    public float critRateBonus;
+    public float critDamBonus;
+    #endregion
+
+    #region AttackGem
+    public float damgeBonusGem;
+    #endregion
+
+    #region DefenceGem
+    public int defBonusGem;
+    #endregion
+
+    #region Skill
+    public BaseSkillType skillBaseType;
+    public SpecialSkillType skillSpecialType;
+    #endregion
 
     public virtual void Use()
     {
-        Debug.Log("Used " + itemName);
+        //Debug.Log("Used " + itemName);
         // Nếu là HP Potion: hồi máu
         // Nếu là Buff: tăng tốc
         // Nếu là Scroll: mở cửa,...
@@ -41,7 +73,7 @@ public class HealthPotion : Item
     public override void Use()
     {
         base.Use();
-        Debug.Log("Healed for " + healAmount + " HP");
+        //Debug.Log("Healed for " + healAmount + " HP");
         // Gọi PlayerHealth.Instance.Heal(healAmount) chẳng hạn
     }
 }

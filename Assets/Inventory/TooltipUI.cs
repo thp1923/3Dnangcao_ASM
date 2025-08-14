@@ -1,4 +1,5 @@
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,8 +9,8 @@ public class TooltipUI : MonoBehaviour
 
     public GameObject tooltipPanel;
     public TextMeshProUGUI nameText;
-    public TextMeshProUGUI typeText;
-    public TextMeshProUGUI valueText;
+    public TextMeshProUGUI descriptionText;
+    public TextMeshProUGUI rarityText;
 
     void Awake()
     {
@@ -25,8 +26,8 @@ public class TooltipUI : MonoBehaviour
     {
         tooltipPanel.SetActive(true);
         nameText.text = item.itemName;
-        typeText.text = $"Type: {item.itemType} | Rarity: {item.rarity}";
-        valueText.text = $"Value: {item.value}";
+        descriptionText.text = $"{item.description}";
+        rarityText.text = $"Rarity: {item.rarity} \n{item.descriptionStats}";
     }
 
     public void HideTooltip()

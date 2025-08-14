@@ -16,7 +16,7 @@ public class PlayerAim : MonoBehaviour
     Animator animator;
 
     private List<GameObject> enemiesList = new List<GameObject>();
-    private GameObject closestEnemy;
+    [HideInInspector] public GameObject closestEnemy;
     private bool lockOn = false;
     private bool transitioningFromLock = false;
     private vThirdPersonController tcp;
@@ -161,6 +161,29 @@ public class PlayerAim : MonoBehaviour
             // Trạng thái bình thường ban đầu
             cam.GetComponent<vThirdPersonCamera>().target = transform;
         }
+    }
+
+    public void LockForStun()
+    {
+        float range = lockRange;
+        foreach (GameObject enemy in enemiesList)
+        {
+            if (enemy == null) continue;
+
+            float dist = Vector3.Distance(transform.position, enemy.transform.position);
+            if (dist < range)
+            {
+                range = dist;
+                closestEnemy = enemy;
+            }
+        }
+        if (closestEnemy == null) return;
+
+        Vector3 directionToEnemy = (closestEnemy.transform.position - transform.position).normalized;
+        directionToEnemy.y = 0;
+
+        Quaternion targetRotation = Quaternion.LookRotation(directionToEnemy);
+        transform.rotation = targetRotation; // Xoay ngay lập tức
     }
 
     private void OnDrawGizmos()

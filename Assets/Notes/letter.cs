@@ -37,7 +37,7 @@ public class letter : MonoBehaviour
             letterUI.SetActive(false);
             letterMesh.enabled = true;
             player.enabled = true;
-           
+
         }
 
         //If toggle equals true, that means the player is picking up the letter.
@@ -46,7 +46,7 @@ public class letter : MonoBehaviour
             letterUI.SetActive(true);
             letterMesh.enabled = false;
             player.enabled = false;
-        }      
+        }
     }
     public bool IsOpen()
     {

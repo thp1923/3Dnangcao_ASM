@@ -2,15 +2,19 @@
 using UnityEngine.VFX;
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.UI;
+using TMPro;
 
 public class PlayerBuff : MonoBehaviour
 {
-    public enum ClassPlayer
+    public enum BuffType
     {
-        Atk, Def
+        Atk = 0, Def = 1
     }
 
-    public ClassPlayer classPlayer;
+    internal bool canBuff;
+
+    public BuffType buffTypePlayer;
 
     AttackDamgePlayer atp;
     PlayerTakeDamge ptd;
@@ -22,26 +26,37 @@ public class PlayerBuff : MonoBehaviour
 
     [Header("--------CD--------")]
     public float CD;
+    public GameObject CD_Panal;
+    public TextMeshProUGUI cdText;
     float _CD;
     [Header("--------Atk--------")]
-    public int atkBonus;
+    public float atkBonus;
     public int stunDamgeBonus;
     public ParticleSystem[] attackEffect;
     public VisualEffect effect;
     public Color colorEffect;
     public AudioClip atkClip;
     private Color currentColor;
+    bool isFireSword;
     [Header("--------Def--------")]
-    public int defBonus;
+    public float defBonus;
     public int stunDefBonus;
     public Material defMaterial;
     public GameObject targetRoot;
     public List<SkinnedMeshRenderer> skinnedMeshes;
     public AudioClip defClip;
+    bool isBodyShield;
+
+    int aBonus;
+    int dBonus;
+
+    internal int buffTypeId; // Lưu loại buff
 
     private void Start()
     {
         Collect();
+        CD_Panal.SetActive(false);
+        buffTypePlayer = (BuffType)buffTypeId;
         atp = GetComponent<AttackDamgePlayer>();
         ptd = GetComponent<PlayerTakeDamge>();
         animator = GetComponent<Animator>();
@@ -68,15 +83,26 @@ public class PlayerBuff : MonoBehaviour
     private void Update()
     {
         _CD -= Time.deltaTime;
-        if (Input.GetKeyDown(BuffKey) && _CD <= 0)
+        if(CD_Panal.activeSelf)
+            cdText.text = _CD.ToString("F1");
+        if(_CD > 0)
+        {
+            CD_Panal.SetActive(true);
+        }
+        else
+        {
+            CD_Panal.SetActive(false);
+        }
+        if (Input.GetKeyDown(BuffKey) && _CD <= 0 && canBuff)
         {
             _CD = CD;
-            switch (classPlayer)
+            buffTypeId = (int)(buffTypePlayer);
+            switch (buffTypePlayer)
             {
-                case ClassPlayer.Atk:
+                case BuffType.Atk:
                     animator.SetTrigger("BuffATK");
                     break;
-                case ClassPlayer.Def:
+                case BuffType.Def:
                     animator.SetTrigger("BuffDEF");
                     break;
                 default:
@@ -87,12 +113,15 @@ public class PlayerBuff : MonoBehaviour
 
     public void Buff()
     {
-        switch (classPlayer)
+        switch (buffTypePlayer)
         {
-            case ClassPlayer.Atk:
-                atp.atkBonus += atkBonus;
-                atp.stunDamgeBonus += stunDamgeBonus;
+            case BuffType.Atk:
+                aBonus = (int)(atp.BaseATK * (atkBonus / 100f));
+                isFireSword = true;
+                atp.atkBonusSkill = aBonus;
+                atp.stunDamgeBonus = stunDamgeBonus;
                 GetComponent<AudioPlayer>().isBuff = true;
+                GetComponent<SwordTrailEffect>().isFlame = true;
                 buffSource.PlayOneShot(atkClip);
                 fireLoop.Play();
                 effect.SetVector4("Color", (Vector4)colorEffect);
@@ -102,9 +131,11 @@ public class PlayerBuff : MonoBehaviour
                     atkEf.GetComponent<Light>().enabled = true;
                 }
                 break;
-            case ClassPlayer.Def:
-                ptd.stunResistanceBonus += stunDefBonus;
-                ptd.defenseBonus += defBonus;
+            case BuffType.Def:
+                dBonus = (int)(ptd.Defense * (defBonus / 100f));
+                isBodyShield = true;
+                ptd.stunResistanceBonus = stunDefBonus;
+                ptd.defenseBonusSkill = dBonus;
                 buffSource.PlayOneShot(defClip);
                 foreach (var renderer in skinnedMeshes)
                 {
@@ -133,46 +164,46 @@ public class PlayerBuff : MonoBehaviour
     IEnumerator EndBuff()
     {
         yield return new WaitForSeconds(CD/3);
-        switch (classPlayer)
+        if (isFireSword)
         {
-            case ClassPlayer.Atk:
-                atp.atkBonus -= atkBonus;
-                atp.stunDamgeBonus -= stunDamgeBonus;
-                GetComponent<AudioPlayer>().isBuff = false;
-                buffSource.PlayOneShot(atkClip);
-                fireLoop.Stop();
-                effect.SetVector4("Color", (Vector4)currentColor);
-                foreach (var atkEf in attackEffect)
+            atp.atkBonusSkill = 0;
+            atp.stunDamgeBonus = 0;
+            GetComponent<AudioPlayer>().isBuff = false;
+            GetComponent<SwordTrailEffect>().isFlame = false;
+            buffSource.PlayOneShot(atkClip);
+            fireLoop.Stop();
+            effect.SetVector4("Color", (Vector4)currentColor);
+            foreach (var atkEf in attackEffect)
+            {
+                atkEf.Stop();
+                atkEf.GetComponent<Light>().enabled = false;
+            }
+            isFireSword = false;
+        }
+        else if (isBodyShield)
+        {
+            ptd.stunResistanceBonus = 0;
+            ptd.defenseBonusSkill = 0;
+            foreach (var renderer in skinnedMeshes)
+            {
+                Material[] mats = renderer.materials;
+
+                if (mats.Length == 0)
+                    continue;
+
+                // Tạo mảng mới ngắn hơn 1
+                Material[] newMats = new Material[mats.Length - 1];
+
+                // Copy hết trừ cái cuối cùng
+                for (int i = 0; i < newMats.Length; i++)
                 {
-                    atkEf.Stop();
-                    atkEf.GetComponent<Light>().enabled = false;
+                    newMats[i] = mats[i];
                 }
-                break;
-            case ClassPlayer.Def:
-                ptd.stunResistanceBonus -= stunDefBonus;
-                ptd.defenseBonus -= defBonus;
-                foreach (var renderer in skinnedMeshes)
-                {
-                    Material[] mats = renderer.materials;
 
-                    if (mats.Length == 0)
-                        continue;
-
-                    // Tạo mảng mới ngắn hơn 1
-                    Material[] newMats = new Material[mats.Length - 1];
-
-                    // Copy hết trừ cái cuối cùng
-                    for (int i = 0; i < newMats.Length; i++)
-                    {
-                        newMats[i] = mats[i];
-                    }
-
-                    // Gán lại mảng đã rút gọn
-                    renderer.materials = newMats;
-                }
-                break;
-            default:
-                break;
+                // Gán lại mảng đã rút gọn
+                renderer.materials = newMats;
+            }
+            isBodyShield = false;
         }
     }
 }

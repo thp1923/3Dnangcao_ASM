@@ -9,11 +9,37 @@ public class SceneLoadTrigger : MonoBehaviour
     private void OnTriggerEnter(Collider col)
     {
         if (hasTriggered) return;
+        if (!col.CompareTag("Player")) return;
+        if (string.IsNullOrEmpty(sceneName)) return;
 
-        if (col.CompareTag("Player") && !string.IsNullOrEmpty(sceneName))
+        hasTriggered = true; // chống đúp
+
+        var gsm = GameAutoSaveManager.Instance;
+        if (gsm != null)
         {
-            hasTriggered = true;
-            SceneTransitionManager.Instance.FadeToScene(sceneName);
+            // báo cho GSM biết sắp đổi scene
+            gsm.PrepareSceneChange();
+
+            // lưu inventory trước
+            InventoryManager.Instance?.SaveInventoryForSlot(gsm.saveSlot);
+
+            // save state rồi mới chuyển scene
+            gsm.SaveCurrentGame(() =>
+            {
+                if (SceneTransitionManager.Instance != null)
+                    SceneTransitionManager.Instance.FadeToScene(sceneName);
+                else
+                    UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
+            });
         }
+        else
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
+        }
+    }
+
+    private void OnDisable()
+    {
+        hasTriggered = false;
     }
 }

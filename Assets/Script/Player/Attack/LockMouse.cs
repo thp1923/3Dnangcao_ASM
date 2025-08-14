@@ -5,13 +5,11 @@ using UnityEngine;
 public class LockMouse : MonoBehaviour
 {
     public static bool CursorLocked = true;
-    [SerializeField] protected KeyCode lockMouseKey = KeyCode.LeftAlt;
 
-    [SerializeField] protected GameObject inventory;
+
     // Start is called before the first frame update
     protected virtual void Start()
     {
-        inventory.SetActive(false);
     }
 
     // Update is called once per frame
@@ -25,27 +23,27 @@ public class LockMouse : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-
-            if (Input.GetKeyDown(lockMouseKey))
-            {
-                CursorLocked = false;
-                GetComponent<MoveManager>().CheckLockMove(true);
-                GetComponent<MoveManager>().CheckDrag(true);
-                inventory.SetActive(true);
-            }
         }
         else
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+        }
+    }
 
-            if (Input.GetKeyDown(lockMouseKey))
-            {
-                CursorLocked = true;
-                GetComponent<MoveManager>().CheckLockMove(false);
-                GetComponent<MoveManager>().CheckDrag(false);
-                inventory.SetActive(false);
-            }
+    public void LockController(bool Lock)
+    {
+        if (!Lock)
+        {
+            CursorLocked = false;
+            GetComponent<MoveManager>().CheckLockMove(true);
+            GetComponent<MoveManager>().CheckDrag(true);
+        }
+        else
+        {
+            CursorLocked = true;
+            GetComponent<MoveManager>().CheckLockMove(false);
+            GetComponent<MoveManager>().CheckDrag(false);
         }
     }
 }

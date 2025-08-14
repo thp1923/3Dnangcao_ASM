@@ -11,8 +11,8 @@ public class RootMotionHandler : MonoBehaviour
 
     void OnAnimatorMove()
     {
-        if(animator.GetFloat("InputMagnitude") > 0 && !GetComponent<PlayerAttackController>().isAttacking) 
-            return;
+        //if(animator.GetFloat("InputMagnitude") > 0 && !GetComponent<PlayerAttackController>().isAttacking) 
+        //    return;
         // Kiểm tra nếu root motion đang được xử lý bằng script
         if (animator.applyRootMotion)
         {

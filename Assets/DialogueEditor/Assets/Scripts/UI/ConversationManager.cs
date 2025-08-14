@@ -157,6 +157,7 @@ namespace DialogueEditor
         public void EndConversation()
         {
             SetState(eState.TransitioningDialogueOff);
+            NPC.FindAnyObjectByType<NPC>().TogglePlayerScripts(true);
 
             if (OnConversationEnded != null)
                 OnConversationEnded.Invoke();

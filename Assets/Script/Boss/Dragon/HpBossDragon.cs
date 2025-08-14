@@ -18,14 +18,19 @@ public class HpBossDragon : StatsAlive
     bool isDeath;
     // Start is called before the first frame update
     public int Point;
+
+    [Header("---------Items Drop-----------")]
+    public GameObject drop;
+    public List<Item> itemsDrop;
     protected override void Start()
     {
         base.Start();
         aim = GetComponent<Animator>();
     }
 
-    void Update()
+    protected override void Update()
     {
+        base.Update();
         ShowAndHide();
         if (HP_Bar == null) return;
         if (isShow) HP_Bar.SetActive(true);
@@ -76,6 +81,11 @@ public class HpBossDragon : StatsAlive
 
     public void Death()
     {
+        GameObject go = Instantiate(drop, new Vector3(transform.position.x, transform.position.y + 0.75f, transform.position.z), Quaternion.identity);
+        foreach (var itemDrop in itemsDrop)
+        {
+            go.GetComponent<ItemPickUp>().items.Add(itemDrop);
+        }
         FindObjectOfType<UpgradeStats>().AddPoint(Point);
         if (me != null)
             Destroy(me);

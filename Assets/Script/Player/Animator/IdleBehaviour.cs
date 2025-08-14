@@ -13,6 +13,7 @@ public class IdleBehaviour : StateMachineBehaviour
         PlayerAttackController.Instance.canRecceiveInput = true;
         animator.SetFloat("InputMagnitude", 0f);
         animator.GetComponent<MoveManager>().CheckLockMove(false);
+        animator.GetComponent<SwordTrailEffect>().PlayFlame(false);
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

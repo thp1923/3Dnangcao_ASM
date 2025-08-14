@@ -8,6 +8,14 @@ public class IdleKnightBehaviour : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.GetComponent<DragonRotation>().enabled = true;
+        if(animator.GetComponent<SwordTrailEffect>() != null)
+        {
+            animator.GetComponent<SwordTrailEffect>().PlayFlame(false);
+        }
+        if(animator.GetComponent<FastAttack>() != null)
+        {
+            animator.GetComponent<FastAttack>().QuickAttack();
+        }
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

@@ -15,7 +15,8 @@ namespace Invector.vCharacterController
 
         public virtual void UpdateAnimator()
         {
-            if (animator == null || !animator.enabled) return;
+            var lockCtrl = GetComponent<LockController>();
+            if (animator == null || !animator.enabled || lockCtrl.Inventory.activeSelf || lockCtrl.Quest.activeSelf) return;
 
             animator.SetBool(vAnimatorParameters.IsStrafing, isStrafing); ;
             animator.SetBool(vAnimatorParameters.IsSprinting, isSprinting);

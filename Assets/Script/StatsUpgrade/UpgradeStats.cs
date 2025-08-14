@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class UpgradeStats : MonoBehaviour
 {
+    public int LevelMax = 500;
     public int Point;
     public int Level;
     public int Point_Lost = 10;
@@ -147,15 +148,15 @@ public class UpgradeStats : MonoBehaviour
 
     public void Upgrade(StatsType type)
     {
-        if (Point < Point_Lost)
+        if (Point < Point_Lost || Level >= LevelMax)
         {
-            Debug.Log("Not Enough Point");
+            //Debug.Log("Not Enough Point");
             return;
         }
 
         Level++;
         Point -= Point_Lost;
-        Point_Lost = Mathf.FloorToInt(10 * Mathf.Pow(Level, 1.05f));
+        Point_Lost = Mathf.FloorToInt(200 * Mathf.Pow(Level, 1.25f));
 
         LevelText.text = "Level " + Level;
         PointText.text = "Point: " + Point;
@@ -264,13 +265,29 @@ public class UpgradeStats : MonoBehaviour
 
         if (isHide)
         {
+            GameAutoSaveManager.Instance.OnBonfireRest();
+            // Chuẩn bị reload (snapshot giữ trong RAM)
+            GameAutoSaveManager.Instance.PrepareSceneChange();
+
+            var attackCtrl = FindObjectOfType<PlayerAttackController>();
+            attackCtrl.LockController(true);
             StatsCanva?.SetActive(false);
+
+            // Reload lại scene hiện tại
+            int index = SceneManager.GetActiveScene().buildIndex;
+            SceneManager.LoadScene(index);
         }
         else
         {
             CurrentStats();
-            int index = SceneManager.GetActiveScene().buildIndex;
-            SceneManager.LoadScene(index);
+            var lockCtrl = FindObjectOfType<LockController>();
+            lockCtrl.OutPlayerController();
+            lockCtrl.isOut = false;
+            StatsCanva?.SetActive(true);
+
+            var takeDamage = player.GetComponent<PlayerTakeDamge>();
+            takeDamage.currentHP = takeDamage.MaxHP;
+            takeDamage._heathCount = takeDamage.heathCount;
         }
     }
 }
