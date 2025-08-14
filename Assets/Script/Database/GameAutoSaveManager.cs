@@ -99,7 +99,7 @@ public class GameAutoSaveManager : MonoBehaviour
         var player = GameObject.FindWithTag("Player");
         if (player == null)
         {
-            Debug.LogWarning("Skip save: Player not found in this scene.");
+            //Debug.LogWarning("Skip save: Player not found in this scene.");
             onDone?.Invoke();
             return;
         }
@@ -113,7 +113,7 @@ public class GameAutoSaveManager : MonoBehaviour
 
         if (statsAlive == null || attackDamgePlayer == null || stamina == null || upgradeStats == null)
         {
-            Debug.LogWarning("Skip save: some required components are missing.");
+            //Debug.LogWarning("Skip save: some required components are missing.");
             onDone?.Invoke();
             return;
         }
@@ -174,12 +174,12 @@ public class GameAutoSaveManager : MonoBehaviour
             },
             result =>
             {
-                Debug.Log($"✅ AutoSaved: {sceneName} at {pos}");
+                //Debug.Log($"✅ AutoSaved: {sceneName} at {pos}");
                 onDone?.Invoke();
             },
             error =>
             {
-                Debug.LogError(error.GenerateErrorReport());
+                //Debug.LogError(error.GenerateErrorReport());
                 onDone?.Invoke();
             }
         );
@@ -266,7 +266,7 @@ public class GameAutoSaveManager : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning($"❗ Chưa có dữ liệu save cho slot: {saveSlot}");
+                //Debug.LogWarning($"❗ Chưa có dữ liệu save cho slot: {saveSlot}");
             }
         },
         error => Debug.LogError(error.GenerateErrorReport()));
@@ -301,11 +301,11 @@ public class GameAutoSaveManager : MonoBehaviour
         playTime = Mathf.Max(0, data.PlayTime);
 
         var player = GameObject.FindWithTag("Player");
-        if (player == null)
-        {
-            Debug.LogError("Player không tìm thấy để apply state.");
-            return;
-        }
+        //if (player == null)
+        //{
+        //     Debug.LogError("Player không tìm thấy để apply state.");
+        //    return;
+        //}
 
         // Lấy components
         var statsAlive = player.GetComponent<StatsAlive>();
@@ -377,6 +377,6 @@ public class GameAutoSaveManager : MonoBehaviour
             player.transform.position = new Vector3(data.posX, data.posY, data.posZ);
         }
 
-        Debug.Log("✅ Loaded game state và áp dụng thành công (RAM snapshot / server).");
+        //Debug.Log("✅ Loaded game state và áp dụng thành công (RAM snapshot / server).");
     }
 }
