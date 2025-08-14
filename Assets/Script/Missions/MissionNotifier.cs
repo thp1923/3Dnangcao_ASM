@@ -4,7 +4,7 @@ using System.Collections;
 public class MissionNotifier : MonoBehaviour
 {
     public TMP_Text notificationText;
-    public float fadeDuration = 0.5f;
+    public float fadeDuration = 1f;
     public float displayDuration = 2f;
 
     private Coroutine currentCoroutine;
