@@ -42,9 +42,9 @@ public class PlayerAttackController : LockMouse
     private IEnumerator SpeedRegain()
     {
         swordContract = true;
-        playerAim.speed = contract_speed_time.x;
+        //playerAim.speed = contract_speed_time.x;
         yield return new WaitForSeconds(contract_speed_time.y);
-        playerAim.speed = 1;
+        //playerAim.speed = 1;
         swordContract = false;
     }
 

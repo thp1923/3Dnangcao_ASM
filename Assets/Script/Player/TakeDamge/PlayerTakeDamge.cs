@@ -37,6 +37,7 @@ public class PlayerTakeDamge : StatsAlive
     public int heathCount;
     internal int _heathCount;
     public ParticleSystem healFire;
+    public Transform healTransformEffect;
     bool isHealling;
     public float timeHeal;
     public AudioSource heallSound;
@@ -93,6 +94,7 @@ public class PlayerTakeDamge : StatsAlive
     public void HeathHp()
     {
         heath = (int)(MaxHP * 0.3f);
+        healFire.transform.position = healTransformEffect.position;
         currentHP += heath;
         isHealling = true;
         _heathCount -= 1;
@@ -210,7 +212,6 @@ public class PlayerTakeDamge : StatsAlive
             int stun = stunDamge - (StunResistance + stunResistanceBonus);
             GetComponent<PlayerAim>().ClosestEnemy();
             GetComponent<PlayerAim>().LockForStun();
-            PlayerAim.SetTrigger("Stun");
             if(stun > 4000)
             {
                 PlayerAim.SetTrigger("Hit3");

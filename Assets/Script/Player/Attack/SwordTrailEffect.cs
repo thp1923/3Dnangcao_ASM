@@ -1,9 +1,12 @@
 using UnityEngine.VFX;
 using UnityEngine;
+using Tiny;
 
 public class SwordTrailEffect : MonoBehaviour
 {
     public VisualEffect trailEffect;
+
+    public Trail swordTrail;
 
     public bool isFlame;
 
@@ -24,7 +27,8 @@ public class SwordTrailEffect : MonoBehaviour
                 fireTrail.Stop();
             }
         }
-
+        if(swordTrail != null)
+            swordTrail.enabled = false;
     }
 
     private void Update()
@@ -71,6 +75,43 @@ public class SwordTrailEffect : MonoBehaviour
                     trailEffect.SetBool("UseForce", false);
                     trailEffect.gameObject.SetActive(false);
                 }
+            }
+        }
+    }
+
+    public void PlayParticalSwordSpeacial(int number)
+    {
+        if (number != 0)
+        {
+            damageEnabled = true;
+            if (isFlame && fireTrails != null)
+            {
+                foreach (var fireTrail in fireTrails)
+                {
+                    fireTrail.Play();
+                }
+            }
+            else
+            {
+                if (swordTrail != null)
+                    swordTrail.enabled = true;
+            }
+        }
+        else
+        {
+            damageEnabled = false;
+            currentWeapon.ResetSettings();
+            if (isFlame && fireTrails != null)
+            {
+                foreach (var fireTrail in fireTrails)
+                {
+                    fireTrail.Stop();
+                }
+            }
+            else
+            {
+                if (swordTrail != null)
+                    swordTrail.enabled = false;
             }
         }
     }
