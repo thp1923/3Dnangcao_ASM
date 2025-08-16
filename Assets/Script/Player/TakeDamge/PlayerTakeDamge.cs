@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerTakeDamge : StatsAlive
 {
@@ -22,6 +23,8 @@ public class PlayerTakeDamge : StatsAlive
     [SerializeField] private KeyCode blockKey = KeyCode.Mouse1;
     public int staminaLost = 35;
     public Animator CanvaDied;
+    public Image canvaImage;
+    public float fadeSpeed = 1f;
 
     public Material defMaterial;
     public GameObject targetRoot;
@@ -49,8 +52,6 @@ public class PlayerTakeDamge : StatsAlive
     public float[] duration; // Time shake
     public float[] magnitude; // Shake level
 
-    public static int MaxHp { get; internal set; }
-
     protected override void Start()
     {
         base.Start();
@@ -67,6 +68,7 @@ public class PlayerTakeDamge : StatsAlive
         rb = GetComponent<Rigidbody>();
         _heathCount = heathCount;
         Collect();
+        StartFadeOut();
     }
 
     protected override void Update()
@@ -75,6 +77,31 @@ public class PlayerTakeDamge : StatsAlive
         Block();
         Heath();
     }
+
+    public void StartFadeOut()
+    {
+        StartCoroutine(FadeOutCoroutine());
+    }
+
+    private IEnumerator FadeOutCoroutine()
+    {
+        Color color = canvaImage.color;
+
+        while (color.a > 0f)
+        {
+            color.a -= Time.deltaTime * fadeSpeed;
+            canvaImage.color = color;
+            yield return null;
+        }
+
+        // đảm bảo alpha = 0
+        color.a = 0f;
+        canvaImage.color = color;
+
+        // tắt object chứa Image
+        canvaImage.gameObject.SetActive(false);
+    }
+
 
     void Heath()
     {
