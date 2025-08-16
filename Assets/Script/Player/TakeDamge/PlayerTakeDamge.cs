@@ -7,7 +7,8 @@ using UnityEngine;
 
 public class PlayerTakeDamge : StatsAlive
 {
-    Animator PlayerAim;
+    Animator anim;               // Animator của Player
+    PlayerAim playerAim;         // Script PlayerAim
     Rigidbody rb;
 
     public AudioSource parrySource;
@@ -50,42 +51,41 @@ public class PlayerTakeDamge : StatsAlive
 
     public static int MaxHp { get; internal set; }
 
-    // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
         healFire.Stop();
         healText.gameObject.SetActive(false);
+
         foreach (var fireTrail in fireTrails)
         {
             fireTrail.gameObject.SetActive(false);
         }
-        PlayerAim = GetComponent<Animator>();
+
+        anim = GetComponent<Animator>();
+        playerAim = GetComponent<PlayerAim>();
         rb = GetComponent<Rigidbody>();
         _heathCount = heathCount;
         Collect();
     }
 
-    // Update is called once per frame
     protected override void Update()
     {
         base.Update();
         Block();
         Heath();
     }
-    
+
     void Heath()
     {
-        if (_heathCount <= 0 || isDeath )
-        {
-            return;
-        }
+        if (_heathCount <= 0 || isDeath) return;
+
         if (Input.GetKeyDown(heathKey) && !isHealling)
         {
             HeathHp();
         }
     }
-    
+
     public void ParryAudio()
     {
         parrySource.PlayOneShot(parryClip);
@@ -102,13 +102,14 @@ public class PlayerTakeDamge : StatsAlive
         healText.text = _heathCount.ToString();
         heallSound.PlayOneShot(healClip[0]);
         healFire.Play();
+
         if (currentHP >= MaxHP)
-        {
             currentHP = MaxHP;
-        }
+
         HpSlider.value = currentHP;
         StartCoroutine(Healling());
     }
+
     public void PlayFlame(bool IsFlame)
     {
         if (fireTrails == null) return;
@@ -117,6 +118,7 @@ public class PlayerTakeDamge : StatsAlive
             fireTrail.gameObject.SetActive(IsFlame);
         }
     }
+
     IEnumerator Healling()
     {
         yield return new WaitForSeconds(timeHeal);
@@ -128,34 +130,31 @@ public class PlayerTakeDamge : StatsAlive
 
     void Block()
     {
-        if (Input.GetKeyDown(blockKey) && PlayerAim.GetBool("IsGrounded") 
-            && PlayerAttackController.CursorLocked && !isBlock 
+        if (Input.GetKeyDown(blockKey)
+            && anim.GetBool("IsGrounded")
+            && PlayerAttackController.CursorLocked
+            && !isBlock
             && GetComponent<Stamina>().stamina >= staminaLost)
         {
-            //audioP.PlayClip(9);
-            PlayerAim.SetTrigger("Block");
+            anim.SetTrigger("Block");
             GetComponent<Stamina>().TakeStamina(staminaLost);
         }
     }
 
     void Collect()
     {
-        if (targetRoot == null)
-        {
-            return;
-        }
+        if (targetRoot == null) return;
 
-        skinnedMeshes.Clear(); // Xoá dữ liệu cũ tránh lỗi
+        skinnedMeshes.Clear();
         skinnedMeshes.AddRange(targetRoot.GetComponentsInChildren<SkinnedMeshRenderer>());
     }
 
     public void BlockEffect(bool block)
     {
-        if(block)
+        if (block)
         {
             foreach (var renderer in skinnedMeshes)
             {
-                // Kiểm tra nếu đã có thì không thêm nữa
                 if (System.Array.Exists(renderer.materials, mat => mat == defMaterial))
                     continue;
 
@@ -174,20 +173,12 @@ public class PlayerTakeDamge : StatsAlive
             foreach (var renderer in skinnedMeshes)
             {
                 Material[] mats = renderer.materials;
+                if (mats.Length == 0) continue;
 
-                if (mats.Length == 0)
-                    continue;
-
-                // Tạo mảng mới ngắn hơn 1
                 Material[] newMats = new Material[mats.Length - 1];
-
-                // Copy hết trừ cái cuối cùng
                 for (int i = 0; i < newMats.Length; i++)
-                {
                     newMats[i] = mats[i];
-                }
 
-                // Gán lại mảng đã rút gọn
                 renderer.materials = newMats;
             }
         }
@@ -196,43 +187,43 @@ public class PlayerTakeDamge : StatsAlive
     public override void TakeDamge(int damge, int stunDamge, int trueDamge)
     {
         if (GodMode || GetComponent<PlayerDodge>().isDodging) return;
+
         if (isBlock)
         {
             base.TakeDamge(0, 0, trueDamge);
             return;
         }
+
         base.TakeDamge(damge, stunDamge, trueDamge);
-        if(currentHP <= 0)
+
+        if (currentHP <= 0)
         {
             Death();
         }
-        if(stunDamge > (StunResistance + stunResistanceBonus))
+
+        if (stunDamge > (StunResistance + stunResistanceBonus))
         {
-            if(PlayerAim == null && noTakeDamge) return;
+            if (anim == null) return;
+
             int stun = stunDamge - (StunResistance + stunResistanceBonus);
-            GetComponent<PlayerAim>().ClosestEnemy();
-            GetComponent<PlayerAim>().LockForStun();
-            if(stun > 4000)
+
+            playerAim?.ClosestEnemy();
+            playerAim?.LockForStun();
+            if (stun >= 100)
             {
-                PlayerAim.SetTrigger("Hit3");
-                CameraShake.Instance.StartShake(duration[2], magnitude[2]);
-                ApplyKnockback(knockbackForce[3], knockBackTime[3]);
-            }
-            else if(stun >= 100 && stun <= 4000)
-            {
-                PlayerAim.SetTrigger("Hit3");
+                anim.SetTrigger("Hit3");
                 CameraShake.Instance.StartShake(duration[2], magnitude[2]);
                 ApplyKnockback(knockbackForce[2], knockBackTime[2]);
             }
-            else if(stun < 100 && stun >=50)
+            else if (stun < 100 && stun >= 50)
             {
-                PlayerAim.SetTrigger("Hit2");
+                anim.SetTrigger("Hit2");
                 CameraShake.Instance.StartShake(duration[1], magnitude[1]);
                 ApplyKnockback(knockbackForce[1], knockBackTime[1]);
             }
             else
             {
-                PlayerAim.SetTrigger("Hit");
+                anim.SetTrigger("Hit");
                 CameraShake.Instance.StartShake(duration[0], magnitude[0]);
                 ApplyKnockback(knockbackForce[0], knockBackTime[0]);
             }
@@ -241,7 +232,6 @@ public class PlayerTakeDamge : StatsAlive
 
     public void ApplyKnockback(float knockForce, float lockDuration)
     {
-        // Nếu đang knockback thì dừng cũ trước
         if (knockbackRoutine != null)
             StopCoroutine(knockbackRoutine);
 
@@ -250,7 +240,6 @@ public class PlayerTakeDamge : StatsAlive
 
     private IEnumerator KnockbackCoroutine(float knockForce, float lockDuration)
     {
-
         Vector3 knockbackDir = -transform.forward.normalized;
         float timer = 0f;
 
@@ -260,7 +249,6 @@ public class PlayerTakeDamge : StatsAlive
             timer += Time.fixedDeltaTime;
             yield return new WaitForFixedUpdate();
         }
-
     }
 
     public void CancelKnockback()
@@ -272,22 +260,22 @@ public class PlayerTakeDamge : StatsAlive
         }
     }
 
-
-
     public void Death()
     {
-        if (PlayerAim == null) return;
+        if (anim == null) return;
+
         isDeath = true;
-        PlayerAim.SetBool("IsDeath", true);
+        anim.SetBool("IsDeath", true);
         CanvaDied.SetBool("IsDeath", true);
-        PlayerAim.SetFloat("InputMagnitude", -1f);
+        anim.SetFloat("InputMagnitude", -1f);
+
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+
         GetComponent<vThirdPersonInput>().enabled = false;
         GetComponent<vThirdPersonController>().enabled = false;
         GetComponent<PlayerAttackController>().enabled = false;
         GetComponent<CapsuleCollider>().enabled = false;
         rb.useGravity = false;
-        
     }
 }

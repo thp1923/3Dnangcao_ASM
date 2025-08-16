@@ -8785,6 +8785,7 @@ GameObject:
   - component: {fileID: 1464467639981715625}
   - component: {fileID: 3807892061761740672}
   - component: {fileID: 1753859410514894081}
+  - component: {fileID: 8224195643886562233}
   m_Layer: 3
   m_Name: vBasicController_Dwarf Idle@T-Pose
   m_TagString: Player
@@ -9061,10 +9062,8 @@ MonoBehaviour:
   - 0.5
   - 3
   - 6
-  - 70
   knockBackTime:
   - 0.01
-  - 1
   - 1
   - 1
   heathKey: 114
@@ -9391,6 +9390,24 @@ MonoBehaviour:
   isOut: 0
   keyInventory: 98
   keyQuest: 106
+--- !u!114 &8224195643886562233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6462669875762278692}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71c9e56fbc90cdf478083662f59521dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 1
+  footOffset: 0.1
+  raycastRange: 1
+  moveSpeed: 6
 --- !u!1 &6572938840107320626
 GameObject:
   m_ObjectHideFlags: 0
@@ -16551,7 +16568,7 @@ PrefabInstance:
     - target: {fileID: 3118669467232707663, guid: 6faf0af0322d8b343aa06ddbb550307e,
         type: 3}
       propertyPath: m_Materials.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3118669467232707663, guid: 6faf0af0322d8b343aa06ddbb550307e,
         type: 3}
