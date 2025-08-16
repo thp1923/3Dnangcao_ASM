@@ -263,7 +263,7 @@ public class PlayerTakeDamge : StatsAlive
     public void Death()
     {
         if (anim == null) return;
-
+        CanvaDied.gameObject.SetActive(true);
         isDeath = true;
         anim.SetBool("IsDeath", true);
         CanvaDied.SetBool("IsDeath", true);
