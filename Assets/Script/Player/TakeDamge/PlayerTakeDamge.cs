@@ -73,6 +73,10 @@ public class PlayerTakeDamge : StatsAlive
 
     protected override void Update()
     {
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            TakeDamge(0, 130, 0);
+        }
         base.Update();
         Block();
         Heath();
