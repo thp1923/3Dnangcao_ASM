@@ -46,7 +46,7 @@ public class AutoPerformanceOptimizer : MonoBehaviour
             QualitySettings.lodBias = lodBiasLow;
             QualitySettings.shadowDistance = shadowDistanceLow;
             QualitySettings.pixelLightCount = pixelLightLow;
-            Debug.Log("Performance Optimized: Lower quality for FPS boost");
+            //Debug.Log("Performance Optimized: Lower quality for FPS boost");
         }
         else
         {
@@ -54,7 +54,7 @@ public class AutoPerformanceOptimizer : MonoBehaviour
             QualitySettings.lodBias = lodBiasHigh;
             QualitySettings.shadowDistance = shadowDistanceHigh;
             QualitySettings.pixelLightCount = pixelLightHigh;
-            Debug.Log("Performance Restored: Higher quality");
+            //Debug.Log("Performance Restored: Higher quality");
         }
     }
 }
