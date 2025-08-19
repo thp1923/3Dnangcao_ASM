@@ -23,10 +23,21 @@ public class AttackBehaviour : StateMachineBehaviour
         animator.GetComponent<MoveManager>().CheckSleep(true);
     }
 
+    void ResetAllTriggers(Animator animator)
+    {
+        foreach (AnimatorControllerParameter param in animator.parameters)
+        {
+            if (param.type == AnimatorControllerParameterType.Trigger)
+            {
+                animator.ResetTrigger(param.name);
+            }
+        }
+    }
+
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.ResetTrigger("Attack"+numberAttack);
+        ResetAllTriggers(animator);
         animator.GetComponent<AttackDamgePlayer>().attackRange -= attackRangeAdd;
         animator.GetComponent<PlayerAttackController>().canClick = true;
         animator.GetComponent<PlayerAttackController>().inputRecceived = false;

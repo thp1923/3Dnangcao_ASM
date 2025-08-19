@@ -19,6 +19,7 @@ public class AttackRunBehaviour : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.GetComponent<MoveManager>().CheckSleep(true);
+        animator.GetComponent<AudioPlayer>().source.Stop();
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state

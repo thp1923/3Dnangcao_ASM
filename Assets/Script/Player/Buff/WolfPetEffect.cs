@@ -29,7 +29,7 @@ public class WolfPetEffect : MonoBehaviour
 
             firePound.transform.position = new Vector3(
                 transform.position.x,
-                firePound.transform.position.y,
+                transform.position.y,
                 transform.position.z
             );
 

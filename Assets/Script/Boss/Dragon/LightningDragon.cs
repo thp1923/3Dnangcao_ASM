@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using StatsManager;
 
@@ -15,28 +15,40 @@ public class LightningDragon : StatsAttack
     {
         lightning = GetComponent<ParticleSystem>();
     }
-    // Start is called before the first frame update
+
     void OnEnable()
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        player = GameObject.FindGameObjectWithTag("Player")?.transform;
+        if (player == null) return;
+
         transform.position = player.position;
-        lightning.Play();
+        lightning?.Play();
         StartCoroutine(Hide());
+
+        // Nếu muốn spawn ra là đánh luôn thì để lại dòng này,
+        // còn không thì bỏ đi, để gọi Attack() từ bên ngoài
         Attack(0);
     }
 
     public override void Attack(int attackNumber)
     {
         base.Attack(attackNumber);
-        LightningDamge(attackNumber);
+        LightningDamage(attackNumber);
     }
 
-    public void LightningDamge(int attackNum)
+    public void LightningDamage(int attackNum)
     {
-        Collider[] col = Physics.OverlapBox(transform.position, lightningRange, Quaternion.identity, attackMask);
-        foreach(Collider player in col)
+        if (stunDamge == null || attackNum < 0 || attackNum >= stunDamge.Length) return;
+
+        Collider[] hits = Physics.OverlapBox(transform.position, lightningRange, Quaternion.identity, attackMask);
+
+        foreach (Collider hit in hits)
         {
-            player.GetComponent<PlayerTakeDamge>().TakeDamge(atk, stunDamge[attackNum], 0);
+            PlayerTakeDamge takeDamage = hit.GetComponent<PlayerTakeDamge>();
+            if (takeDamage != null)
+            {
+                takeDamage.TakeDamge(atk, stunDamge[attackNum], 0);
+            }
         }
     }
 
@@ -49,6 +61,6 @@ public class LightningDragon : StatsAttack
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;
-        Gizmos.DrawWireCube(gameObject.transform.position, lightningRange);
+        Gizmos.DrawWireCube(transform.position, lightningRange);
     }
 }

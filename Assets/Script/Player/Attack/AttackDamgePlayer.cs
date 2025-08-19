@@ -11,6 +11,10 @@ public class AttackDamgePlayer : StatsAttack
     public LayerMask attackMask;
 
     public int godDamge;
+
+    [Header("-------------Shake----------")]
+    public float duration; // Time shake
+    public float magnitude; // Shake level
     public override void Attack(int attackNumber)
     {
         base.Attack(attackNumber);
@@ -28,6 +32,7 @@ public class AttackDamgePlayer : StatsAttack
         foreach (Collider enemy in colInfo)
         {
             enemy.GetComponent<EnemyTakeDamge>().TakeDamge(atk, (stunDamge[attackNum]+stunDamgeBonus), godDamge);
+            CameraShake.Instance.StartShake(duration, magnitude);
         }
     }
     private void OnDrawGizmosSelected()
