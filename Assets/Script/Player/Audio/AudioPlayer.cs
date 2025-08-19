@@ -23,11 +23,13 @@ public class AudioPlayer : MonoBehaviour
         if (!isBuff)
         {
             if (attackClipNormal == null) return;
+            source.Stop();
             attackSource.PlayOneShot(attackClipNormal[index]);
         }
         else
         {
             if (attackClipFire == null) return;
+            source.Stop();
             attackSource.PlayOneShot(attackClipFire[index]);
         }
     }

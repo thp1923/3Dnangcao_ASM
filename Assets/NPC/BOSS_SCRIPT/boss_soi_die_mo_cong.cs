@@ -7,6 +7,7 @@ public class boss_soi_die_mo_cong : MonoBehaviour
     public GameObject Boss;
     public GameObject cong;
     private EnemyTakeDamge enemyTakeDamage;
+    public bool enemydead;
 
     private void Start()
     {
@@ -18,7 +19,7 @@ public class boss_soi_die_mo_cong : MonoBehaviour
     {
         if (enemyTakeDamage.currentHP <= 0)
         {
-            cong.SetActive(false);
+            cong.SetActive(enemydead);
         }
     }
 }

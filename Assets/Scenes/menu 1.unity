@@ -20876,6 +20876,80 @@ MonoBehaviour:
   references:
     version: 2
     RefIds: []
+--- !u!1 &1334806709
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1334806711}
+  - component: {fileID: 1334806710}
+  m_Layer: 0
+  m_Name: GameAutoSave
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1334806710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1334806709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbab68c7e672bf649ab51d67a40db60b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  VerboseLogging: 0
+  saveSlot: 
+  cutsceneScenes:
+  - CutsceneOpening
+  - WolfBossCutscene
+  - CutsceneDragonBoss
+  - FinalBossCutscene
+  - CreditScene
+  level: 1
+  playTime: 0
+  MaxHP: 0
+  Defense: 0
+  StunResistance: 0
+  currentHP: 0
+  BaseATK: 0
+  CritRate: 0
+  CritDamge: 0
+  StaminaMax: 0
+  Point: 0
+  HeathCount: 0
+  AtkBonus: 0
+  DamgeAttack: 0
+  AtkBonusSkill: 0
+  CritRateBonus: 0
+  CritDamgeBonus: 0
+  CanSkill: 0
+  SpecialSkillId: 0
+  CanBuff: 0
+  BuffTypeId: 0
+  nextPlayerPosition: {x: 0, y: 0, z: 0}
+--- !u!4 &1334806711
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1334806709}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 375.17365, y: 11.239847, z: 2563.6375}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1335146999
 GameObject:
   m_ObjectHideFlags: 0
@@ -26277,7 +26351,6 @@ GameObject:
   - component: {fileID: 1650183750}
   - component: {fileID: 1650183751}
   - component: {fileID: 1650183752}
-  - component: {fileID: 1650183753}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -26347,41 +26420,6 @@ MonoBehaviour:
   - {fileID: 849129240}
   - {fileID: 1891470427}
   - {fileID: 1123855741}
---- !u!114 &1650183753
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1650183747}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbab68c7e672bf649ab51d67a40db60b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  saveSlot: 
-  level: 1
-  playTime: 0
-  MaxHP: 0
-  Defense: 0
-  StunResistance: 0
-  currentHP: 0
-  BaseATK: 0
-  CritRate: 0
-  CritDamge: 0
-  StaminaMax: 0
-  Point: 0
-  HeathCount: 0
-  AtkBonus: 0
-  DamgeAttack: 0
-  AtkBonusSkill: 0
-  CritRateBonus: 0
-  CritDamgeBonus: 0
-  CanSkill: 0
-  SpecialSkillId: 0
-  CanBuff: 0
-  BuffTypeId: 0
-  nextPlayerPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &1656070269
 GameObject:
   m_ObjectHideFlags: 0
@@ -34721,3 +34759,4 @@ SceneRoots:
   - {fileID: 141038647}
   - {fileID: 975081564}
   - {fileID: 9126459208109019746}
+  - {fileID: 1334806711}

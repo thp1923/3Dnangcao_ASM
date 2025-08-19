@@ -84,6 +84,13 @@ public class BossKnightMoveAI : MonoBehaviour
             GetComponent<BossKnightAttackController>().enabled = true;
             playerInRange = false;
         }
+        if (playerInRange)
+        {
+            if (!agent.enabled)
+            {
+                agent.enabled = true;
+            }
+        }
     }
 
     void StrafeAroundPlayer()

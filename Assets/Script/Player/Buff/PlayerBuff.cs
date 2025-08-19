@@ -33,10 +33,7 @@ public class PlayerBuff : MonoBehaviour
     public float atkBonus;
     public int stunDamgeBonus;
     public ParticleSystem[] attackEffect;
-    public VisualEffect effect;
-    public Color colorEffect;
     public AudioClip atkClip;
-    private Color currentColor;
     bool isFireSword;
     [Header("--------Def--------")]
     public float defBonus;
@@ -60,8 +57,6 @@ public class PlayerBuff : MonoBehaviour
         atp = GetComponent<AttackDamgePlayer>();
         ptd = GetComponent<PlayerTakeDamge>();
         animator = GetComponent<Animator>();
-        Vector4 colorVec = effect.GetVector4("Color");
-        currentColor = new Color(colorVec.x, colorVec.y, colorVec.z, colorVec.w);
         foreach (var atkEf in attackEffect)
         {
             atkEf.Stop();
@@ -124,7 +119,6 @@ public class PlayerBuff : MonoBehaviour
                 GetComponent<SwordTrailEffect>().isFlame = true;
                 buffSource.PlayOneShot(atkClip);
                 fireLoop.Play();
-                effect.SetVector4("Color", (Vector4)colorEffect);
                 foreach (var atkEf in attackEffect)
                 {
                     atkEf.Play();
@@ -172,7 +166,6 @@ public class PlayerBuff : MonoBehaviour
             GetComponent<SwordTrailEffect>().isFlame = false;
             buffSource.PlayOneShot(atkClip);
             fireLoop.Stop();
-            effect.SetVector4("Color", (Vector4)currentColor);
             foreach (var atkEf in attackEffect)
             {
                 atkEf.Stop();
