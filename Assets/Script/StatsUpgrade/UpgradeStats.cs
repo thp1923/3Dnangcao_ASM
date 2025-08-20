@@ -68,7 +68,7 @@ public class UpgradeStats : MonoBehaviour
         PointLostText.text = "Need Point: " + Point_Lost;
         if(Level > 0)
         {
-            Point_Lost = Mathf.FloorToInt(10 * Mathf.Pow(Level, 1.05f));
+            Point_Lost = Mathf.FloorToInt(100 * Mathf.Pow(Level, 1.03f));
             PointLostText.text = "Need Point: " + Point_Lost;
         }
     }
@@ -156,7 +156,7 @@ public class UpgradeStats : MonoBehaviour
 
         Level++;
         Point -= Point_Lost;
-        Point_Lost = Mathf.FloorToInt(200 * Mathf.Pow(Level, 1.25f));
+        Point_Lost = Mathf.FloorToInt(100 * Mathf.Pow(Level, 1.03f));
 
         LevelText.text = "Level " + Level;
         PointText.text = "Point: " + Point;
@@ -165,7 +165,7 @@ public class UpgradeStats : MonoBehaviour
         switch (type)
         {
             case StatsType.HP:
-                nextHP_Max = (int)(currentHP_Max * 1.1f);
+                nextHP_Max = (int)(currentHP_Max * 1.05f);
                 currentHP_Max = nextHP_Max;
                 HP.text = currentHP_Max.ToString();
                 NextHP.text = currentHP_Max.ToString();
@@ -173,7 +173,7 @@ public class UpgradeStats : MonoBehaviour
                 break;
 
             case StatsType.Def:
-                nextDef = (int)(currentDef * 1.05f);
+                nextDef = (int)(currentDef * 1.02f);
                 currentDef = nextDef;
                 Def.text = currentDef.ToString();
                 NextDef.text = currentDef.ToString();
@@ -181,7 +181,7 @@ public class UpgradeStats : MonoBehaviour
                 break;
 
             case StatsType.Attack:
-                nextBaseATK = (int)(currentBaseATK * 1.1f);
+                nextBaseATK = (int)(currentBaseATK * 1.05f);
                 currentBaseATK = nextBaseATK;
                 BaseATK.text = currentBaseATK.ToString();
                 NextBaseATK.text = currentBaseATK.ToString();
@@ -201,7 +201,7 @@ public class UpgradeStats : MonoBehaviour
                 break;
 
             case StatsType.Stamina:
-                nextStaminaMax = (int)(currentStaminaMax * 1.2f);
+                nextStaminaMax = (int)(currentStaminaMax * 1.1f);
                 currentStaminaMax = nextStaminaMax;
                 Stamina.text = currentStaminaMax.ToString();
                 NextStamina.text = currentStaminaMax.ToString();

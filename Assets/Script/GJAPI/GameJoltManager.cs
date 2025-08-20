@@ -8,8 +8,12 @@ public enum TrophyType
 {
     StartNewGame,
     TestingTrophy,
-    SecretTrophy,
-    BossDefeatedTrophy,
+    SecretCatTrophy,
+    SecretCodeTrophy,
+    MiniBossDefeatedTrophy,
+    Boss1DefeatedTrophy,
+    Boss2DefeatedTrophy,
+    Boss3DefeatedTrophy,
     CollectAllTrophy
 
 }
@@ -134,6 +138,7 @@ public class GameJoltManager : MonoBehaviour
                     //Debug.LogError($"Unlock failed: Unknown error from Game Jolt for trophy '{type}' (ID {id})");
                     break;
             }
+            FindObjectOfType<AchievementCollector>()?.CheckAllTrophiesUnlocked();
         });
     }
 
@@ -181,5 +186,14 @@ public class GameJoltManager : MonoBehaviour
         PlayerPrefs.SetString(TOKEN_KEY, GameJoltAPI.Instance.CurrentUser.Token);
         PlayerPrefs.Save();
         //Debug.Log("Game Jolt credentials saved for Editor auto-login.");
+    }
+    public TrophyType? GetTrophyTypeById(int id)
+    {
+        foreach (var pair in trophyMap)
+        {
+            if (pair.Value == id)
+                return pair.Key;
+        }
+        return null;
     }
 }
