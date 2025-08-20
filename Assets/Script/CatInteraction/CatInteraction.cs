@@ -4,7 +4,7 @@ using TMPro;
 public class CatInteraction : MonoBehaviour
 {
     public GameJoltManager gameJoltManager;
-    public TrophyType CAT = TrophyType.SecretTrophy;
+    public TrophyType CAT = TrophyType.SecretCatTrophy;
     public TMP_Text interactText;
     public Animator catAnimator;
     public AudioSource audioSource;

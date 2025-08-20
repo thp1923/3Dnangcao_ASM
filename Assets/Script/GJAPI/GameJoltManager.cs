@@ -8,8 +8,12 @@ public enum TrophyType
 {
     StartNewGame,
     TestingTrophy,
-    SecretTrophy,
-    BossDefeatedTrophy,
+    SecretCatTrophy,
+    SecretCodeTrophy,
+    MiniBossDefeatedTrophy,
+    Boss1DefeatedTrophy,
+    Boss2DefeatedTrophy,
+    Boss3DefeatedTrophy,
     CollectAllTrophy
 
 }
