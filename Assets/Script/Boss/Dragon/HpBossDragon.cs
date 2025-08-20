@@ -11,6 +11,8 @@ public class HpBossDragon : StatsAlive
     public GameObject me;
     public TextMeshProUGUI damPopUp;
 
+    public TrophyType trophyType;
+
     public LayerMask playerMask;
     public float rangeShow = 70f;
     public GameObject HP_Bar;
@@ -84,7 +86,7 @@ public class HpBossDragon : StatsAlive
         GameJoltManager gjManager = FindObjectOfType<GameJoltManager>();
         if (gjManager != null)
         {
-            gjManager.UnlockTrophy(TrophyType.Boss2DefeatedTrophy);
+            gjManager.UnlockTrophy(trophyType);
         }
         GameObject go = Instantiate(drop, new Vector3(transform.position.x, transform.position.y + 0.75f, transform.position.z), Quaternion.identity);
         foreach (var itemDrop in itemsDrop)
