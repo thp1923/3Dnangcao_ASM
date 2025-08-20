@@ -97,8 +97,13 @@ public class EnemyTakeDamge : StatsAlive
         damPopUp.text = null;
     }
 
-    void Death()
+    public void Death()
     {
+        var achievement = GetComponent<EnemyAchievement>();
+        if (achievement != null)
+        {
+            achievement.TryUnlock();
+        }
         FindObjectOfType<PlayerAim>().RemoveEnemy(gameObject);
         // Danh sách tạm cho các item được chọn ngẫu nhiên
         List<Item> droppedItems = new List<Item>();
