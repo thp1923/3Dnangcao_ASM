@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Died : MonoBehaviour
 {
-    private bool _respawning;
+    //private bool _respawning;
 
     public void Hide()
     {
@@ -11,8 +11,8 @@ public class Died : MonoBehaviour
 
     public void ResetScene()
     {
-        if (_respawning) return;
-        _respawning = true;
+        //if (_respawning) return;
+        //_respawning = true;
 
         GameAutoSaveManager.Instance.OnPlayerDie();
     }
