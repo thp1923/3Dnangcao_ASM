@@ -296,6 +296,11 @@ public class PlayerTakeDamge : StatsAlive
         Debug.Log("Death");
         if (anim == null)
             anim = GetComponent<Animator>();
+        if(canvaImage == null || CanvaDied == null)
+        {
+            canvaImage = GameObject.FindWithTag("DieCanva").GetComponent<Image>();
+            CanvaDied = GameObject.FindWithTag("DieCanva").GetComponent<Animator>();
+        }
         canvaImage.gameObject.SetActive(true);
         isDeath = true;
         anim.SetBool("IsDeath", true);
