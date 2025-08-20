@@ -70,15 +70,19 @@ namespace StatsManager
                     HpLostSlider.value = HpSlider.value;
                 }
             }
-            if(HpSlider.maxValue != MaxHP)
+            if(type == TypeTakeDamge.Only)
             {
-                HpSlider.maxValue = MaxHP;
-                HpSlider.value = currentHP;
-            }
-            if(HpLostSlider.maxValue != MaxHP)
-            {
-                HpLostSlider.maxValue = MaxHP;
-                HpLostSlider.value = currentHP;
+
+                if(HpSlider.maxValue != MaxHP && HpSlider != null)
+                {
+                    HpSlider.maxValue = MaxHP;
+                    HpSlider.value = currentHP;
+                }
+                if(HpLostSlider.maxValue != MaxHP && HpLostSlider != null)
+                {
+                    HpLostSlider.maxValue = MaxHP;
+                    HpLostSlider.value = currentHP;
+                }
             }
         }
 

@@ -47,6 +47,7 @@ public class EnemyTakeDamge : StatsAlive
 
     void ShowAndHide()
     {
+        if(playerMask == 0) return;
         Collider[] playerIn = Physics.OverlapSphere(gameObject.transform.position, rangeShow, playerMask);
         if(playerIn.Length > 0 )
         {
