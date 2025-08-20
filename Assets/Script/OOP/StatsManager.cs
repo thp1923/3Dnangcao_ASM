@@ -70,6 +70,16 @@ namespace StatsManager
                     HpLostSlider.value = HpSlider.value;
                 }
             }
+            if(HpSlider.maxValue != MaxHP)
+            {
+                HpSlider.maxValue = MaxHP;
+                HpSlider.value = currentHP;
+            }
+            if(HpLostSlider.maxValue != MaxHP)
+            {
+                HpLostSlider.maxValue = MaxHP;
+                HpLostSlider.value = currentHP;
+            }
         }
 
         public virtual void TakeDamge(int damge, int stunDamge, int trueDamge)
@@ -221,7 +231,16 @@ namespace StatsManager
                 staminaLostBar.value = staminaBar.value;
             }
             RecoveStamina();
-            staminaBar.value = stamina;
+            if(staminaBar.value != stamina)
+                staminaBar.value = stamina;
+            if(staminaBar.maxValue != StaminaMax)
+            {
+                staminaBar.maxValue = StaminaMax;
+            }
+            if(staminaLostBar.maxValue != StaminaMax)
+            {
+                staminaLostBar.maxValue = StaminaMax;
+            }
         }
 
         public virtual void RecoveStamina()
