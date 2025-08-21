@@ -308,7 +308,6 @@ public class PlayerTakeDamge : StatsAlive
 
     public void Death()
     {
-        Debug.Log("Death");
         if (anim == null)
             anim = GetComponent<Animator>();
         if (canvaImage == null)
@@ -319,9 +318,6 @@ public class PlayerTakeDamge : StatsAlive
         isDeath = true;
         anim.SetBool("IsDeath", true);
         anim.SetFloat("InputMagnitude", -1f);
-
-        if (canvaImage.gameObject.activeSelf)
-            Debug.Log("CanvaActive");
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
