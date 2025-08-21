@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Invector.vCharacterController;
+using System.Collections;
 
 public class MoveManager : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class MoveManager : MonoBehaviour
         tcp = GetComponent<vThirdPersonController>();
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
+        rb.isKinematic = true;
+        StartCoroutine(IsKinematic(false));
     }
 
     // Update is called once per frame
@@ -27,6 +30,12 @@ public class MoveManager : MonoBehaviour
             GetComponent<Stamina>().TakeStamina(staminaLost);
             _timeLostStaminaRun = timeLostStaminaRun;
         }
+    }
+
+    IEnumerator IsKinematic(bool isKine)
+    {
+        yield return new WaitForSeconds(0.5f);
+        rb.isKinematic = isKine;
     }
 
     public void CheckLockMove(bool Lock)

@@ -22,7 +22,6 @@ public class PlayerTakeDamge : StatsAlive
     public ParticleSystem[] fireTrails;
     [SerializeField] private KeyCode blockKey = KeyCode.Mouse1;
     public int staminaLost = 35;
-    public Animator CanvaDied;
     public Image canvaImage;
     public float fadeSpeed = 1f;
 
@@ -104,6 +103,22 @@ public class PlayerTakeDamge : StatsAlive
 
         // tắt object chứa Image
         canvaImage.gameObject.SetActive(false);
+    }
+    private IEnumerator FadeInCoroutine()
+    {
+        canvaImage.gameObject.SetActive(true);
+        Color color = canvaImage.color;
+
+        while (color.a < 1f)
+        {
+            color.a += Time.deltaTime * fadeSpeed;
+            canvaImage.color = color;
+            yield return null;
+        }
+
+        // đảm bảo alpha = 0
+        color.a = 1f;
+        canvaImage.color = color;
     }
 
 
@@ -293,22 +308,16 @@ public class PlayerTakeDamge : StatsAlive
 
     public void Death()
     {
-        Debug.Log("Death");
         if (anim == null)
             anim = GetComponent<Animator>();
-        if(canvaImage == null || CanvaDied == null)
+        if (canvaImage == null)
         {
             canvaImage = GameObject.FindWithTag("DieCanva").GetComponent<Image>();
-            CanvaDied = GameObject.FindWithTag("DieCanva").GetComponent<Animator>();
         }
-        canvaImage.gameObject.SetActive(true);
+        StartCoroutine(FadeInCoroutine());
         isDeath = true;
         anim.SetBool("IsDeath", true);
-        CanvaDied.SetBool("IsDeath", true);
         anim.SetFloat("InputMagnitude", -1f);
-
-        if (canvaImage.gameObject.activeSelf)
-            Debug.Log("CanvaActive");
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
@@ -318,5 +327,12 @@ public class PlayerTakeDamge : StatsAlive
         GetComponent<PlayerAttackController>().enabled = false;
         GetComponent<CapsuleCollider>().enabled = false;
         rb.useGravity = false;
+        StartCoroutine(Reset());
+    }
+
+    IEnumerator Reset()
+    {
+        yield return new WaitForSeconds(3f);
+        canvaImage.gameObject.GetComponent<Died>().ResetScene();
     }
 }

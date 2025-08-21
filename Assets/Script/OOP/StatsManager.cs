@@ -188,7 +188,7 @@ namespace StatsManager
     public class StatsStamina : MonoBehaviour
     {
         public int StaminaMax;
-        public int StaminaRecover;
+        public float StaminaRecover;
         public float RecoverStaminaTime;
 
         protected float _recoverStaminaTime;
@@ -255,7 +255,7 @@ namespace StatsManager
 
             if (stamina < StaminaMax && _recoverStaminaTime <= 0)
             {
-                stamina += StaminaRecover;
+                stamina += (int)(StaminaMax * (StaminaRecover/100));
                 _recoverStaminaTime = RecoverStaminaTime;
             }
             else if (stamina > StaminaMax)

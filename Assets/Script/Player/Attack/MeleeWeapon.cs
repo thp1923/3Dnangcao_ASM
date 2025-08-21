@@ -33,7 +33,7 @@ public class MeleeWeapon : MonoBehaviour
 
     public void ResetSettings()
     {
-        //recoverTime = 0;
+        recoverTime = 0;
         hitCount = max_hitCount;
     }
 
@@ -56,7 +56,7 @@ public class MeleeWeapon : MonoBehaviour
         {
             current_wallType = hit.transform.tag;
 
-            if (current_wallType == "Player") current_wallType = "Concrete";
+            //if (current_wallType == "Player") current_wallType = "Concrete";
 
             switch(hit.transform.tag)
             {
