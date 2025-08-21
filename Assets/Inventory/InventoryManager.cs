@@ -185,7 +185,7 @@ public class InventoryManager : MonoBehaviour
                 int addPoint = Mathf.Max(0, item.value);
                 up.AddPoint(addPoint); // ✅ dùng UpgradeStats.AddPoint
                 GameAutoSaveManager.Instance?.SaveCurrentGame();
-                Debug.Log($"[Inventory] Duplicate in BAG ID={item.ItemID} → +{addPoint} Point. New={up.Point}");
+                //Debug.Log($"[Inventory] Duplicate in BAG ID={item.ItemID} → +{addPoint} Point. New={up.Point}");
             }
             return; // không thêm vào túi
         }
