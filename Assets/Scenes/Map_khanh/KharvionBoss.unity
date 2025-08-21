@@ -12742,6 +12742,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Portal blue
       objectReference: {fileID: 0}
+    - target: {fileID: 5607819269926399345, guid: 45e0f06c750176947862c10346226439,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -52866,6 +52871,12 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1780992131}
   m_Mesh: {fileID: 4300058, guid: 6242f79499f00814aba57a57f05813d6, type: 3}
+--- !u!1 &1781108973 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4061757954450624202, guid: 57d3c8c198bdf444a97e19c666a3dd73,
+    type: 3}
+  m_PrefabInstance: {fileID: 1078543036}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1785443972
 GameObject:
   m_ObjectHideFlags: 0
@@ -57265,6 +57276,52 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1935610377}
   m_Mesh: {fileID: 4300036, guid: 5261ab5fed140a34cb25b2d3b797c420, type: 3}
+--- !u!1 &1935880524
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1935880526}
+  - component: {fileID: 1935880525}
+  m_Layer: 0
+  m_Name: OpenDoor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1935880525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1935880524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6be5652c75cc8a14388875206441a573, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Boss: {fileID: 1781108973}
+  Door: {fileID: 422505794}
+--- !u!4 &1935880526
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1935880524}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 890.6755, y: 10.467015, z: -186.10875}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1937856999
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -63405,3 +63462,4 @@ SceneRoots:
   - {fileID: 1348192889}
   - {fileID: 760331737}
   - {fileID: 422505793}
+  - {fileID: 1935880526}

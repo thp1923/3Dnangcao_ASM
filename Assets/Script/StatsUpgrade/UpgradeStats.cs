@@ -122,8 +122,8 @@ public class UpgradeStats : MonoBehaviour
         if (player == null)
         {
             player = GameObject.FindWithTag("Player");
-            if (player == null) return;
         }
+        if (player == null) return;
 
         if (player.GetComponent<PlayerTakeDamge>().isDeath) return;
         if (!PlayerAttackController.CursorLocked) return;
