@@ -91,7 +91,7 @@ public class MeleeWeapon : MonoBehaviour
             if (settings != null)
             {
                 settings.LightIntensityMultiplier = 1;
-                settings.AnimationSpeed = 1;
+                settings.AnimationSpeed = 2;
                 settings.FreezeDecalDisappearance = true;
             }
 
